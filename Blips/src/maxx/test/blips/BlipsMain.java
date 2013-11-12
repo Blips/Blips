@@ -26,7 +26,8 @@ public class BlipsMain extends Activity {
 	// Reference to every button in grid
 	BlipCell[][] cells;
 	// Boolean to tell whether we're paused or not
-	boolean isPaused;
+	boolean isStopped = false;
+	boolean destroyed;
 	
 	// Save / Play / Clear Buttons
 	Button loadsaveButton;
@@ -44,7 +45,9 @@ public class BlipsMain extends Activity {
       
       // create the layout 
       initializeLayout();
-      isPaused = false;
+      isStopped = false;
+      destroyed = false;
+      
       // initialize listeners
       initListeners();
       // Start timer
@@ -60,9 +63,26 @@ public class BlipsMain extends Activity {
 			}
 		}
 		
+		editor.putBoolean("isStopped", isStopped);
 		editor.commit();
+		clearAll();
 		
 		super.onPause();
+	}
+	
+	public void onResume() {	
+		super.onResume();
+		isStopped = getPreferences(MODE_PRIVATE).getBoolean("isStopped", false);
+
+		if (!destroyed) {
+			for (int c = 0; c < GRID_SIZE; c++) {
+				for (int r = 0; r < GRID_SIZE; r++) {
+		        	 cells[c][r].setChecked(getPreferences(MODE_PRIVATE).getBoolean("ButtonState" + c + r, false));
+				}
+			}
+		}
+		
+		destroyed = false;
 	}
    
    protected void initializeLayout() {
@@ -170,10 +190,10 @@ public class BlipsMain extends Activity {
    }
    
    @Override
-   public void onDestroy() {      
+   public void onDestroy() {  
+	  destroyed = true;
       super.onDestroy();
-      clearAll();
-   }
+   } 
    
    public void clearAll() {
       for(int i = 0; i<GRID_SIZE; i++) {
@@ -184,12 +204,12 @@ public class BlipsMain extends Activity {
    }
    
    public void togglePlay() {
-      if (isPaused) {
+      if (isStopped) {
          playButton.setText("Pause");
-         isPaused = false;
+         isStopped = false;
       }
       else {
-         isPaused = true;
+         isStopped = true;
          playButton.setText("Play");
          
       }

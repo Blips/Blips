@@ -99,7 +99,7 @@ public class BlipCell extends ToggleButton {
 	            // synthesis loop, run constantly while active
 	            while(active) {	 
 	            	// only play sound if column matches playing index of sequencer
-	               if (((BlipsMain)mainActivity).playingIndex == column && !((BlipsMain)mainActivity).isPaused) {
+	               if (((BlipsMain)mainActivity).playingIndex == column && !((BlipsMain)mainActivity).isStopped) {
 	            	   for (int i=0; i < buffsize; i++){ 
 	            		   samples[i] = (short) (amp * Math.sin(ph));
 	            		   ph += twopi*fr/sampleRate;
