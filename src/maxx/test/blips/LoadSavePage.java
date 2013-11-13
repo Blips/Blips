@@ -95,8 +95,8 @@ public class LoadSavePage extends Activity {
       String encodedSave = "";
       Intent i = getIntent();
       
-      for (int c = 0; c < BlipsMain.GRID_SIZE; c++) {
-         for (int r = 0; r < BlipsMain.GRID_SIZE; r++) {
+      for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+         for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
             if (i.getBooleanExtra("ButtonState"+r+c, false)) {
                encodedSave += 1;
             } else {
@@ -143,7 +143,7 @@ public class LoadSavePage extends Activity {
 
           /* Prepare a char-Array that will
            * hold the chars we read back in. */
-           char[] inputBuffer = new char[BlipsMain.GRID_SIZE * BlipsMain.GRID_SIZE + 1];
+           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 1];
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
@@ -152,11 +152,10 @@ public class LoadSavePage extends Activity {
            /** Create a new intent to send back to parent Activity */
            Intent resI = new Intent();
            
-        // Transform the chars to a String
            int i = 0;
 
-           for (int c = 0; c < BlipsMain.GRID_SIZE; c++) {
-              for (int r = 0; r < BlipsMain.GRID_SIZE; r++) {
+           for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+              for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
                  resI.putExtra("LoadCell"+r+c, inputBuffer[i++]);
                  Log.d("Loading file " + filename, "FILE - Row: " + c + " Col: " + r + " Value: " + inputBuffer[i-1]);
               }

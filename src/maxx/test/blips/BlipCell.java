@@ -14,6 +14,7 @@ public class BlipCell extends ToggleButton {
 	private boolean active;
 	private Context mainActivity = null;
 	private Thread t = null;
+	private BlipGenerator generator;
 
 	int sampleRate = 44100;
 
@@ -29,12 +30,13 @@ public class BlipCell extends ToggleButton {
 		System.out.println("Cell created with default constructor");
 	}
 	
-	public BlipCell(Context context, int c, int r) {
+	public BlipCell(Context context, BlipGenerator bg, int c, int r) {
 		super(context);
 		mainActivity = context;
 	
 		column = c;
 		row = r;
+		generator = bg;
 		
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -67,10 +69,14 @@ public class BlipCell extends ToggleButton {
 		
 		if (active) {
 			// Start player thread if button is selected
-			play();
+			generator.playSound(BlipsMain.GRID_ROWS - row);
 		}
 		
 		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);
+	}
+	
+	public void setGen(BlipGenerator bg) {
+		this.generator = bg;
 	}
 	
 	public void play() {

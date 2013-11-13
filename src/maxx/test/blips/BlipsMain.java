@@ -18,7 +18,8 @@ import android.widget.Toast;
 
 public class BlipsMain extends Activity {
 	// Grid and timer constants
-	static final int GRID_SIZE = 4;
+	static final int GRID_ROWS = 8;
+	static final int GRID_COLS = 4;
 	static final int MILLI_DELAY = 500;
 	
 	// Playing index of sequence
@@ -34,6 +35,9 @@ public class BlipsMain extends Activity {
 	Button clearButton;
 	Button playButton;
 	
+	BlipGenerator bg;
+
+	
 	// Activity Result Code Variable
 	static final int LOAD_SAVE_REQ_CODE = 1;
 
@@ -41,7 +45,7 @@ public class BlipsMain extends Activity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-      
+	  bg = new BlipGenerator(this);  
       
       // create the layout 
       initializeLayout();
@@ -57,8 +61,8 @@ public class BlipsMain extends Activity {
 	public void onPause() {
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
 		
-		for (int c = 0; c < GRID_SIZE; c++) {
-			for (int r = 0; r < GRID_SIZE; r++) {
+		for (int c = 0; c < GRID_COLS; c++) {
+			for (int r = 0; r < GRID_ROWS; r++) {
 				editor.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
 			}
 		}
@@ -66,30 +70,40 @@ public class BlipsMain extends Activity {
 		editor.putBoolean("isStopped", isStopped);
 		editor.commit();
 		clearAll();
-		
+	    bg.stop();
+	    bg = null;
+
 		super.onPause();
 	}
 	
 	public void onResume() {	
 		super.onResume();
+	    if (bg == null) {
+	    	bg = new BlipGenerator(this);
+	    }
+
 		isStopped = getPreferences(MODE_PRIVATE).getBoolean("isStopped", false);
 
 		if (!destroyed) {
-			for (int c = 0; c < GRID_SIZE; c++) {
-				for (int r = 0; r < GRID_SIZE; r++) {
-		        	 cells[c][r].setChecked(getPreferences(MODE_PRIVATE).getBoolean("ButtonState" + c + r, false));
+			for (int c = 0; c < GRID_COLS; c++) {
+				for (int r = 0; r < GRID_ROWS; r++) {
+		        	cells[c][r].setGen(bg); 
+					cells[c][r].setChecked(getPreferences(MODE_PRIVATE).getBoolean("ButtonState" + c + r, false));
 				}
 			}
 		}
 		
 		destroyed = false;
-	}
+   }
    
    protected void initializeLayout() {
 	   // Grid container
       LinearLayout container = (LinearLayout) findViewById(R.id.llContainer);
       // Grid cells
-      cells = new BlipCell[GRID_SIZE][GRID_SIZE];
+      cells = new BlipCell[GRID_COLS][GRID_ROWS];
+      if (bg == null) {
+    	  bg = new BlipGenerator(this);
+      }
 	 
       // Init row layout params
 	  LinearLayout.LayoutParams row_params = new LinearLayout.LayoutParams(
@@ -100,15 +114,15 @@ public class BlipsMain extends Activity {
 		    	   LinearLayout.LayoutParams.WRAP_CONTENT, 
 		    	   LinearLayout.LayoutParams.WRAP_CONTENT);
 
-      for (int r = 0; r < GRID_SIZE; r++) {
+      for (int r = 0; r < GRID_ROWS; r++) {
     	 // Handle each row in grid
          LinearLayout row = new LinearLayout(this);
  	   	 row.setOrientation(LinearLayout.HORIZONTAL);
  		 row.setLayoutParams(row_params);
 
-         for (int c = 0; c < GRID_SIZE; c++) {
+         for (int c = 0; c < GRID_COLS; c++) {
         	 // Handle each column in row
-        	 BlipCell btn = new BlipCell(this, c, r);
+        	 BlipCell btn = new BlipCell(this, bg, c, r);
         	 btn.setCol(c);
         	 btn.setRow(r);
         	 
@@ -138,9 +152,9 @@ public class BlipsMain extends Activity {
       switch(requestCode) {
       case (LOAD_SAVE_REQ_CODE):
          if(resultCode == Activity.RESULT_OK) {
-            for (int r = 0; r<GRID_SIZE; r++) {
-               for (int c = 0; c<GRID_SIZE; c++) {
-                  cells[r][c].setChecked(data.getCharExtra("LoadCell"+r+c, '0') == '1');
+            for (int r = 0; r<GRID_ROWS; r++) {
+               for (int c = 0; c<GRID_COLS; c++) {
+                  cells[c][r].setChecked(data.getCharExtra("LoadCell"+c+r, '0') == '1');
                }
             }
          }
@@ -155,9 +169,9 @@ public class BlipsMain extends Activity {
             Toast toast = Toast.makeText(BlipsMain.this, "Load or save...", Toast.LENGTH_SHORT);
             toast.show();
             Intent i = new Intent(BlipsMain.this, LoadSavePage.class);
-            for(int row = 0; row<GRID_SIZE; row++) {
-               for (int col = 0; col<GRID_SIZE; col++) {
-                  i.putExtra("ButtonState" + row + col, cells[row][col].isOn());
+            for(int row = 0; row<GRID_ROWS; row++) {
+               for (int col = 0; col<GRID_COLS; col++) {
+                  i.putExtra("ButtonState" + col + row, cells[col][row].isOn());
                }
             }
             startActivityForResult(i, LOAD_SAVE_REQ_CODE);
@@ -196,22 +210,22 @@ public class BlipsMain extends Activity {
    } 
    
    public void clearAll() {
-      for(int i = 0; i<GRID_SIZE; i++) {
-         for(int j = 0; j<GRID_SIZE; j++) {
-            cells[i][j].setChecked(false);
+      for(int c = 0; c<GRID_COLS; c++) {
+         for(int r = 0; r<GRID_ROWS; r++) {
+            cells[c][r].setChecked(false);
          }
       }
    }
    
-   public void togglePlay() {
-      if (isStopped) {
+   public void togglePlay() {      
+	  if (isStopped) {
+    	 bg.stop();
          playButton.setText("Pause");
          isStopped = false;
       }
       else {
          isStopped = true;
          playButton.setText("Play");
-         
       }
    }
    
@@ -224,7 +238,7 @@ public class BlipsMain extends Activity {
 	      public void run () {
 	         handler.post (new Runnable () {
 	            public void run () {
-	               if (++playingIndex >= GRID_SIZE) {
+	               if (++playingIndex >= GRID_COLS) {
 	                  playingIndex = 0;
 	               }	                	
 	            }
