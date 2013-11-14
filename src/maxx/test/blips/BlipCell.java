@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 public class BlipCell extends ToggleButton {
@@ -13,8 +14,8 @@ public class BlipCell extends ToggleButton {
 	private int row;
 	private boolean active;
 	private Context mainActivity = null;
-	private Thread t = null;
 	private BlipGenerator generator;
+	private String name = null;
 
 	int sampleRate = 44100;
 
@@ -37,6 +38,14 @@ public class BlipCell extends ToggleButton {
 		column = c;
 		row = r;
 		generator = bg;
+		name = BlipGenerator.notes[BlipsMain.GRID_ROWS - row - 1];
+		// Strip octave number off name for now
+		name = name.substring(0, name.length() - 1);
+
+		
+		  // Init btn layout params
+		LinearLayout.LayoutParams btn_params = new LinearLayout.LayoutParams(125, 120);
+	 	setLayoutParams(btn_params);
 		
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -67,78 +76,19 @@ public class BlipCell extends ToggleButton {
 		// Set the new button state
 		active = isActive;
 		
-		if (active) {
-			// Start player thread if button is selected
-			generator.playSound(BlipsMain.GRID_ROWS - row);
-		}
+		if (isActive && generator!= null) {
+		 	setText(name);
 		
+		 	if (!generator.playing) {
+				// Play demo sound if not sequencing already
+				generator.playSound(BlipsMain.GRID_ROWS - row);
+			}
+		}
+
 		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);
 	}
 	
 	public void setGen(BlipGenerator bg) {
 		this.generator = bg;
-	}
-	
-	public void play() {
-		System.out.println("Cell in column:" + column + " row:" + row + " start playing");
-
-	      t = new Thread() {
-	         public void run() {
-	            // set process priority
-	            setPriority(Thread.MAX_PRIORITY);
-	            int buffsize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-	                  AudioFormat.ENCODING_PCM_16BIT);
-	            // create an audiotrack object
-	            AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, 
-	                                                   AudioFormat.CHANNEL_OUT_MONO, 
-	                                                   AudioFormat.ENCODING_PCM_16BIT, 
-	                                                   buffsize, 
-	                                                   AudioTrack.MODE_STREAM);
-	            short samples[] = new short[buffsize];
-	            int amp = 10000;
-	            double twopi = 8.*Math.atan(1.);
-	            double fr = 55 + 55 * (16 - row);
-	            double ph = 0.0;
-	        
-	            audioTrack.play();
-	         
-	            // synthesis loop, run constantly while active
-	            while(active) {	 
-	            	// only play sound if column matches playing index of sequencer
-	               if (((BlipsMain)mainActivity).playingIndex == column && !((BlipsMain)mainActivity).isStopped) {
-	            	   for (int i=0; i < buffsize; i++){ 
-	            		   samples[i] = (short) (amp * Math.sin(ph));
-	            		   ph += twopi*fr/sampleRate;
-	               	   }
-
-	            	   if (((BlipsMain)mainActivity).playingIndex == column) {
-	            		   audioTrack.write(samples, 0, buffsize);
-	            	   }
-	               }
-	            }
-	            
-	            audioTrack.stop();
-	            audioTrack.release();
-	         }
-	      };
-	      
-	      t.start();
-	}
-	
-	public void stop() {
-
-      if (t != null) {
-	      try {
-	         t.join();
-	      } catch (InterruptedException e) {
-	         e.printStackTrace();
-	      }
-	      
-	      t = null;
-      }
-      
-		System.out.println("Cell in column:" + column + " row:" + row + " stop playing");
-
-		
 	}
 }

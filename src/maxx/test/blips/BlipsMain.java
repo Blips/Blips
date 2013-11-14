@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 public class BlipsMain extends Activity {
 	// Grid and timer constants
-	static final int GRID_ROWS = 8;
-	static final int GRID_COLS = 4;
+	static final int GRID_ROWS = 12;
+	static final int GRID_COLS = 8;
 	static final int MILLI_DELAY = 500;
 	
 	// Playing index of sequence
@@ -27,7 +27,7 @@ public class BlipsMain extends Activity {
 	// Reference to every button in grid
 	BlipCell[][] cells;
 	// Boolean to tell whether we're paused or not
-	boolean isStopped = false;
+	boolean isStopped = true;
 	boolean destroyed;
 	
 	// Save / Play / Clear Buttons
@@ -35,7 +35,7 @@ public class BlipsMain extends Activity {
 	Button clearButton;
 	Button playButton;
 	
-	BlipGenerator bg;
+	BlipGenerator bg = null;
 
 	
 	// Activity Result Code Variable
@@ -43,14 +43,15 @@ public class BlipsMain extends Activity {
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
+	  bg = new BlipGenerator(this);  
+
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-	  bg = new BlipGenerator(this);  
       
       // create the layout 
       initializeLayout();
-      isStopped = false;
-      destroyed = false;
+      isStopped = true;
+      destroyed = true;
       
       // initialize listeners
       initListeners();
@@ -77,12 +78,13 @@ public class BlipsMain extends Activity {
 	}
 	
 	public void onResume() {	
-		super.onResume();
 	    if (bg == null) {
 	    	bg = new BlipGenerator(this);
 	    }
+	    
+		super.onResume();
 
-		isStopped = getPreferences(MODE_PRIVATE).getBoolean("isStopped", false);
+		isStopped = getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
 
 		if (!destroyed) {
 			for (int c = 0; c < GRID_COLS; c++) {
@@ -109,10 +111,7 @@ public class BlipsMain extends Activity {
 	  LinearLayout.LayoutParams row_params = new LinearLayout.LayoutParams(
 				   LinearLayout.LayoutParams.MATCH_PARENT, 
 				   LinearLayout.LayoutParams.MATCH_PARENT);
-	  // Init btn layout params
-	  LinearLayout.LayoutParams btn_params = new LinearLayout.LayoutParams(
-		    	   LinearLayout.LayoutParams.WRAP_CONTENT, 
-		    	   LinearLayout.LayoutParams.WRAP_CONTENT);
+
 
       for (int r = 0; r < GRID_ROWS; r++) {
     	 // Handle each row in grid
@@ -130,7 +129,6 @@ public class BlipsMain extends Activity {
         	 btn.setTextOn("");
         	 btn.setText("");
         	 
-        	 btn.setLayoutParams(btn_params);
         	 row.addView(btn);
         	 cells[c][r] = btn;
         	 
@@ -219,13 +217,14 @@ public class BlipsMain extends Activity {
    
    public void togglePlay() {      
 	  if (isStopped) {
-    	 bg.stop();
          playButton.setText("Pause");
          isStopped = false;
+    	 bg.play();
       }
       else {
          isStopped = true;
          playButton.setText("Play");
+         bg.stop();
       }
    }
    
