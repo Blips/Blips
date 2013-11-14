@@ -1,10 +1,8 @@
 package maxx.test.blips;
 
 
-import java.util.Timer;
-import java.util.TimerTask;
+
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -22,8 +20,6 @@ public class BlipsMain extends Activity {
 	static final int GRID_COLS = 8;
 	static final int MILLI_DELAY = 500;
 	
-	// Playing index of sequence
-	int playingIndex = 0;
 	// Reference to every button in grid
 	BlipCell[][] cells;
 	// Boolean to tell whether we're paused or not
@@ -55,8 +51,6 @@ public class BlipsMain extends Activity {
       
       // initialize listeners
       initListeners();
-      // Start timer
-      startSequence();
    }
    
 	public void onPause() {
@@ -70,7 +64,6 @@ public class BlipsMain extends Activity {
 		
 		editor.putBoolean("isStopped", isStopped);
 		editor.commit();
-		clearAll();
 	    bg.stop();
 	    bg = null;
 
@@ -84,7 +77,8 @@ public class BlipsMain extends Activity {
 	    
 		super.onResume();
 
-		isStopped = getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
+		isStopped = !getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
+		togglePlay();
 
 		if (!destroyed) {
 			for (int c = 0; c < GRID_COLS; c++) {
@@ -103,6 +97,7 @@ public class BlipsMain extends Activity {
       LinearLayout container = (LinearLayout) findViewById(R.id.llContainer);
       // Grid cells
       cells = new BlipCell[GRID_COLS][GRID_ROWS];
+    
       if (bg == null) {
     	  bg = new BlipGenerator(this);
       }
@@ -141,7 +136,7 @@ public class BlipsMain extends Activity {
       loadsaveButton = (Button)this.findViewById(R.id.loadsave_button);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
-      playButton.setText("Pause");
+      playButton.setText("Play");
    }
    
    @Override
@@ -226,23 +221,5 @@ public class BlipsMain extends Activity {
          playButton.setText("Play");
          bg.stop();
       }
-   }
-   
-   public void startSequence (){
-	   final Handler handler = new Handler ();
-	   
-	   // Timer, calls the inner run() every MILLI_DELAY interval
-	   Timer timer = new Timer();
-	   timer.scheduleAtFixedRate (new TimerTask (){
-	      public void run () {
-	         handler.post (new Runnable () {
-	            public void run () {
-	               if (++playingIndex >= GRID_COLS) {
-	                  playingIndex = 0;
-	               }	                	
-	            }
-	         });
-	      }
-	   }, 0, MILLI_DELAY);
    }
 }

@@ -2,6 +2,8 @@ package maxx.test.blips;
 
 
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
@@ -10,7 +12,7 @@ public class BlipCell extends ToggleButton {
 	private int column;
 	private int row;
 	private boolean active;
-	private BlipGenerator generator;
+	private BlipGenerator generator = null;
 	private String name = null;
 
 	public BlipCell(Context context) {
@@ -69,11 +71,26 @@ public class BlipCell extends ToggleButton {
 		
 		if (isActive && generator!= null) {
 		 	setText(name);
+		 	generator.selections.get(column).add(BlipsMain.GRID_ROWS - row);
 		
 		 	if (!generator.playing) {
 				// Play demo sound if not sequencing already
 				generator.playSound(BlipsMain.GRID_ROWS - row);
 			}
+		} else if (generator != null) {
+			System.out.println("Remove row " + row + " from col " + column);
+
+			ArrayList<Integer> col = generator.selections.get(column);
+			
+			if (col.contains(BlipsMain.GRID_ROWS - row)) {
+				for (int i = 0; i < col.size(); i++) {
+					if (col.get(i) == BlipsMain.GRID_ROWS - row) {
+						col.remove(i);
+					}
+				}
+			}
+		} else {
+			System.out.println("Generator is NULL!");
 		}
 
 		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);
