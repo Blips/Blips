@@ -22,7 +22,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class LoadSavePage extends Activity {
    // File name variable

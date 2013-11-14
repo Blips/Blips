@@ -3,9 +3,6 @@ package maxx.test.blips;
 
 
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
@@ -13,17 +10,12 @@ public class BlipCell extends ToggleButton {
 	private int column;
 	private int row;
 	private boolean active;
-	private Context mainActivity = null;
 	private BlipGenerator generator;
 	private String name = null;
-
-	int sampleRate = 44100;
-
 
 	public BlipCell(Context context) {
 		super(context);
 		
-		mainActivity = context;
 		column = 0;
 		row = 0;
 		active = false;
@@ -33,7 +25,6 @@ public class BlipCell extends ToggleButton {
 	
 	public BlipCell(Context context, BlipGenerator bg, int c, int r) {
 		super(context);
-		mainActivity = context;
 	
 		column = c;
 		row = r;
