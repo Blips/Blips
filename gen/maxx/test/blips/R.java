@@ -49,19 +49,19 @@ public final class R {
         public static final int main=0x7f090000;
     }
     public static final class raw {
-        public static final int a5=0x7f040000;
-        public static final int a6=0x7f040001;
-        public static final int ab6=0x7f040002;
-        public static final int b5=0x7f040003;
-        public static final int bb5=0x7f040004;
-        public static final int c5=0x7f040005;
-        public static final int d5=0x7f040006;
-        public static final int db5=0x7f040007;
-        public static final int e5=0x7f040008;
-        public static final int eb5=0x7f040009;
-        public static final int f5=0x7f04000a;
-        public static final int g5=0x7f04000b;
-        public static final int gb5=0x7f04000c;
+        public static final int pianoa5=0x7f040000;
+        public static final int pianoa6=0x7f040001;
+        public static final int pianoab6=0x7f040002;
+        public static final int pianob5=0x7f040003;
+        public static final int pianobb5=0x7f040004;
+        public static final int pianoc5=0x7f040005;
+        public static final int pianod5=0x7f040006;
+        public static final int pianodb5=0x7f040007;
+        public static final int pianoe5=0x7f040008;
+        public static final int pianoeb5=0x7f040009;
+        public static final int pianof5=0x7f04000a;
+        public static final int pianog5=0x7f04000b;
+        public static final int pianogb5=0x7f04000c;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;

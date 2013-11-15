@@ -19,27 +19,28 @@ public class BlipGenerator {
    static final int[] major = {2, 2, 1, 2, 2, 2, 1};
    static final int[] minor = {2, 1, 2, 2, 1, 2, 2};
        
-   static final int S1 = R.raw.a5;
-   static final int S2 = R.raw.bb5;
-   static final int S3 = R.raw.b5;
-   static final int S4 = R.raw.c5;
-   static final int S5 = R.raw.db5;
-   static final int S6 = R.raw.d5;
-   static final int S7 = R.raw.eb5;
-   static final int S8 = R.raw.e5;
-   static final int S9 = R.raw.f5;
-   static final int S10 = R.raw.gb5;
-   static final int S11 = R.raw.g5;
-   static final int S12 = R.raw.ab6;
-   static final int S13 = R.raw.a6;
+   static final int S1 = R.raw.pianoa5;
+   static final int S2 = R.raw.pianobb5;
+   static final int S3 = R.raw.pianob5;
+   static final int S4 = R.raw.pianoc5;
+   static final int S5 = R.raw.pianodb5;
+   static final int S6 = R.raw.pianod5;
+   static final int S7 = R.raw.pianoeb5;
+   static final int S8 = R.raw.pianoe5;
+   static final int S9 = R.raw.pianof5;
+   static final int S10 = R.raw.pianogb5;
+   static final int S11 = R.raw.pianog5;
+   static final int S12 = R.raw.pianoab6;
+   static final int S13 = R.raw.pianoa6;
 	      
    private static SoundPool soundPool = null;
    
     // Member variables
    boolean playing;
+   boolean loading = false;
    int playingIndex = 0;
    int rootIndex = 0;
-   float volume = 1f;
+   float volume = .1f;
    Timer timer = null;
 
    Context mainContext = null;
@@ -47,7 +48,7 @@ public class BlipGenerator {
    
    // List of current selections for each column
    ArrayList<ArrayList<Integer>> selections = null;
-	   
+   
    public BlipGenerator() {
 	   playing = false;
 	   scale = minor;
@@ -62,7 +63,9 @@ public class BlipGenerator {
    
     /** Populate the SoundPool*/
    public void initSounds() {
-      selections = new ArrayList<ArrayList<Integer>>(0);
+	  if (selections == null) {
+		  selections = new ArrayList<ArrayList<Integer>>(0);
+	  }
 
       for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
          selections.add(new ArrayList<Integer>(0));
@@ -77,9 +80,15 @@ public class BlipGenerator {
          public void onLoadComplete(SoundPool soundPool, int sampleId,
           int status) {
             System.out.println("Load completed for " + sampleId + " Status: " + status);
+            
+            if (sampleId == 13) {
+            	loading = false;
+            }
          }
       });
 
+      loading = true;
+      
       soundPool.load(mainContext, S1, 1);
       soundPool.load(mainContext, S2, 1);
       soundPool.load(mainContext, S3, 1);
@@ -108,21 +117,34 @@ public class BlipGenerator {
     }
    
    public void play() {
+	   if (soundPool == null) {
+		   initSounds();
+	   }
+	   
 	   playing = true;
-	   startSequence();
+	   playingIndex = 0;
+	   ((BlipsMain)mainContext).runOnUiThread(new Runnable() {
+		@Override
+		public void run() {
+			startSequence();			
+		}
+	   });
    }
    
    
    public void stop() {
 	   playing = false;	
+	   
 	   if (timer != null) {
 		   timer.cancel();
 		   timer = null;
 	   }
 	   
-       for (int row : selections.get(playingIndex)) {
-    	   soundPool.stop(row);
-       }
+	   if (soundPool != null) {
+		   soundPool.autoPause();
+		   soundPool.release();
+		   soundPool = null;
+	   }
    }
    
    public void startSequence (){
@@ -138,12 +160,23 @@ public class BlipGenerator {
 	      public void run () {
 	         handler.post (new Runnable () {
 	            public void run () {
-	               for (int row : selections.get(playingIndex)) {
-	            	   soundPool.play(row, volume, volume, 1, 0, 1f);
-	               }
+	            	// Start current index
+	            	if (!(((BlipsMain)mainContext).resetting || loading)) {
+	            		for (int row : selections.get(playingIndex)) {
+	            			if (soundPool.play(row, volume, volume, 1, 0, 1f) == 0) {
+	            				System.out.println("Play failed");
+	            				
+	            				// Error recovery
+	            				soundPool.release();
+	            				soundPool = null;
+	            				initSounds();
+	            			}
+	            		}
+	            	}
 	               
+	               // Increment index
 	               if (++playingIndex >= BlipsMain.GRID_COLS) {
-		                  playingIndex = 0;
+	            	   playingIndex = 0;
 		           }
 	            }
 	         });

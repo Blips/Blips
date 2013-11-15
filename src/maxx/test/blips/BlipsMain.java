@@ -32,6 +32,7 @@ public class BlipsMain extends Activity {
 	Button playButton;
 	
 	BlipGenerator bg = null;
+	boolean resetting = true;
 
 	
 	// Activity Result Code Variable
@@ -39,14 +40,16 @@ public class BlipsMain extends Activity {
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
-	  bg = new BlipGenerator(this);  
+	  bg = new BlipGenerator(this);
+	  resetting = true;
 
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
       
+      isStopped = false;
+
       // create the layout 
       initializeLayout();
-      isStopped = true;
       destroyed = true;
       
       // initialize listeners
@@ -75,20 +78,26 @@ public class BlipsMain extends Activity {
 	    	bg = new BlipGenerator(this);
 	    }
 	    
+		resetting = true;
+
+	    
 		super.onResume();
 
-		isStopped = !getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
-		togglePlay();
-
 		if (!destroyed) {
+			isStopped = false;
+			
 			for (int c = 0; c < GRID_COLS; c++) {
 				for (int r = 0; r < GRID_ROWS; r++) {
 		        	cells[c][r].setGen(bg); 
 					cells[c][r].setChecked(getPreferences(MODE_PRIVATE).getBoolean("ButtonState" + c + r, false));
 				}
 			}
+			
+			isStopped = !getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
+			togglePlay();
 		}
 		
+		resetting = false;
 		destroyed = false;
    }
    
@@ -107,6 +116,7 @@ public class BlipsMain extends Activity {
 				   LinearLayout.LayoutParams.MATCH_PARENT, 
 				   LinearLayout.LayoutParams.MATCH_PARENT);
 
+	  isStopped = false;
 
       for (int r = 0; r < GRID_ROWS; r++) {
     	 // Handle each row in grid
@@ -136,11 +146,14 @@ public class BlipsMain extends Activity {
       loadsaveButton = (Button)this.findViewById(R.id.loadsave_button);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
-      playButton.setText("Play");
+      
+      isStopped = !getPreferences(MODE_PRIVATE).getBoolean("isStopped", true);
+      togglePlay();
    }
    
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  resetting = true;
       super.onActivityResult(requestCode, resultCode, data);
       switch(requestCode) {
       case (LOAD_SAVE_REQ_CODE):
@@ -153,6 +166,7 @@ public class BlipsMain extends Activity {
          }
       break;
       }
+      resetting = false;
    }
    
    public void initListeners() {
@@ -203,8 +217,8 @@ public class BlipsMain extends Activity {
    } 
    
    public void clearAll() {
-      for(int c = 0; c<GRID_COLS; c++) {
-         for(int r = 0; r<GRID_ROWS; r++) {
+      for(int c = 0; c < GRID_COLS; c++) {
+         for(int r = 0; r < GRID_ROWS; r++) {
             cells[c][r].setChecked(false);
          }
       }

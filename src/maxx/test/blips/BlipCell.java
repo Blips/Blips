@@ -72,6 +72,9 @@ public class BlipCell extends ToggleButton {
 
 		// Set the new button state
 		active = isActive;
+		if (generator == null) {
+			generator = ((BlipsMain)getContext()).bg;
+		}
 		
 		if (isActive && generator!= null) {
 			resetIndex();
@@ -79,7 +82,7 @@ public class BlipCell extends ToggleButton {
 			setText(name);
 		 	generator.selections.get(column).add(soundIndex);
 		
-		 	if (!generator.playing) {
+		 	if (!(generator.playing || ((BlipsMain)getContext()).resetting)) {
 				// Play demo sound if not sequencing already
 				generator.playSound(soundIndex);
 			}
