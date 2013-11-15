@@ -123,12 +123,8 @@ public class BlipGenerator {
 	   
 	   playing = true;
 	   playingIndex = 0;
-	   ((BlipsMain)mainContext).runOnUiThread(new Runnable() {
-		@Override
-		public void run() {
-			startSequence();			
-		}
-	   });
+	  
+	   startSequence();			
    }
    
    
