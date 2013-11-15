@@ -9,10 +9,14 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 public class BlipCell extends ToggleButton {
+	// Layout and state vars
 	private int column;
 	private int row;
 	private boolean active;
 	private BlipGenerator generator = null;
+	
+	// User feedback vars
+	private int soundIndex;
 	private String name = null;
 
 	public BlipCell(Context context) {
@@ -70,22 +74,25 @@ public class BlipCell extends ToggleButton {
 		active = isActive;
 		
 		if (isActive && generator!= null) {
-		 	setText(name);
-		 	generator.selections.get(column).add(BlipsMain.GRID_ROWS - row);
+			resetIndex();
+		 	
+			setText(name);
+		 	generator.selections.get(column).add(soundIndex);
 		
 		 	if (!generator.playing) {
 				// Play demo sound if not sequencing already
-				generator.playSound(BlipsMain.GRID_ROWS - row);
+				generator.playSound(soundIndex);
 			}
 		} else if (generator != null) {
 			System.out.println("Remove row " + row + " from col " + column);
 
 			ArrayList<Integer> col = generator.selections.get(column);
 			
-			if (col.contains(BlipsMain.GRID_ROWS - row)) {
+			if (col.contains(soundIndex)) {
 				for (int i = 0; i < col.size(); i++) {
-					if (col.get(i) == BlipsMain.GRID_ROWS - row) {
+					if (col.get(i) == soundIndex) {
 						col.remove(i);
+						break;
 					}
 				}
 			}
@@ -93,7 +100,25 @@ public class BlipCell extends ToggleButton {
 			System.out.println("Generator is NULL!");
 		}
 
-		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);
+		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);		
+	}
+	
+	public void resetIndex() {
+		// SoundPool indexes at 1 (wtf???)
+		soundIndex = 1;
+		
+		// Sound index (0-12) is the sum of all scale intervals preceding note
+		for (int i = 0; i < BlipsMain.GRID_ROWS - row - 1; i++) {
+			soundIndex += generator.scale[i];
+		}
+		
+		// Name is root note + sound index (modulo for wrap around) -1 for zero index
+		name = BlipGenerator.notes[(generator.rootIndex + soundIndex - 1) % 12];
+		
+		System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
+	
+		// Strip off octave number for now
+		name = name.substring(0, name.length() - 1);
 	}
 	
 	public void setGen(BlipGenerator bg) {

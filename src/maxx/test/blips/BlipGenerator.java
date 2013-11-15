@@ -9,17 +9,16 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Handler;
-import android.util.SparseIntArray;
 
 public class BlipGenerator {   
 	// Static variables
    // Note name array
-   static final String[] notes = {"A5", "Bb5", "B5", "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab6"};
+   static final String[] notes = {"A5", "Bb5", "B5", "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab6", "A6"};
    
    // Scale interval arrays
-   static final int[] major = {2, 1, 2, 2, 1, 2, 2};
-   static final int[] minor = {2, 2, 1, 2, 2, 2, 1};
-    
+   static final int[] major = {2, 2, 1, 2, 2, 2, 1};
+   static final int[] minor = {2, 1, 2, 2, 1, 2, 2};
+       
    static final int S1 = R.raw.a5;
    static final int S2 = R.raw.bb5;
    static final int S3 = R.raw.b5;
@@ -32,13 +31,14 @@ public class BlipGenerator {
    static final int S10 = R.raw.gb5;
    static final int S11 = R.raw.g5;
    static final int S12 = R.raw.ab6;
+   static final int S13 = R.raw.a6;
 	      
    private static SoundPool soundPool = null;
-   private static SparseIntArray soundPoolMap = null;
    
     // Member variables
    boolean playing;
    int playingIndex = 0;
+   int rootIndex = 0;
    float volume = 1f;
    Timer timer = null;
 
@@ -50,56 +50,57 @@ public class BlipGenerator {
 	   
    public BlipGenerator() {
 	   playing = false;
+	   scale = minor;
    }
    
    public BlipGenerator(Context context) {
 	   playing = false;
 	   mainContext = context;
+	   scale = minor;
 	   initSounds();
    }
    
     /** Populate the SoundPool*/
-    public void initSounds() {
-    	selections = new ArrayList<ArrayList<Integer>>(0);
-    	
-    	for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
-    		selections.add(new ArrayList<Integer>(0));
-    	}
-    	
-    	System.out.println("Selections initialized. Size: " + selections.size());
-    	
-		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
-		soundPoolMap = new SparseIntArray(12);  
-		
-		soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener(){
-		
-			@Override
-			public void onLoadComplete(SoundPool soundPool, int sampleId,
-					int status) {
-				System.out.println("Load completed for " + sampleId + " Status: " + status);
-			}});
-		
-		soundPoolMap.put( S1, soundPool.load(mainContext, S1, 1) );
-		soundPoolMap.put( S2, soundPool.load(mainContext, S2, 1) );
-		soundPoolMap.put( S3, soundPool.load(mainContext, S3, 1) );
-		soundPoolMap.put( S1, soundPool.load(mainContext, S4, 1) );
-		soundPoolMap.put( S2, soundPool.load(mainContext, S5, 1) );
-		soundPoolMap.put( S3, soundPool.load(mainContext, S6, 1) );
-		soundPoolMap.put( S1, soundPool.load(mainContext, S7, 1) );
-		soundPoolMap.put( S2, soundPool.load(mainContext, S8, 1) );
-		soundPoolMap.put( S3, soundPool.load(mainContext, S9, 1) );
-		soundPoolMap.put( S1, soundPool.load(mainContext, S10, 1) );
-		soundPoolMap.put( S2, soundPool.load(mainContext, S11, 1) );
-		soundPoolMap.put( S3, soundPool.load(mainContext, S12, 1) );
-    }
+   public void initSounds() {
+      selections = new ArrayList<ArrayList<Integer>>(0);
+
+      for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
+         selections.add(new ArrayList<Integer>(0));
+      }
+
+      System.out.println("Selections initialized. Size: " + selections.size());
+
+      soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 100);
+
+      soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener(){
+         @Override
+         public void onLoadComplete(SoundPool soundPool, int sampleId,
+          int status) {
+            System.out.println("Load completed for " + sampleId + " Status: " + status);
+         }
+      });
+
+      soundPool.load(mainContext, S1, 1);
+      soundPool.load(mainContext, S2, 1);
+      soundPool.load(mainContext, S3, 1);
+      soundPool.load(mainContext, S4, 1);
+      soundPool.load(mainContext, S5, 1);
+      soundPool.load(mainContext, S6, 1);
+      soundPool.load(mainContext, S7, 1);
+      soundPool.load(mainContext, S8, 1);
+      soundPool.load(mainContext, S9, 1);
+      soundPool.load(mainContext, S10, 1);
+      soundPool.load(mainContext, S11, 1);
+      soundPool.load(mainContext, S12, 1);
+      soundPool.load(mainContext, S13, 1);
+   }
     
     /** Play a given sound in the soundPool */
     public void playSound(int soundID) {
-	   if(soundPool == null || soundPoolMap == null || mainContext == null) {
+	   if(soundPool == null) {
 		   System.out.println("Something is null");
 	      initSounds();
 	   }
-	   
 
        // play sound with same right and left volume, with a priority of 1, 
        // zero repeats (i.e play once), and a playback rate of 1f

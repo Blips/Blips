@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class BlipsMain extends Activity {
 	// Grid and timer constants
-	static final int GRID_ROWS = 12;
+	static final int GRID_ROWS = 8;
 	static final int GRID_COLS = 8;
 	static final int MILLI_DELAY = 500;
 	
