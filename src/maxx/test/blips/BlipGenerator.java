@@ -186,6 +186,11 @@ public class BlipGenerator {
    }
    
    public void changeScale(int[] newScale, int newRoot) {
+	   // Don't do anything if nothing changed
+	   if (newScale == scale || newRoot == rootIndex) {
+		   return;
+	   }
+	   
 	   // Pause playback
 	   soundPool.autoPause();
 	   loading = true;
@@ -199,7 +204,7 @@ public class BlipGenerator {
 	   if (newScale != null) {
 		   scale = newScale;
 	   }
-	   
+	  
 	   // Drop old selected notes
 	   selections = null;
 	   initSelections();
