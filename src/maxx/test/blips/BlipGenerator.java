@@ -190,9 +190,15 @@ public class BlipGenerator {
 	   soundPool.autoPause();
 	   loading = true;
 	   
-	   // Set new scale descriptors
-	   rootIndex = newRoot;
-	   scale = newScale;
+	   // Pass negative root to maintain current value
+	   if (newRoot >= 0) {
+		   rootIndex = newRoot;
+	   }
+	   
+	   // Pass null scale to maintain current value
+	   if (newScale != null) {
+		   scale = newScale;
+	   }
 	   
 	   // Drop old selected notes
 	   selections = null;
