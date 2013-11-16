@@ -56,7 +56,9 @@ public class BlipsMain extends Activity {
       
       isStopped = false;
       
-      getScreenDimensions();
+      if (heightPixels == 0 || widthPixels == 0) {
+    	  setScreenDimensions();
+      }
 
       // create the layout 
       initializeLayout();
@@ -66,29 +68,32 @@ public class BlipsMain extends Activity {
       initListeners();
    }
    
-   public void getScreenDimensions() {
+   public void setScreenDimensions() {
 	   WindowManager w = this.getWindowManager();
 	   display = w.getDefaultDisplay();
 	   DisplayMetrics metrics = new DisplayMetrics();
 	   display.getMetrics(metrics);
+	   
 	   // since SDK_INT = 1;
 	   widthPixels = metrics.widthPixels;
 	   heightPixels = metrics.heightPixels;
+	   
 	   // includes window decorations (statusbar bar/menu bar)
 	   if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
-	   try {
-	       widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
-	       heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
-	   } catch (Exception ignored) {
+		   try {
+		       widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+		       heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+		   } catch (Exception ignored) {
 	   }
+	   
 	   // includes window decorations (statusbar bar/menu bar)
 	   if (Build.VERSION.SDK_INT >= 17)
-	   try {
-	       Point realSize = new Point();
-	       Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
-	       widthPixels = realSize.x;
-	       heightPixels = realSize.y;
-	   } catch (Exception ignored) {
+		   try {
+		       Point realSize = new Point();
+		       Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
+		       widthPixels = realSize.x;
+		       heightPixels = realSize.y;
+		   } catch (Exception ignored) {
 	   }
    }
    
@@ -115,8 +120,7 @@ public class BlipsMain extends Activity {
 	    }
 	    
 		resetting = true;
-
-	    
+   
 		super.onResume();
 
 		if (!destroyed) {
@@ -269,6 +273,8 @@ public class BlipsMain extends Activity {
       else {
          isStopped = true;
          playButton.setText("Play");
+         // Test change scale (it works)
+         //bg.changeScale(bg.scale == BlipGenerator.major ? BlipGenerator.minor : BlipGenerator.major, 0);
          bg.stop();
       }
    }

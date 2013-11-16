@@ -63,15 +63,7 @@ public class BlipGenerator {
    
     /** Populate the SoundPool*/
    public void initSounds() {
-	  if (selections == null) {
-		  selections = new ArrayList<ArrayList<Integer>>(0);
-	  }
-
-      for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
-         selections.add(new ArrayList<Integer>(0));
-      }
-
-      System.out.println("Selections initialized. Size: " + selections.size());
+	   initSelections();
 
       soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 100);
 
@@ -102,6 +94,18 @@ public class BlipGenerator {
       soundPool.load(mainContext, S11, 1);
       soundPool.load(mainContext, S12, 1);
       soundPool.load(mainContext, S13, 1);
+   }
+   
+   public void initSelections() {
+	  if (selections == null) {
+		  selections = new ArrayList<ArrayList<Integer>>(0);
+	  }
+
+      for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
+         selections.add(new ArrayList<Integer>(0));
+      }
+
+      System.out.println("Selections initialized. Size: " + selections.size());
    }
     
     /** Play a given sound in the soundPool */
@@ -159,6 +163,7 @@ public class BlipGenerator {
 	            	// Start current index
 	            	if (!(((BlipsMain)mainContext).resetting || loading)) {
 	            		for (int row : selections.get(playingIndex)) {
+	            			// Play sound and check result
 	            			if (soundPool.play(row, volume, volume, 1, 0, 1f) == 0) {
 	            				System.out.println("Play failed");
 	            				
@@ -168,15 +173,44 @@ public class BlipGenerator {
 	            				initSounds();
 	            			}
 	            		}
+	            		
+	 	               // Increment index
+	 	               if (++playingIndex >= BlipsMain.GRID_COLS) {
+	 	            	   playingIndex = 0;
+	 		           }
 	            	}
-	               
-	               // Increment index
-	               if (++playingIndex >= BlipsMain.GRID_COLS) {
-	            	   playingIndex = 0;
-		           }
 	            }
 	         });
 	      }
 	   }, 0, BlipsMain.MILLI_DELAY);
+   }
+   
+   public void changeScale(int[] newScale, int newRoot) {
+	   // Pause playback
+	   soundPool.autoPause();
+	   loading = true;
+	   
+	   // Set new scale descriptors
+	   rootIndex = newRoot;
+	   scale = newScale;
+	   
+	   // Drop old selected notes
+	   selections = null;
+	   initSelections();
+	   
+	   // Set each button's new label and sound index
+		for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+			for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+				BlipCell btn = ((BlipsMain)mainContext).cells[c][r];
+				btn.resetIndex(); 
+	        	
+				if (btn.isOn()) {
+	        		selections.get(c).add(btn.getIndex());
+	        	}
+			}
+		}
+		
+		loading = false;
+		playingIndex = 0;
    }
 }

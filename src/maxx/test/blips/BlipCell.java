@@ -47,7 +47,9 @@ public class BlipCell extends ToggleButton {
 													BlipsMain.widthPixels / (BlipsMain.GRID_COLS + 1), 
 													BlipsMain.heightPixels / (BlipsMain.GRID_ROWS + heightOffset));
 	 	setLayoutParams(btn_params);
-		
+	 	
+	 	setTextSize(12.0f);
+	 	
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
 	
@@ -72,13 +74,14 @@ public class BlipCell extends ToggleButton {
 	}
 
 	public void setChecked(boolean isActive) {
+		if (generator == null) {
+			generator = ((BlipsMain)getContext()).bg;
+		}
+		
 		super.setChecked(isActive);
 
 		// Set the new button state
 		active = isActive;
-		if (generator == null) {
-			generator = ((BlipsMain)getContext()).bg;
-		}
 		
 		if (isActive && generator!= null) {
 			resetIndex();
@@ -126,6 +129,14 @@ public class BlipCell extends ToggleButton {
 	
 		// Strip off octave number for now
 		name = name.substring(0, name.length() - 1);
+		
+		if (active) {
+			setText(name);
+		}
+	}
+	
+	public int getIndex() {
+		return soundIndex;
 	}
 	
 	public void setGen(BlipGenerator bg) {
