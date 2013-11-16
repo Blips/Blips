@@ -94,8 +94,8 @@ public class LoadSavePage extends Activity {
       String encodedSave = "";
       Intent i = getIntent();
       
-      for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
-         for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+      for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+         for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
             if (i.getBooleanExtra("ButtonState"+r+c, false)) {
                encodedSave += 1;
             } else {
@@ -153,10 +153,10 @@ public class LoadSavePage extends Activity {
            
            int i = 0;
 
-           for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
-              for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+           for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+              for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
                  resI.putExtra("LoadCell"+r+c, inputBuffer[i++]);
-                 Log.d("Loading file " + filename, "FILE - Row: " + c + " Col: " + r + " Value: " + inputBuffer[i-1]);
+                 Log.d("Loading file " + filename, "FILE - Row: " + r + " Col: " + c + " Value: " + inputBuffer[i-1]);
               }
            }
          

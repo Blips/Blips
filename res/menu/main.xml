@@ -1,9 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-
+    <item android:id="@+id/menu_rootnote"
+        android:title="@string/root_menu"
+        android:showAsAction="always">
+    	<menu>
+    	    <item android:id="@+id/subroot_c"
+    	        android:title="@string/root_c"></item>
+    	    <item android:id="@+id/subroot_db"
+    	        android:title="@string/root_db"></item>
+    	    <item android:id="@+id/subroot_d"
+    	        android:title="@string/root_d"></item>
+    	    <item android:id="@+id/subroot_eb"
+    	        android:title="@string/root_eb"></item>
+    	    <item android:id="@+id/subroot_e"
+    	        android:title="@string/root_e"></item>
+    	    <item android:id="@+id/subroot_f"
+    	        android:title="@string/root_f"></item>
+    	    <item android:id="@+id/subroot_gb"
+    	        android:title="@string/root_gb"></item>
+    	    <item android:id="@+id/subroot_g"
+    	        android:title="@string/root_g"></item>
+    	    <item android:id="@+id/subroot_ab"
+    	        android:title="@string/root_ab"></item>
+    	    <item android:id="@+id/subroot_a"
+    	        android:title="@string/root_a"></item>
+    	    <item android:id="@+id/subroot_bb"
+    	        android:title="@string/root_bb"></item>
+    	    <item android:id="@+id/subroot_b"
+    	        android:title="@string/root_b"></item>
+    	</menu>
+    </item>
+    <item android:id="@+id/menu_scale"
+        android:title="@string/scale_menu"
+        android:showAsAction="always" >
+    	<menu>
+    	    <item android:id="@+id/subscale_major"
+    	        android:title="@string/scale_major"></item>
+    	    <item android:id="@+id/subscale_minor"
+    	        android:title="@string/scale_minor"></item>
+    	    <item android:id="@+id/subscale_mixolydian"
+    	        android:title="@string/scale_mixolydian"></item>
+    	    <item android:id="@+id/subscale_dorian"
+    	        android:title="@string/scale_dorian"></item>
+    	    <item android:id="@+id/subscale_phrygian"
+    	        android:title="@string/scale_phrygian"></item>
+    	    <item android:id="@+id/subscale_lydian"
+    	        android:title="@string/scale_lydian"></item>
+    	    <item android:id="@+id/subscale_locrian"
+    	        android:title="@string/scale_locrian"></item>
+    	</menu>
+    </item>
+    <item android:id="@+id/menu_saveload"
+        android:title="@string/saveload_menu"
+        android:showAsAction="always" >
+    </item>
 </menu>

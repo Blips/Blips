@@ -15,14 +15,14 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" />
 
-    <Button
+   <!-- <Button
         android:id="@+id/loadsave_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llContainer"
         android:layout_gravity="left"
         android:text="@string/button_loadsave"
-        android:textSize="18sp" />
+        android:textSize="18sp" /> -->
 
     <Button
         android:id="@+id/clear_button"
@@ -30,8 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/llContainer"
         android:text="@string/button_clear"
-        android:textSize="18sp"
-        android:layout_toRightOf="@+id/loadsave_button" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/play_button"
