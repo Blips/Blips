@@ -38,10 +38,14 @@ public class BlipCell extends ToggleButton {
 		name = BlipGenerator.notes[BlipsMain.GRID_ROWS - row - 1];
 		// Strip octave number off name for now
 		name = name.substring(0, name.length() - 1);
+		
+		int heightOffset = BlipsMain.display.getRotation() == 0 ? 8 : 5;
 
 		
 		  // Init btn layout params
-		LinearLayout.LayoutParams btn_params = new LinearLayout.LayoutParams(125, 120);
+		LinearLayout.LayoutParams btn_params = new LinearLayout.LayoutParams(
+													BlipsMain.widthPixels / (BlipsMain.GRID_COLS + 1), 
+													BlipsMain.heightPixels / (BlipsMain.GRID_ROWS + heightOffset));
 	 	setLayoutParams(btn_params);
 		
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");

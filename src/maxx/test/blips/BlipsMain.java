@@ -2,13 +2,18 @@ package maxx.test.blips;
 
 
 
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -19,6 +24,9 @@ public class BlipsMain extends Activity {
 	static final int GRID_ROWS = 8;
 	static final int GRID_COLS = 8;
 	static final int MILLI_DELAY = 500;
+	static int widthPixels = 0;
+	static int heightPixels = 0;
+	static Display display;
 	
 	// Reference to every button in grid
 	BlipCell[][] cells;
@@ -47,6 +55,8 @@ public class BlipsMain extends Activity {
       setContentView(R.layout.activity_main);
       
       isStopped = false;
+      
+      getScreenDimensions();
 
       // create the layout 
       initializeLayout();
@@ -54,6 +64,32 @@ public class BlipsMain extends Activity {
       
       // initialize listeners
       initListeners();
+   }
+   
+   public void getScreenDimensions() {
+	   WindowManager w = this.getWindowManager();
+	   display = w.getDefaultDisplay();
+	   DisplayMetrics metrics = new DisplayMetrics();
+	   display.getMetrics(metrics);
+	   // since SDK_INT = 1;
+	   widthPixels = metrics.widthPixels;
+	   heightPixels = metrics.heightPixels;
+	   // includes window decorations (statusbar bar/menu bar)
+	   if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+	   try {
+	       widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+	       heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+	   } catch (Exception ignored) {
+	   }
+	   // includes window decorations (statusbar bar/menu bar)
+	   if (Build.VERSION.SDK_INT >= 17)
+	   try {
+	       Point realSize = new Point();
+	       Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
+	       widthPixels = realSize.x;
+	       heightPixels = realSize.y;
+	   } catch (Exception ignored) {
+	   }
    }
    
 	public void onPause() {
