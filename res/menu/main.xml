@@ -1,57 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/menu_main">
+    
     <item android:id="@+id/menu_rootnote"
-        android:title="@string/root_menu"
+        android:title="@string/root_a"
         android:showAsAction="always">
+    	
     	<menu>
     	    <item android:id="@+id/subroot_c"
-    	        android:title="@string/root_c"></item>
+    	        android:title="@string/root_c" />
+    	  
     	    <item android:id="@+id/subroot_db"
-    	        android:title="@string/root_db"></item>
+    	        android:title="@string/root_db" />
+    	    
     	    <item android:id="@+id/subroot_d"
-    	        android:title="@string/root_d"></item>
+    	        android:title="@string/root_d" />
+    	    
     	    <item android:id="@+id/subroot_eb"
-    	        android:title="@string/root_eb"></item>
+    	        android:title="@string/root_eb" />
+    	    
     	    <item android:id="@+id/subroot_e"
-    	        android:title="@string/root_e"></item>
+    	        android:title="@string/root_e" />
+    	    
     	    <item android:id="@+id/subroot_f"
-    	        android:title="@string/root_f"></item>
+    	        android:title="@string/root_f" />
+    	    
     	    <item android:id="@+id/subroot_gb"
-    	        android:title="@string/root_gb"></item>
+    	        android:title="@string/root_gb" />
+    	    
     	    <item android:id="@+id/subroot_g"
-    	        android:title="@string/root_g"></item>
+    	        android:title="@string/root_g" />
+    	    
     	    <item android:id="@+id/subroot_ab"
-    	        android:title="@string/root_ab"></item>
+    	        android:title="@string/root_ab" />
+    	    
     	    <item android:id="@+id/subroot_a"
-    	        android:title="@string/root_a"></item>
+    	        android:title="@string/root_a" />
+    	    
     	    <item android:id="@+id/subroot_bb"
-    	        android:title="@string/root_bb"></item>
+    	        android:title="@string/root_bb" />
+    	    
     	    <item android:id="@+id/subroot_b"
-    	        android:title="@string/root_b"></item>
+    	        android:title="@string/root_b" />
     	</menu>
     </item>
+   
     <item android:id="@+id/menu_scale"
-        android:title="@string/scale_menu"
-        android:showAsAction="always" >
-    	<menu>
+        android:title="@string/scale_minor"
+        android:showAsAction="always">
+    
+       	<menu>
     	    <item android:id="@+id/subscale_major"
-    	        android:title="@string/scale_major"></item>
+    	        android:title="@string/scale_major" />
+    	    
     	    <item android:id="@+id/subscale_minor"
-    	        android:title="@string/scale_minor"></item>
+    	        android:title="@string/scale_minor" />
+    	    
     	    <item android:id="@+id/subscale_mixolydian"
-    	        android:title="@string/scale_mixolydian"></item>
+    	        android:title="@string/scale_mixolydian" />
+    	    
     	    <item android:id="@+id/subscale_dorian"
-    	        android:title="@string/scale_dorian"></item>
+    	        android:title="@string/scale_dorian" />
+    	    
     	    <item android:id="@+id/subscale_phrygian"
-    	        android:title="@string/scale_phrygian"></item>
+    	        android:title="@string/scale_phrygian" />
+    	    
     	    <item android:id="@+id/subscale_lydian"
-    	        android:title="@string/scale_lydian"></item>
+    	        android:title="@string/scale_lydian" />
+    	    
     	    <item android:id="@+id/subscale_locrian"
-    	        android:title="@string/scale_locrian"></item>
+    	        android:title="@string/scale_locrian" />
+    	    
+    	    <item android:id="@+id/subscale_harmonic" 
+    	        android:title="@string/scale_harmonic" />
     	</menu>
     </item>
     <item android:id="@+id/menu_saveload"
         android:title="@string/saveload_menu"
-        android:showAsAction="always" >
-    </item>
+        android:showAsAction="always" />
 </menu>

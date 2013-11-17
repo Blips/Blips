@@ -16,8 +16,14 @@ public class BlipGenerator {
    static final String[] notes = {"A5", "Bb5", "B5", "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab6", "A6"};
    
    // Scale interval arrays
-   static final int[] major = {2, 2, 1, 2, 2, 2, 1};
-   static final int[] minor = {2, 1, 2, 2, 1, 2, 2};
+   static final int[] major      = {2, 2, 1, 2, 2, 2, 1};
+   static final int[] minor      = {2, 1, 2, 2, 1, 2, 2};
+   static final int[] dorian     = {2, 1, 2, 2, 2, 1, 2};
+   static final int[] lydian     = {2, 2, 2, 1, 2, 2, 1};
+   static final int[] locrian    = {1, 2, 2, 1, 2, 2, 2};
+   static final int[] phrygian   = {1, 2, 2, 2, 1, 2, 2};
+   static final int[] harmonic   = {2, 1, 2, 2, 1, 3, 1};
+   static final int[] mixolydian = {2, 2, 1, 2, 2, 1, 2};
        
    static final int S1 = R.raw.pianoa5;
    static final int S2 = R.raw.pianobb5;
@@ -37,13 +43,13 @@ public class BlipGenerator {
    
     // Member variables
    boolean playing;
-   boolean loading = false;
+   boolean loading = true;
    int playingIndex = 0;
    int rootIndex = 0;
-   float volume = .1f;
+   float volume = .5f;
    Timer timer = null;
 
-   Context mainContext = null;
+   BlipsMain mainContext = null;
    int[] scale = null;
    
    // List of current selections for each column
@@ -55,9 +61,15 @@ public class BlipGenerator {
    }
    
    public BlipGenerator(Context context) {
+	   loading = true;
 	   playing = false;
-	   mainContext = context;
-	   scale = minor;
+	   mainContext = (BlipsMain)context;
+	   scale = new int[7];
+		
+	   for (int i = 0; i < scale.length; i++) {
+			scale[i] = mainContext.prefs.getInt("ScaleInterval" + i, BlipGenerator.minor[i]);
+	   }
+	   
 	   initSounds();
    }
    
@@ -65,38 +77,40 @@ public class BlipGenerator {
    public void initSounds() {
 	   initSelections();
 
-      soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 100);
-
-      soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener(){
-         @Override
-         public void onLoadComplete(SoundPool soundPool, int sampleId,
-          int status) {
-            System.out.println("Load completed for " + sampleId + " Status: " + status);
-            
-            if (sampleId == 13) {
-            	loading = false;
-            }
-         }
-      });
-
-      loading = true;
-      
-      soundPool.load(mainContext, S1, 1);
-      soundPool.load(mainContext, S2, 1);
-      soundPool.load(mainContext, S3, 1);
-      soundPool.load(mainContext, S4, 1);
-      soundPool.load(mainContext, S5, 1);
-      soundPool.load(mainContext, S6, 1);
-      soundPool.load(mainContext, S7, 1);
-      soundPool.load(mainContext, S8, 1);
-      soundPool.load(mainContext, S9, 1);
-      soundPool.load(mainContext, S10, 1);
-      soundPool.load(mainContext, S11, 1);
-      soundPool.load(mainContext, S12, 1);
-      soundPool.load(mainContext, S13, 1);
+	   if (soundPool == null) {
+	      soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 100);
+	
+	      soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener(){
+	         @Override
+	         public void onLoadComplete(SoundPool soundPool, int sampleId,
+	          int status) {
+	            System.out.println("Load completed for " + sampleId + " Status: " + status);
+	            
+	            if (sampleId == 13) {
+	            	loading = false;
+	            }
+	         }
+	      });
+	      
+	      soundPool.load(mainContext, S1, 1);
+	      soundPool.load(mainContext, S2, 1);
+	      soundPool.load(mainContext, S3, 1);
+	      soundPool.load(mainContext, S4, 1);
+	      soundPool.load(mainContext, S5, 1);
+	      soundPool.load(mainContext, S6, 1);
+	      soundPool.load(mainContext, S7, 1);
+	      soundPool.load(mainContext, S8, 1);
+	      soundPool.load(mainContext, S9, 1);
+	      soundPool.load(mainContext, S10, 1);
+	      soundPool.load(mainContext, S11, 1);
+	      soundPool.load(mainContext, S12, 1);
+	      soundPool.load(mainContext, S13, 1);
+	   }
    }
    
    public void initSelections() {
+	  loading = true;
+	  
 	  if (selections == null) {
 		  selections = new ArrayList<ArrayList<Integer>>(0);
 	  }
@@ -161,7 +175,7 @@ public class BlipGenerator {
 	         handler.post (new Runnable () {
 	            public void run () {
 	            	// Start current index
-	            	if (!(((BlipsMain)mainContext).resetting || loading)) {
+	            	if (!(mainContext.resetting || loading || soundPool == null)) {
 	            		for (int row : selections.get(playingIndex)) {
 	            			// Play sound and check result
 	            			if (soundPool.play(row, volume, volume, 1, 0, 1f) == 0) {
@@ -185,14 +199,20 @@ public class BlipGenerator {
 	   }, 0, BlipsMain.MILLI_DELAY);
    }
    
-   public void changeScale(int[] newScale, int newRoot) {
+   public void changeScale(int[] newScale, int newRoot) {	   
 	   // Don't do anything if nothing changed
-	   if (newScale == scale || newRoot == rootIndex) {
+	   if (newScale == scale && newRoot == rootIndex) {
 		   return;
 	   }
 	   
+	   System.out.println("Changing scale");
+
+	   
 	   // Pause playback
-	   soundPool.autoPause();
+      if (playing) {
+	      soundPool.autoPause();
+      }
+
 	   loading = true;
 	   
 	   // Pass negative root to maintain current value
@@ -212,7 +232,7 @@ public class BlipGenerator {
 	   // Set each button's new label and sound index
 		for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
 			for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-				BlipCell btn = ((BlipsMain)mainContext).cells[c][r];
+				BlipCell btn = mainContext.cells[c][r];
 				btn.resetIndex(); 
 	        	
 				if (btn.isOn()) {
