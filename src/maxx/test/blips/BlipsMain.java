@@ -49,8 +49,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 	boolean resetting = true;
 
 	
-	// Activity Result Code Variable
+	// Activity Result Code Variable and tracker
 	static final int LOAD_SAVE_REQ_CODE = 1;
+	protected static boolean DATA_LOADED = false;
 	
 	// Menu for Changing Root note, Scale, and saving/loading
 	protected static Menu mainMenu;
@@ -154,13 +155,23 @@ public class BlipsMain extends SherlockFragmentActivity {
 
 		if (!destroyed) {
 			isStopped = false;
-			
-			for (int c = 0; c < GRID_COLS; c++) {
-				for (int r = 0; r < GRID_ROWS; r++) {
-		        	cells[c][r].setGen(bg); 
-					cells[c][r].setChecked(prefs.getBoolean("ButtonState" + c + r, false));
+			if(!DATA_LOADED) {
+				for (int c = 0; c < GRID_COLS; c++) {
+					for (int r = 0; r < GRID_ROWS; r++) {
+						cells[c][r].setGen(bg); 
+						cells[c][r].setChecked(prefs.getBoolean("ButtonState" + c + r, false));
+					}
 				}
 			}
+			else {
+				for (int c = 0; c < GRID_COLS; c++) {
+					for (int r = 0; r < GRID_ROWS; r++) {
+						cells[c][r].setGen(bg); 
+					}
+				}
+				DATA_LOADED = false;
+			}
+			
 			
 			isStopped = !prefs.getBoolean("isStopped", true);
 			togglePlay();
@@ -212,7 +223,6 @@ public class BlipsMain extends SherlockFragmentActivity {
          container.addView(row);
       }
       
-//      loadsaveButton = (Button)this.findViewById(R.id.loadsave_button);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
       
@@ -222,22 +232,7 @@ public class BlipsMain extends SherlockFragmentActivity {
    
 
    
-   public void initListeners() {
-//      this.loadsaveButton.setOnClickListener(new OnClickListener() {
-//         public void onClick(View view)
-//         {
-//            Toast toast = Toast.makeText(BlipsMain.this, "Load or save...", Toast.LENGTH_SHORT);
-//            toast.show();
-//            Intent i = new Intent(BlipsMain.this, LoadSavePage.class);
-//            for(int row = 0; row<GRID_ROWS; row++) {
-//               for (int col = 0; col<GRID_COLS; col++) {
-//                  i.putExtra("ButtonState" + col + row, cells[col][row].isOn());
-//               }
-//            }
-//            startActivityForResult(i, LOAD_SAVE_REQ_CODE);
-//         }
-//      });
-      
+   public void initListeners() {      
       
       this.clearButton.setOnClickListener(new OnClickListener() {
          public void onClick(View view)
@@ -465,6 +460,7 @@ public class BlipsMain extends SherlockFragmentActivity {
       switch(requestCode) {
 	      case (LOAD_SAVE_REQ_CODE):
 	         if(resultCode == Activity.RESULT_OK) {
+	         	DATA_LOADED = true;
 	            for (int c = 0; c < GRID_COLS; c++) {
 	               for (int r = 0; r < GRID_ROWS; r++) {
 	                  cells[c][r].setChecked(data.getCharExtra("LoadCell" + c + r, '0') == '1');

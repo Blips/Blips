@@ -1036,17 +1036,28 @@ containing a value of this type.
     public static final class raw {
         public static final int pianoa5=0x7f040000;
         public static final int pianoa6=0x7f040001;
-        public static final int pianoab6=0x7f040002;
-        public static final int pianob5=0x7f040003;
-        public static final int pianobb5=0x7f040004;
-        public static final int pianoc5=0x7f040005;
-        public static final int pianod5=0x7f040006;
-        public static final int pianodb5=0x7f040007;
-        public static final int pianoe5=0x7f040008;
-        public static final int pianoeb5=0x7f040009;
-        public static final int pianof5=0x7f04000a;
-        public static final int pianog5=0x7f04000b;
-        public static final int pianogb5=0x7f04000c;
+        public static final int pianoab5=0x7f040002;
+        public static final int pianoab6=0x7f040003;
+        public static final int pianob5=0x7f040004;
+        public static final int pianob6=0x7f040005;
+        public static final int pianobb5=0x7f040006;
+        public static final int pianobb6=0x7f040007;
+        public static final int pianoc5=0x7f040008;
+        public static final int pianoc6=0x7f040009;
+        public static final int pianod5=0x7f04000a;
+        public static final int pianod6=0x7f04000b;
+        public static final int pianodb5=0x7f04000c;
+        public static final int pianodb6=0x7f04000d;
+        public static final int pianoe5=0x7f04000e;
+        public static final int pianoe6=0x7f04000f;
+        public static final int pianoeb5=0x7f040010;
+        public static final int pianoeb6=0x7f040011;
+        public static final int pianof5=0x7f040012;
+        public static final int pianof6=0x7f040013;
+        public static final int pianog5=0x7f040014;
+        public static final int pianog6=0x7f040015;
+        public static final int pianogb5=0x7f040016;
+        public static final int pianogb6=0x7f040017;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
