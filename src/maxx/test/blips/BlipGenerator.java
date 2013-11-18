@@ -5,7 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
-import android.graphics.Color;
+//import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
@@ -193,7 +193,7 @@ public class BlipGenerator {
    public void startSequence (){
 	   final Handler handler = new Handler ();
 	   
-	   // Timer, calls the inner run() every MILLI_DELAY interval
+	   // Timer, calls the inner run() every MILLI_DELAY+sliderValue interval
 	   if (timer != null) {
 		   timer.cancel();
 	   }
@@ -242,7 +242,7 @@ public class BlipGenerator {
 	            }
 	         });
 	      }
-	   }, 0, BlipsMain.MILLI_DELAY);
+	   }, 0, BlipsMain.MILLI_DELAY-BlipsMain.sliderValue);
    }
    
    public boolean changeScale(int[] newScale, int newRoot) {	   

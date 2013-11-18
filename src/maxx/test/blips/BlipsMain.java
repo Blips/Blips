@@ -22,6 +22,8 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 
@@ -29,7 +31,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	// Grid and timer constants
 	static final int GRID_ROWS = 8;
 	static final int GRID_COLS = 8;
-	static final int MILLI_DELAY = 500;
+	static final int MILLI_DELAY = 750; // changed since slider starts at 250
 	static int widthPixels = 0;
 	static int heightPixels = 0;
 	static int rotation = 0;
@@ -41,11 +43,15 @@ public class BlipsMain extends SherlockFragmentActivity {
 	boolean isStopped = true;
 	boolean destroyed;
 	
-	// Save / Play / Clear Buttons
-//	Button loadsaveButton;   - now inside the actionbar
+	// Play / Clear Buttons
 	Button clearButton;
 	Button playButton;
 	
+	// Tempo Slider and slider value
+	SeekBar tempoSlider;
+	protected static int sliderValue = 250;
+	
+	// Store generator and other state variables
 	BlipGenerator bg = null;
 	boolean resetting = true;
 
@@ -229,6 +235,10 @@ public class BlipsMain extends SherlockFragmentActivity {
          container.addView(row);
       }
       
+      // Initialize tempo slider and buttons
+      tempoSlider = (SeekBar)this.findViewById(R.id.tempobar);
+      tempoSlider.setMax(500); // Delay can go from 250 to 750
+      tempoSlider.setProgress(sliderValue);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
       
@@ -254,6 +264,32 @@ public class BlipsMain extends SherlockFragmentActivity {
          {
             togglePlay();
          }
+      });
+      
+      this.tempoSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+    	 @Override
+    	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    	 	 sliderValue = progress;
+    	 	 //TODO kill/restart timer thread
+    	 	 // You are not allowed to change the delay on a timer while its running,
+    	 	 // so unless we implement a different way of playing notes, we cannot
+    	 	 // have tempo dynamically change.
+    	 }
+
+		 @Override
+		 public void onStartTrackingTouch(SeekBar seekBar) {
+			 // Stop the sequencer. This allows the Timer to update its delay
+			 if (!isStopped) {
+				 bg.stop();
+			 }
+		 }
+
+		 @Override
+		 public void onStopTrackingTouch(SeekBar seekBar) {
+			 if (!isStopped) {
+				 bg.play();
+			 }
+		 }
       });
    }
    
@@ -295,8 +331,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   rootMenu = menu.findItem(R.id.menu_rootnote);
 	   scaleMenu = menu.findItem(R.id.menu_scale);
 	   
-	   scaleMenu.setTitle(prefs.getString("savedScale", "Minor"));
-	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_a)));
+	   scaleMenu.setTitle(prefs.getString("savedScale", getString(R.string.scale_minor)));
+	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_c)));
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
 	   return true;

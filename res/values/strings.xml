@@ -35,5 +35,6 @@
     <string name="scale_menu">Scale</string>
     <string name="root_menu">Key</string>
     <string name="saveload_menu">Load/Save</string>
+    <string name="tempotext">Tempo</string>
 
 </resources>

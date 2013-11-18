@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -138,6 +137,10 @@ public class LoadSavePage extends Activity {
               * the ActivityContext provides.
               * Again for security reasons with
               * openFileInput(...) */
+             File dir = getFilesDir();
+             saveFiles = dir.listFiles();
+             
+             saveListview.setAdapter(new FileListAdapter(this, saveFiles));
 
           } catch (IOException ioe) 
             {ioe.getMessage();}
@@ -189,6 +192,9 @@ public class LoadSavePage extends Activity {
    
    void delete(String filename) {
       this.deleteFile(filename);
-      ((BaseAdapter) saveListview.getAdapter()).notifyDataSetChanged();
+      File dir = getFilesDir();
+      saveFiles = dir.listFiles();
+      
+      saveListview.setAdapter(new FileListAdapter(this, saveFiles));
    }
 }
