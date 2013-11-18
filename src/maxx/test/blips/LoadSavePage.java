@@ -94,6 +94,12 @@ public class LoadSavePage extends Activity {
       String encodedSave = "";
       Intent i = getIntent();
       
+      encodedSave += i.getIntExtra("ScaleRoot", 0);
+      
+      for (int x = 0; x < BlipGenerator.minor.length; x++) {
+    	  encodedSave += i.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
+      }
+      
       for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
          for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
             if (i.getBooleanExtra("ButtonState"+c+r, false)) {
@@ -144,7 +150,7 @@ public class LoadSavePage extends Activity {
 
           /* Prepare a char-Array that will
            * hold the chars we read back in. */
-           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 1];
+           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + BlipGenerator.minor.length + 1];
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
@@ -157,6 +163,14 @@ public class LoadSavePage extends Activity {
            Intent resI = new Intent();
            
            int i = 0;
+           
+           resI.putExtra("LoadRoot", Character.getNumericValue(inputBuffer[i++]));
+           System.out.println("Loaded root " + inputBuffer[i - 1]);
+           
+           for (int x = 0; x < BlipGenerator.minor.length; x++) {
+         	  resI.putExtra("ScaleInterval" + x, Character.getNumericValue(inputBuffer[i++]));
+         	  System.out.println("Loaded interval " + x + " value: " + inputBuffer[i - 1]);
+           }
 
            for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
               for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {

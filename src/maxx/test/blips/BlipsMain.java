@@ -132,7 +132,6 @@ public class BlipsMain extends SherlockFragmentActivity {
 		}
 		
 		editor.putInt("ScaleRoot", bg.rootIndex);
-		
 		editor.putBoolean("isStopped", isStopped);
 		
 		editor.commit();
@@ -456,27 +455,64 @@ public class BlipsMain extends SherlockFragmentActivity {
               i.putExtra("ButtonState" + c + r, cells[c][r].isOn());
            }
         }
+        
+		for (int x = 0; x < bg.scale.length; x++) {
+			i.putExtra("ScaleInterval" + x, bg.scale[x]);
+		}
+		
+		i.putExtra("ScaleRoot", bg.rootIndex);
+		
         startActivityForResult(i, LOAD_SAVE_REQ_CODE);
    }
    
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  resetting = true;
+	  
       super.onActivityResult(requestCode, resultCode, data);
       switch(requestCode) {
 	      case (LOAD_SAVE_REQ_CODE):
 	         if(resultCode == Activity.RESULT_OK) {
+	        	Editor edit = prefs.edit();
 	         	DATA_LOADED = true;
+	         	int[] scale = new int[BlipGenerator.minor.length];
+		      	
+	         	if (bg == null) {
+			    	bg = new BlipGenerator(this);
+	         	}
+
 	            for (int c = 0; c < GRID_COLS; c++) {
 	               for (int r = 0; r < GRID_ROWS; r++) {
 	                  cells[c][r].setChecked(data.getCharExtra("LoadCell" + c + r, '0') == '1');
+	  				  edit.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
 	                  System.out.println("Setting " + cells[c][r].isOn() + " checked for cell " + c + r);
 	               }
 	            }
+	            
+	    		for (int x = 0; x < scale.length; x++) {
+	    			scale[x] = data.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
+	    			edit.putInt("ScaleInterval" + x, bg.scale[x]);
+	    		}
+	    			    		
+	    		if (bg.changeScale(scale, data.getIntExtra("LoadRoot", 0))) {
+		    		for (int x = 0; x < scale.length; x++) {
+		    			scale[x] = data.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
+		    			edit.putInt("ScaleInterval" + x, bg.scale[x]);
+		    		}
+		    		
+		    		edit.putInt("ScaleRoot", bg.rootIndex);
+	    		}
+	            
+	            
+	            bg.play();
+	            
+	            
+ 	            edit.commit();
 	         }
 	      
 	      	 break;
       }
+     
       resetting = false;
    }
 }
