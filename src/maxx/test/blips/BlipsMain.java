@@ -270,10 +270,6 @@ public class BlipsMain extends SherlockFragmentActivity {
     	 @Override
     	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     	 	 sliderValue = progress;
-    	 	 //TODO kill/restart timer thread
-    	 	 // You are not allowed to change the delay on a timer while its running,
-    	 	 // so unless we implement a different way of playing notes, we cannot
-    	 	 // have tempo dynamically change.
     	 }
 
 		 @Override

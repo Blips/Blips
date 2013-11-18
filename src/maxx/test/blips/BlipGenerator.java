@@ -193,7 +193,7 @@ public class BlipGenerator {
    public void startSequence (){
 	   final Handler handler = new Handler ();
 	   
-	   // Timer, calls the inner run() every MILLI_DELAY+sliderValue interval
+	   // Timer, calls the inner run() every MILLI_DELAY-sliderValue interval
 	   if (timer != null) {
 		   timer.cancel();
 	   }
