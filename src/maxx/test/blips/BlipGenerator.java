@@ -14,6 +14,7 @@ import android.os.Handler;
 public class BlipGenerator {   
 	// Static variables
    // Note name array
+   // TODO: Why is this here?
    static final String[] notes = {"A5", "Bb5", "B5", "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab6", "A6"};
    
    // Scale interval arrays
@@ -25,32 +26,38 @@ public class BlipGenerator {
    static final int[] phrygian   = {1, 2, 2, 2, 1, 2, 2};
    static final int[] harmonic   = {2, 1, 2, 2, 1, 3, 1};
    static final int[] mixolydian = {2, 2, 1, 2, 2, 1, 2};
-       
-   static final int S1 = R.raw.pianoa5;
-   static final int S2 = R.raw.pianobb5;
-   static final int S3 = R.raw.pianob5;
-   static final int S4 = R.raw.pianoc5;
-   static final int S5 = R.raw.pianodb5;
-   static final int S6 = R.raw.pianod5;
-   static final int S7 = R.raw.pianoeb5;
-   static final int S8 = R.raw.pianoe5;
-   static final int S9 = R.raw.pianof5;
-   static final int S10 = R.raw.pianogb5;
-   static final int S11 = R.raw.pianog5;
-   static final int S12 = R.raw.pianoab6;
-   static final int S13 = R.raw.pianoa6;
-   static final int S14 = R.raw.pianoa6;
-   static final int S15 = R.raw.pianobb6;
-   static final int S16 = R.raw.pianob6;
-   static final int S17 = R.raw.pianoc6;
-   static final int S18 = R.raw.pianodb6;
-   static final int S19 = R.raw.pianod6;
-   static final int S20 = R.raw.pianoeb6;
-   static final int S21 = R.raw.pianoe6;
-   static final int S22 = R.raw.pianof6;
-   static final int S23 = R.raw.pianogb6;
-   static final int S24 = R.raw.pianog6;
-   static final int S25 = R.raw.pianoab7;
+   
+   // TODO: Read below
+   // I parsed all the files from the site as they were,
+   // which was from C to C. While we don't need to change
+   // our default from being A, you should still take note
+   // that the lowest note we support is C5, and that the
+   // notes have now moved in terms of SX positioning.
+   static final int S1 = R.raw.pianoc5;
+   static final int S2 = R.raw.pianodb5;
+   static final int S3 = R.raw.pianod5;
+   static final int S4 = R.raw.pianoeb5;
+   static final int S5 = R.raw.pianoe5;
+   static final int S6 = R.raw.pianof5;
+   static final int S7 = R.raw.pianogb5;
+   static final int S8 = R.raw.pianog5;
+   static final int S9 = R.raw.pianoab5;
+   static final int S10 = R.raw.pianoa5; // here's A!
+   static final int S11 = R.raw.pianobb5;
+   static final int S12 = R.raw.pianob5;
+   static final int S13 = R.raw.pianoc6;
+   static final int S14 = R.raw.pianodb6;
+   static final int S15 = R.raw.pianod6;
+   static final int S16 = R.raw.pianoeb6;
+   static final int S17 = R.raw.pianoe6;
+   static final int S18 = R.raw.pianof6;
+   static final int S19 = R.raw.pianogb6;
+   static final int S20 = R.raw.pianog6;
+   static final int S21 = R.raw.pianoab6;
+   static final int S22 = R.raw.pianoa6;
+   static final int S23 = R.raw.pianobb6;
+   static final int S24 = R.raw.pianob6;
+   static final int S25 = R.raw.pianoc7;
 	      
    private static SoundPool soundPool = null;
    

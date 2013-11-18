@@ -2,6 +2,7 @@ package maxx.test.blips;
 
 
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -79,6 +80,10 @@ public class BlipsMain extends SherlockFragmentActivity {
       if (heightPixels == 0 || widthPixels == 0 || rotation != display.getRotation()) {
     	  setScreenDimensions();
       }
+      
+      // Remove the App title from Action bar
+      ActionBar ab = getSupportActionBar();
+      ab.setDisplayShowTitleEnabled(false);
 
       // create the layout 
       initializeLayout();
@@ -291,7 +296,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   scaleMenu = menu.findItem(R.id.menu_scale);
 	   
 	   scaleMenu.setTitle(prefs.getString("savedScale", "Minor"));
-	   rootMenu.setTitle(prefs.getString("savedRootNote", "A"));
+	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_a)));
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
 	   return true;
