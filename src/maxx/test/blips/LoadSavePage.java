@@ -94,15 +94,17 @@ public class LoadSavePage extends Activity {
       String encodedSave = "";
       Intent i = getIntent();
       
-      for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-         for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
-            if (i.getBooleanExtra("ButtonState"+r+c, false)) {
+      for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+         for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+            if (i.getBooleanExtra("ButtonState"+c+r, false)) {
                encodedSave += 1;
             } else {
                encodedSave += 0;
             }
          }
       }
+      
+      System.out.println("Saving encoded string: " + encodedSave);
       
       try { 
              // catches IOException below
@@ -146,16 +148,19 @@ public class LoadSavePage extends Activity {
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
-
+           System.out.println("Loading encoded string ");
+           for (int i = 0; i < inputBuffer.length; i++ ) {
+        	   System.out.println(" " + inputBuffer[i]);
+           }
            
            /** Create a new intent to send back to parent Activity */
            Intent resI = new Intent();
            
            int i = 0;
 
-           for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-              for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
-                 resI.putExtra("LoadCell"+r+c, inputBuffer[i++]);
+           for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+              for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+                 resI.putExtra("LoadCell"+c+r, inputBuffer[i++]);
                  Log.d("Loading file " + filename, "FILE - Row: " + r + " Col: " + c + " Value: " + inputBuffer[i-1]);
               }
            }

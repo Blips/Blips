@@ -49,6 +49,7 @@ public class BlipCell extends ToggleButton {
 	 	setLayoutParams(btn_params);
 	 	
 	 	setTextSize(12.0f);
+	 	resetIndex();
 	 	
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -75,6 +76,7 @@ public class BlipCell extends ToggleButton {
 
 	public void setChecked(boolean isActive) {
 		if (generator == null) {
+			System.out.println("Getting new generator");
 			generator = ((BlipsMain)getContext()).bg;
 		}
 		
@@ -82,10 +84,12 @@ public class BlipCell extends ToggleButton {
 
 		// Set the new button state
 		active = isActive;
+		if (generator == null) {
+			System.out.println("Whoops! Generator is NULL!!!");
+			return;
+		}
 		
-		if (isActive && generator!= null) {
-			resetIndex();
-		 	
+		if (isActive) {		 	
 			setText(name);
 		 	generator.selections.get(column).add(soundIndex);
 		
@@ -93,12 +97,12 @@ public class BlipCell extends ToggleButton {
 				// Play demo sound if not sequencing already
 				generator.playSound(soundIndex);
 			}
-		} else if (generator != null) {
-			System.out.println("Remove row " + row + " from col " + column);
-
+		} else {
 			ArrayList<Integer> col = generator.selections.get(column);
 			
 			if (col.contains(soundIndex)) {
+				System.out.println("Remove row " + row + " from col " + column);
+
 				for (int i = 0; i < col.size(); i++) {
 					if (col.get(i) == soundIndex) {
 						col.remove(i);
@@ -106,8 +110,6 @@ public class BlipCell extends ToggleButton {
 					}
 				}
 			}
-		} else {
-			System.out.println("Generator is NULL!");
 		}
 
 		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);		

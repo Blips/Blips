@@ -446,7 +446,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   t.show();
         Intent i = new Intent(BlipsMain.this, LoadSavePage.class);
         for(int c = 0; c < GRID_COLS; c++) {
-           for (int r = 0; r<GRID_ROWS; r++) {
+           for (int r = 0; r < GRID_ROWS; r++) {
               i.putExtra("ButtonState" + c + r, cells[c][r].isOn());
            }
         }

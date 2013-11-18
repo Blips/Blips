@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
@@ -176,7 +177,7 @@ public class BlipGenerator {
 	            public void run () {
 	            	// Start current index
 	            	if (!(mainContext.resetting || loading || soundPool == null)) {
-	            		for (int row : selections.get(playingIndex)) {
+	            	   for (int row : selections.get(playingIndex)) {
 	            			// Play sound and check result
 	            			if (soundPool.play(row, volume, volume, 1, 0, 1f) == 0) {
 	            				System.out.println("Play failed");
@@ -186,9 +187,26 @@ public class BlipGenerator {
 	            				soundPool = null;
 	            				initSounds();
 	            			}
-	            		}
+	            	   }
+	            	   
+	            	   //TODO: Implement playing/selected/off graphics
+	            	   /*
+	            	   
+	            	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
+
+	            	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+	            		   if (mainContext.cells[playingIndex][r].isOn()) {
+	            			   mainContext.cells[playingIndex][r].setBackgroundColor(Color.GREEN);
+	            		   }
+	            		   
+	            		   if (mainContext.cells[lastIndex][r].isOn()) {
+	            			   mainContext.cells[lastIndex][r].setBackgroundColor(Color.GRAY);
+	            		   }
+	            	   }
+	            	   */
 	            		
-	 	               // Increment index
+	            		
+	 	               // Increment index for next loop
 	 	               if (++playingIndex >= BlipsMain.GRID_COLS) {
 	 	            	   playingIndex = 0;
 	 		           }
