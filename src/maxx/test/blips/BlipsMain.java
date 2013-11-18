@@ -131,6 +131,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 			editor.putInt("ScaleInterval" + i, bg.scale[i]);
 		}
 		
+		editor.putInt("ScaleRoot", bg.rootIndex);
+		
 		editor.putBoolean("isStopped", isStopped);
 		
 		editor.commit();
@@ -299,6 +301,8 @@ public class BlipsMain extends SherlockFragmentActivity {
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
 	   boolean ret = false;
+	   int[] scale = null;
+	   int root = -1;
 	   
 	   switch (item.getItemId()) {
 	   	   case R.id.menu_saveload:
@@ -307,136 +311,138 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   		   ret = true;
 	   		   break;
 	   	   case R.id.subscale_major:
-	   		   bg.changeScale(BlipGenerator.major, bg.rootIndex);
+	   		   scale = BlipGenerator.major;
 	   		   scaleMenu.setTitle(R.string.scale_major);
 
 	   		   ret = true;
 	   		   break;
 		   case R.id.subscale_minor:
-		       bg.changeScale(BlipGenerator.minor, bg.rootIndex);
+	   		   scale = BlipGenerator.minor;
 	   		   scaleMenu.setTitle(R.string.scale_minor);
 
 	           ret = true;
 	   		   break;
 		   case R.id.subscale_mixolydian:
-		       bg.changeScale(BlipGenerator.mixolydian, bg.rootIndex);
+	   		   scale = BlipGenerator.mixolydian;
 	   		   scaleMenu.setTitle(R.string.scale_mixolydian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_dorian:
-		       bg.changeScale(BlipGenerator.dorian, bg.rootIndex);
+	   		   scale = BlipGenerator.dorian;
 	   		   scaleMenu.setTitle(R.string.scale_dorian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_phrygian:
-		       bg.changeScale(BlipGenerator.phrygian, bg.rootIndex);
+	   		   scale = BlipGenerator.phrygian;
 	   		   scaleMenu.setTitle(R.string.scale_phrygian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_lydian:
-		       bg.changeScale(BlipGenerator.lydian, bg.rootIndex);
+	   		   scale = BlipGenerator.lydian;
 	   		   scaleMenu.setTitle(R.string.scale_lydian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_locrian:
-		       bg.changeScale(BlipGenerator.locrian, bg.rootIndex);
+	   		   scale = BlipGenerator.locrian;
 	   		   scaleMenu.setTitle(R.string.scale_locrian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_harmonic:
-			   bg.changeScale(BlipGenerator.harmonic, bg.rootIndex);
+	   		   scale = BlipGenerator.harmonic;
 	   		   scaleMenu.setTitle(R.string.scale_harmonic);
 			   
 			   ret = true;
 		   		break;
-		   case R.id.subroot_c:
-				//TODO add code to goto function
-		   	Toast t8 = Toast.makeText(this, "Root changed to C", Toast.LENGTH_SHORT);
-			   t8.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_db:
-				//TODO add code to goto function
-		   	Toast t9 = Toast.makeText(this, "Root changed to Db", Toast.LENGTH_SHORT);
-			   t9.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_d:
-				//TODO add code to goto function
-		   	Toast t10 = Toast.makeText(this, "Root changed to D", Toast.LENGTH_SHORT);
-			   t10.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_eb:
-				//TODO add code to goto function
-		   	Toast t11 = Toast.makeText(this, "Root changed to Eb", Toast.LENGTH_SHORT);
-			   t11.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_e:
-				//TODO add code to goto function
-		   	Toast t12 = Toast.makeText(this, "Root changed to E", Toast.LENGTH_SHORT);
-			   t12.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_f:
-				//TODO add code to goto function
-		   	Toast t13 = Toast.makeText(this, "Root changed to F", Toast.LENGTH_SHORT);
-			   t13.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_gb:
-				//TODO add code to goto function
-		   	Toast t14 = Toast.makeText(this, "Root changed to Gb", Toast.LENGTH_SHORT);
-			   t14.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_g:
-				//TODO add code to goto function
-		   	Toast t15 = Toast.makeText(this, "Root changed to G", Toast.LENGTH_SHORT);
-			   t15.show();
-				ret = true;
-		   		break;
-		   case R.id.subroot_ab:
-				//TODO add code to goto function
-		   	Toast t16 = Toast.makeText(this, "Root changed to Ab", Toast.LENGTH_SHORT);
-			   t16.show();
-				ret = true;
-		   		break;
 		   case R.id.subroot_a:
-				//TODO add code to goto function
-		   	Toast t17 = Toast.makeText(this, "Root changed to A", Toast.LENGTH_SHORT);
-			   t17.show();
+	   		    root = 0;
+		   		rootMenu.setTitle(R.string.root_a);
+
 				ret = true;
 		   		break;
 		   case R.id.subroot_bb:
-				//TODO add code to goto function
-		   	Toast t18 = Toast.makeText(this, "Root changed to Bb", Toast.LENGTH_SHORT);
-			   t18.show();
+				root = 1;
+				rootMenu.setTitle(R.string.root_bb);
+
 				ret = true;
 		   		break;
 		   case R.id.subroot_b:
-				//TODO add code to goto function
-		   	Toast t19 = Toast.makeText(this, "Root changed to B", Toast.LENGTH_SHORT);
-			   t19.show();
+				root = 2;
+				rootMenu.setTitle(R.string.root_b);
+
 				ret = true;
 		   		break;
-			
+		   case R.id.subroot_c:
+				root = 3;
+				rootMenu.setTitle(R.string.root_c);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_db:
+				root = 4;
+				rootMenu.setTitle(R.string.root_db);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_d:
+				root = 5;
+				rootMenu.setTitle(R.string.root_d);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_eb:
+				root = 6;
+				rootMenu.setTitle(R.string.root_eb);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_e:
+				root = 7;
+				rootMenu.setTitle(R.string.root_e);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_f:
+				root = 8;
+				rootMenu.setTitle(R.string.root_f);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_gb:
+				root = 9;
+				rootMenu.setTitle(R.string.root_gb);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_g:
+				root = 10;
+				rootMenu.setTitle(R.string.root_g);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_ab:
+				root = 11;
+				rootMenu.setTitle(R.string.root_ab);
+
+				ret = true;
+		   		break;
 			
 		   default:
 				ret = super.onOptionsItemSelected(item);
 		   		break;
 	   }
 	   
-	   Editor edit = prefs.edit();
-	   edit.putString("savedScale", scaleMenu.getTitle().toString());
-	   edit.putString("savedRootNote", rootMenu.getTitle().toString());
-	   edit.commit();
+	   if (bg.changeScale(scale, root)) {
+		   // Only save preferences if something changed
+		   Editor edit = prefs.edit();
+		   edit.putString("savedScale", scaleMenu.getTitle().toString());
+		   edit.putString("savedRootNote", rootMenu.getTitle().toString());
+		   edit.commit();
+	   }
 	   
 	   return ret;
    }

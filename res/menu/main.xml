@@ -7,6 +7,15 @@
         android:showAsAction="always">
     	
     	<menu>
+    	    <item android:id="@+id/subroot_a"
+              android:title="@string/root_a" />
+          
+          <item android:id="@+id/subroot_bb"
+              android:title="@string/root_bb" />
+          
+          <item android:id="@+id/subroot_b"
+              android:title="@string/root_b" />
+          
     	    <item android:id="@+id/subroot_c"
     	        android:title="@string/root_c" />
     	  
@@ -33,15 +42,6 @@
     	    
     	    <item android:id="@+id/subroot_ab"
     	        android:title="@string/root_ab" />
-    	    
-    	    <item android:id="@+id/subroot_a"
-    	        android:title="@string/root_a" />
-    	    
-    	    <item android:id="@+id/subroot_bb"
-    	        android:title="@string/root_bb" />
-    	    
-    	    <item android:id="@+id/subroot_b"
-    	        android:title="@string/root_b" />
     	</menu>
     </item>
    
@@ -56,20 +56,20 @@
     	    <item android:id="@+id/subscale_minor"
     	        android:title="@string/scale_minor" />
     	    
-    	    <item android:id="@+id/subscale_mixolydian"
-    	        android:title="@string/scale_mixolydian" />
-    	    
     	    <item android:id="@+id/subscale_dorian"
     	        android:title="@string/scale_dorian" />
-    	    
-    	    <item android:id="@+id/subscale_phrygian"
-    	        android:title="@string/scale_phrygian" />
     	    
     	    <item android:id="@+id/subscale_lydian"
     	        android:title="@string/scale_lydian" />
     	    
     	    <item android:id="@+id/subscale_locrian"
     	        android:title="@string/scale_locrian" />
+    	    
+    	    <item android:id="@+id/subscale_phrygian"
+              android:title="@string/scale_phrygian" />
+    	              
+    	    <item android:id="@+id/subscale_mixolydian"
+              android:title="@string/scale_mixolydian" />
     	    
     	    <item android:id="@+id/subscale_harmonic" 
     	        android:title="@string/scale_harmonic" />

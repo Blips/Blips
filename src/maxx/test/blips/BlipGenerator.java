@@ -39,6 +39,18 @@ public class BlipGenerator {
    static final int S11 = R.raw.pianog5;
    static final int S12 = R.raw.pianoab6;
    static final int S13 = R.raw.pianoa6;
+   static final int S14 = R.raw.pianoa6;
+   static final int S15 = R.raw.pianobb6;
+   static final int S16 = R.raw.pianob6;
+   static final int S17 = R.raw.pianoc6;
+   static final int S18 = R.raw.pianodb6;
+   static final int S19 = R.raw.pianod6;
+   static final int S20 = R.raw.pianoeb6;
+   static final int S21 = R.raw.pianoe6;
+   static final int S22 = R.raw.pianof6;
+   static final int S23 = R.raw.pianogb6;
+   static final int S24 = R.raw.pianog6;
+   static final int S25 = R.raw.pianoab7;
 	      
    private static SoundPool soundPool = null;
    
@@ -56,11 +68,6 @@ public class BlipGenerator {
    // List of current selections for each column
    ArrayList<ArrayList<Integer>> selections = null;
    
-   public BlipGenerator() {
-	   playing = false;
-	   scale = minor;
-   }
-   
    public BlipGenerator(Context context) {
 	   loading = true;
 	   playing = false;
@@ -70,6 +77,8 @@ public class BlipGenerator {
 	   for (int i = 0; i < scale.length; i++) {
 			scale[i] = mainContext.prefs.getInt("ScaleInterval" + i, BlipGenerator.minor[i]);
 	   }
+	   
+	   rootIndex = mainContext.prefs.getInt("ScaleRoot", 0);
 	   
 	   initSounds();
    }
@@ -106,6 +115,18 @@ public class BlipGenerator {
 	      soundPool.load(mainContext, S11, 1);
 	      soundPool.load(mainContext, S12, 1);
 	      soundPool.load(mainContext, S13, 1);
+	      soundPool.load(mainContext, S14, 1);
+	      soundPool.load(mainContext, S15, 1);
+	      soundPool.load(mainContext, S16, 1);
+	      soundPool.load(mainContext, S17, 1);
+	      soundPool.load(mainContext, S18, 1);
+	      soundPool.load(mainContext, S19, 1);
+	      soundPool.load(mainContext, S20, 1);
+	      soundPool.load(mainContext, S21, 1);
+	      soundPool.load(mainContext, S22, 1);
+	      soundPool.load(mainContext, S23, 1);
+	      soundPool.load(mainContext, S24, 1);
+	      soundPool.load(mainContext, S25, 1);
 	   }
    }
    
@@ -217,10 +238,10 @@ public class BlipGenerator {
 	   }, 0, BlipsMain.MILLI_DELAY);
    }
    
-   public void changeScale(int[] newScale, int newRoot) {	   
+   public boolean changeScale(int[] newScale, int newRoot) {	   
 	   // Don't do anything if nothing changed
 	   if (newScale == scale && newRoot == rootIndex) {
-		   return;
+		   return false;
 	   }
 	   
 	   System.out.println("Changing scale");
@@ -235,6 +256,8 @@ public class BlipGenerator {
 	   
 	   // Pass negative root to maintain current value
 	   if (newRoot >= 0) {
+		   System.out.println("Changed root note from " + rootIndex + " to " + newRoot);
+
 		   rootIndex = newRoot;
 	   }
 	   
@@ -261,5 +284,7 @@ public class BlipGenerator {
 		
 		loading = false;
 		playingIndex = 0;
+		
+		return true;
    }
 }

@@ -35,10 +35,9 @@ public class BlipCell extends ToggleButton {
 		column = c;
 		row = r;
 		generator = bg;
-		name = BlipGenerator.notes[BlipsMain.GRID_ROWS - row - 1];
-		// Strip octave number off name for now
-		name = name.substring(0, name.length() - 1);
 		
+		resetIndex();
+
 		int heightOffset = BlipsMain.display.getRotation() == 0 ? 8 : 5;
 
 		
@@ -49,7 +48,6 @@ public class BlipCell extends ToggleButton {
 	 	setLayoutParams(btn_params);
 	 	
 	 	setTextSize(12.0f);
-	 	resetIndex();
 	 	
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -117,7 +115,7 @@ public class BlipCell extends ToggleButton {
 	
 	public void resetIndex() {
 		// SoundPool indexes at 1 (wtf???)
-		soundIndex = 1;
+		soundIndex = generator.rootIndex + 1;
 		
 		// Sound index (0-12) is the sum of all scale intervals preceding note
 		for (int i = 0; i < BlipsMain.GRID_ROWS - row - 1; i++) {
@@ -125,7 +123,7 @@ public class BlipCell extends ToggleButton {
 		}
 		
 		// Name is root note + sound index (modulo for wrap around) -1 for zero index
-		name = BlipGenerator.notes[(generator.rootIndex + soundIndex - 1) % 12];
+		name = BlipGenerator.notes[(soundIndex - 1) % 12];
 		
 		System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
 	
