@@ -510,14 +510,18 @@ public class BlipsMain extends SherlockFragmentActivity {
 			    	bg = new BlipGenerator(this);
 	         	}
 	           
-	    		for(int c = 0; c < GRID_COLS; c++) {
+	         	boolean active = false;
+
+	    		for (int c = 0; c < GRID_COLS; c++) {
 	                for (int r = 0; r < GRID_ROWS; r++) {
-	                   cells[c][r].setChecked(data.getBooleanExtra("LoadCell" + c + r, prefs.getBoolean("ButtonState" + c + r, false)));
-	                   edit.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
+	                   active = data.getBooleanExtra("LoadCell" + c + r, prefs.getBoolean("ButtonState" + c + r, false));
+	                   cells[c][r].setChecked(active);
+	                   edit.putBoolean("ButtonState" + c + r, active);
 	                }
 	            }	  
-	    		
+	    		    		
 	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), data.getIntExtra("LoadRoot", 9));
+
 	    		edit.putString("savedScale", bg.scaleName);
 	    		scaleMenu.setTitle(bg.scaleName);
 	    		

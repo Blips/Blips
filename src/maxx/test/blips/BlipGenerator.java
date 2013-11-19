@@ -38,17 +38,6 @@ public class BlipGenerator {
 		        put("Harmonic Minor", new int[] {2, 1, 2, 2, 1, 3, 1});
 		    }};
    
-   
-   // Scale interval arrays
-   static final int[] major      = {2, 2, 1, 2, 2, 2, 1};
-   static final int[] minor      = {2, 1, 2, 2, 1, 2, 2};
-   static final int[] dorian     = {2, 1, 2, 2, 2, 1, 2};
-   static final int[] lydian     = {2, 2, 2, 1, 2, 2, 1};
-   static final int[] locrian    = {1, 2, 2, 1, 2, 2, 2};
-   static final int[] phrygian   = {1, 2, 2, 2, 1, 2, 2};
-   static final int[] harmonic   = {2, 1, 2, 2, 1, 3, 1};
-   static final int[] mixolydian = {2, 2, 1, 2, 2, 1, 2};
-   
    // Piano C5 - B6 inclusive
    static final int S1 = R.raw.pianoc5;
    static final int S2 = R.raw.pianodb5;
@@ -129,7 +118,7 @@ public class BlipGenerator {
 	          int status) {
 	            System.out.println("Load completed for " + sampleId + " Status: " + status);
 	            
-	            if (sampleId == 13) {
+	            if (sampleId == 24) {
 	            	loading = false;
 	            }
 	         }
@@ -282,9 +271,6 @@ public class BlipGenerator {
 		   return false;
 	   }
 	   
-	   System.out.println("Changing scale");
-
-	   
 	   // Pause playback
       if (playing) {
 	      soundPool.autoPause();
@@ -294,13 +280,15 @@ public class BlipGenerator {
 	   
 	   // Pass negative root to maintain current value
 	   if (newRoot >= 0) {
-		   System.out.println("Changed root note from " + rootIndex + " to " + newRoot);
+		   System.out.println("Changed root note from " + noteNames[rootIndex] + " to " + noteNames[newRoot]);
 
 		   rootIndex = newRoot;
 	   }
 	   
 	   // Pass null scale to maintain current value
 	   if (newScale >= 0) {
+		   System.out.println("Changing scale from " + scale + " to " + newScale);
+
 		   scaleIndex = newScale;
 		   scaleName = (String)scales.keySet().toArray()[scaleIndex];
 		   scale = (int[])scales.values().toArray()[scaleIndex];
@@ -314,6 +302,7 @@ public class BlipGenerator {
 		for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
 			for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
 				BlipCell btn = mainContext.cells[c][r];
+				btn.setGen(this);
 				btn.resetIndex(); 
 	        	
 				if (btn.isOn()) {
