@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -93,11 +94,8 @@ public class LoadSavePage extends Activity {
       String encodedSave = "";
       Intent i = getIntent();
       
-      encodedSave += i.getIntExtra("ScaleRoot", 0);
-      
-      for (int x = 0; x < BlipGenerator.minor.length; x++) {
-    	  encodedSave += i.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
-      }
+      encodedSave += i.getIntExtra("ScaleRoot", 9);
+      encodedSave += i.getIntExtra("ScaleIndex", 1);
       
       for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
          for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
@@ -153,7 +151,7 @@ public class LoadSavePage extends Activity {
 
           /* Prepare a char-Array that will
            * hold the chars we read back in. */
-           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + BlipGenerator.minor.length + 1];
+           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 3];
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
@@ -166,19 +164,13 @@ public class LoadSavePage extends Activity {
            Intent resI = new Intent();
            
            int i = 0;
-           
+          
            resI.putExtra("LoadRoot", Character.getNumericValue(inputBuffer[i++]));
-           System.out.println("Loaded root " + inputBuffer[i - 1]);
-           
-           for (int x = 0; x < BlipGenerator.minor.length; x++) {
-         	  resI.putExtra("ScaleInterval" + x, Character.getNumericValue(inputBuffer[i++]));
-         	  System.out.println("Loaded interval " + x + " value: " + inputBuffer[i - 1]);
-           }
+           resI.putExtra("LoadScaleIndex", Character.getNumericValue(inputBuffer[i++]));
 
            for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
               for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-                 resI.putExtra("LoadCell"+c+r, inputBuffer[i++]);
-                 Log.d("Loading file " + filename, "FILE - Row: " + r + " Col: " + c + " Value: " + inputBuffer[i-1]);
+                 resI.putExtra("LoadCell" + c + r, inputBuffer[i++] == '1');
               }
            }
          

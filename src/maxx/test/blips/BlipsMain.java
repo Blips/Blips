@@ -138,11 +138,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 			}
 		}
 		
-		for (int i = 0; i < bg.scale.length; i++) {
-			editor.putInt("ScaleInterval" + i, bg.scale[i]);
-		}
-		
 		editor.putInt("ScaleRoot", bg.rootIndex);
+		editor.putInt("ScaleIndex", bg.scaleIndex);
 		editor.putBoolean("isStopped", isStopped);
 		
 		editor.commit();
@@ -327,7 +324,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   scaleMenu = menu.findItem(R.id.menu_scale);
 	   
 	   scaleMenu.setTitle(prefs.getString("savedScale", getString(R.string.scale_minor)));
-	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_c)));
+	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_a)));
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
 	   return true;
@@ -336,7 +333,7 @@ public class BlipsMain extends SherlockFragmentActivity {
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
 	   boolean ret = false;
-	   int[] scale = null;
+	   int scaleIndex = -1;
 	   int root = -1;
 	   
 	   switch (item.getItemId()) {
@@ -346,49 +343,49 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   		   ret = true;
 	   		   break;
 	   	   case R.id.subscale_major:
-	   		   scale = BlipGenerator.major;
+	   		   scaleIndex = 0;
 	   		   scaleMenu.setTitle(R.string.scale_major);
 
 	   		   ret = true;
 	   		   break;
 		   case R.id.subscale_minor:
-	   		   scale = BlipGenerator.minor;
+	   		   scaleIndex = 1;
 	   		   scaleMenu.setTitle(R.string.scale_minor);
 
 	           ret = true;
 	   		   break;
-		   case R.id.subscale_mixolydian:
-	   		   scale = BlipGenerator.mixolydian;
-	   		   scaleMenu.setTitle(R.string.scale_mixolydian);
-	
-				ret = true;
-		   		break;
 		   case R.id.subscale_dorian:
-	   		   scale = BlipGenerator.dorian;
+	   		   scaleIndex = 2;
 	   		   scaleMenu.setTitle(R.string.scale_dorian);
 	
 				ret = true;
 		   		break;
-		   case R.id.subscale_phrygian:
-	   		   scale = BlipGenerator.phrygian;
-	   		   scaleMenu.setTitle(R.string.scale_phrygian);
-	
-				ret = true;
-		   		break;
 		   case R.id.subscale_lydian:
-	   		   scale = BlipGenerator.lydian;
+	   		   scaleIndex = 3;
 	   		   scaleMenu.setTitle(R.string.scale_lydian);
 	
 				ret = true;
 		   		break;
 		   case R.id.subscale_locrian:
-	   		   scale = BlipGenerator.locrian;
+	   		   scaleIndex = 4;
 	   		   scaleMenu.setTitle(R.string.scale_locrian);
 	
 				ret = true;
 		   		break;
+		   case R.id.subscale_phrygian:
+	   		   scaleIndex = 5;
+	   		   scaleMenu.setTitle(R.string.scale_phrygian);
+	
+				ret = true;
+		   		break;
+		   case R.id.subscale_mixolydian:
+	   		   scaleIndex = 6;
+	   		   scaleMenu.setTitle(R.string.scale_mixolydian);
+	
+				ret = true;
+		   		break;
 		   case R.id.subscale_harmonic:
-	   		   scale = BlipGenerator.harmonic;
+	   		   scaleIndex = 7;
 	   		   scaleMenu.setTitle(R.string.scale_harmonic);
 			   
 			   ret = true;
@@ -471,11 +468,11 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   		break;
 	   }
 	   
-	   if (bg.changeScale(scale, root)) {
+	   if (bg.changeScale(scaleIndex, root)) {
 		   // Only save preferences if something changed
 		   Editor edit = prefs.edit();
-		   edit.putString("savedScale", scaleMenu.getTitle().toString());
-		   edit.putString("savedRootNote", rootMenu.getTitle().toString());
+		   edit.putString("savedScale", bg.scaleName);
+		   edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
 		   edit.commit();
 	   }
 	   
@@ -492,10 +489,7 @@ public class BlipsMain extends SherlockFragmentActivity {
            }
         }
         
-		for (int x = 0; x < bg.scale.length; x++) {
-			i.putExtra("ScaleInterval" + x, bg.scale[x]);
-		}
-		
+		i.putExtra("ScaleIndex", bg.scaleIndex);
 		i.putExtra("ScaleRoot", bg.rootIndex);
 		
         startActivityForResult(i, LOAD_SAVE_REQ_CODE);
@@ -511,39 +505,27 @@ public class BlipsMain extends SherlockFragmentActivity {
 	         if(resultCode == SherlockFragmentActivity.RESULT_OK) {
 	        	Editor edit = prefs.edit();
 	         	DATA_LOADED = true;
-	         	int[] scale = new int[BlipGenerator.minor.length];
 		      	
 	         	if (bg == null) {
 			    	bg = new BlipGenerator(this);
 	         	}
+	           
+	    		for(int c = 0; c < GRID_COLS; c++) {
+	                for (int r = 0; r < GRID_ROWS; r++) {
+	                   cells[c][r].setChecked(data.getBooleanExtra("LoadCell" + c + r, prefs.getBoolean("ButtonState" + c + r, false)));
+	                   edit.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
+	                }
+	            }	  
+	    		
+	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), data.getIntExtra("LoadRoot", 9));
+	    		edit.putString("savedScale", bg.scaleName);
+	    		scaleMenu.setTitle(bg.scaleName);
+	    		
+	    		edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
+	    		rootMenu.setTitle(BlipGenerator.noteNames[bg.rootIndex]);
 
-	            for (int c = 0; c < GRID_COLS; c++) {
-	               for (int r = 0; r < GRID_ROWS; r++) {
-	                  cells[c][r].setChecked(data.getCharExtra("LoadCell" + c + r, '0') == '1');
-	  				  edit.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
-	                  System.out.println("Setting " + cells[c][r].isOn() + " checked for cell " + c + r);
-	               }
-	            }
-	            
-	    		for (int x = 0; x < scale.length; x++) {
-	    			scale[x] = data.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
-	    			edit.putInt("ScaleInterval" + x, bg.scale[x]);
-	    		}
-	    			    		
-	    		if (bg.changeScale(scale, data.getIntExtra("LoadRoot", 0))) {
-		    		for (int x = 0; x < scale.length; x++) {
-		    			scale[x] = data.getIntExtra("ScaleInterval" + x, BlipGenerator.minor[x]);
-		    			edit.putInt("ScaleInterval" + x, bg.scale[x]);
-		    		}
-		    		
-		    		edit.putInt("ScaleRoot", bg.rootIndex);
-	    		}
-	            
-	            
-	            bg.play();
-	            
-	            
- 	            edit.commit();
+	    		edit.commit();
+	    		bg.play();    
 	         }
 	      
 	      	 break;

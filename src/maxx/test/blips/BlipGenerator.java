@@ -2,6 +2,7 @@ package maxx.test.blips;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,20 +26,18 @@ public class BlipGenerator {
 	   							"A\u266D", "A",
 	   							"B\u266D", "B"};
    
-   //TODO: Hashmap scale names to their scale arrays to decrease save and load time/logic
-   /*
-   private static final HashMap<String, int[]> scales = 
-		    new HashMap<String, int[]>() {{
-		        put("Major",      new int[] {2, 2, 1, 2, 2, 2, 1});
-		        put("Minor",      new int[] {2, 1, 2, 2, 1, 2, 2});
-		        put("Dorian",     new int[] {2, 1, 2, 2, 2, 1, 2});
-		        put("Lydian",     new int[] {2, 2, 2, 1, 2, 2, 1});
-		        put("Locrian",    new int[] {1, 2, 2, 1, 2, 2, 2});
-		        put("Phrygian",   new int[] {1, 2, 2, 2, 1, 2, 2});
-		        put("Mixolydian", new int[] {2, 2, 1, 2, 2, 1, 2});
-		        put("Harmonic Minor",   new int[] {2, 1, 2, 2, 1, 3, 1});
+   static final LinkedHashMap<String, int[]> scales = 
+		    new LinkedHashMap<String, int[]>() {{
+		        put("Major",          new int[] {2, 2, 1, 2, 2, 2, 1});
+		        put("Minor",      	  new int[] {2, 1, 2, 2, 1, 2, 2});
+		        put("Dorian",     	  new int[] {2, 1, 2, 2, 2, 1, 2});
+		        put("Lydian",     	  new int[] {2, 2, 2, 1, 2, 2, 1});
+		        put("Locrian",    	  new int[] {1, 2, 2, 1, 2, 2, 2});
+		        put("Phrygian",   	  new int[] {1, 2, 2, 2, 1, 2, 2});
+		        put("Mixolydian",     new int[] {2, 2, 1, 2, 2, 1, 2});
+		        put("Harmonic Minor", new int[] {2, 1, 2, 2, 1, 3, 1});
 		    }};
-   */
+   
    
    // Scale interval arrays
    static final int[] major      = {2, 2, 1, 2, 2, 2, 1};
@@ -94,6 +93,8 @@ public class BlipGenerator {
 
    BlipsMain mainContext = null;
    int[] scale = null;
+   String scaleName = null;
+   int scaleIndex;
    
    // List of current selections for each column
    ArrayList<ArrayList<Integer>> selections = null;
@@ -102,14 +103,16 @@ public class BlipGenerator {
 	   loading = true;
 	   playing = false;
 	   mainContext = (BlipsMain)context;
-	   scale = new int[7];
-		
-	   for (int i = 0; i < scale.length; i++) {
-			scale[i] = mainContext.prefs.getInt("ScaleInterval" + i, BlipGenerator.minor[i]);
-	   }
 	   
+	   // Load root index (default A)
 	   rootIndex = mainContext.prefs.getInt("ScaleRoot", 9);
 	   
+	   // Load scale info (default minor)
+	   scaleIndex = mainContext.prefs.getInt("ScaleIndex", 1);
+	   scaleName = (String)scales.keySet().toArray()[scaleIndex];
+	   scale = (int[])scales.values().toArray()[scaleIndex];
+	   
+	   // Load sounds
 	   initSounds();
    }
  
@@ -273,9 +276,9 @@ public class BlipGenerator {
 	   }, 0, BlipsMain.MILLI_DELAY-BlipsMain.sliderValue);
    }
    
-   public boolean changeScale(int[] newScale, int newRoot) {	   
+   public boolean changeScale(int newScale, int newRoot) {	   
 	   // Don't do anything if nothing changed
-	   if ((newScale == scale && newRoot == rootIndex) || (newScale == null && newRoot < 0)) {
+	   if ((newScale == scaleIndex && newRoot == rootIndex) || (newScale < 0 && newRoot < 0)) {
 		   return false;
 	   }
 	   
@@ -297,8 +300,10 @@ public class BlipGenerator {
 	   }
 	   
 	   // Pass null scale to maintain current value
-	   if (newScale != null) {
-		   scale = newScale;
+	   if (newScale >= 0) {
+		   scaleIndex = newScale;
+		   scaleName = (String)scales.keySet().toArray()[scaleIndex];
+		   scale = (int[])scales.values().toArray()[scaleIndex];
 	   }
 	  
 	   // Drop old selected notes
