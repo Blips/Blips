@@ -46,8 +46,9 @@ public class BlipCell extends ToggleButton {
 													BlipsMain.widthPixels / (BlipsMain.GRID_COLS + 1), 
 													BlipsMain.heightPixels / (BlipsMain.GRID_ROWS + heightOffset));
 	 	setLayoutParams(btn_params);
+	 	setIncludeFontPadding(false);
 	 	
-	 	setTextSize(12.0f);
+	 	setTextSize(8.0f);
 	 	
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -87,7 +88,8 @@ public class BlipCell extends ToggleButton {
 			return;
 		}
 		
-		if (isActive) {		 	
+		if (isActive) {		
+			System.out.println("Setting button name: " + name);
 			setText(name);
 		 	generator.selections.get(column).add(soundIndex);
 		
@@ -123,12 +125,9 @@ public class BlipCell extends ToggleButton {
 		}
 		
 		// Name is root note + sound index (modulo for wrap around) -1 for zero index
-		name = BlipGenerator.notes[(soundIndex - 1) % 12];
+		name = BlipGenerator.noteNames[(soundIndex - 1) % 12];
 		
 		System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
-	
-		// Strip off octave number for now
-		name = name.substring(0, name.length() - 1);
 		
 		if (active) {
 			setText(name);

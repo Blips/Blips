@@ -1,10 +1,12 @@
 package maxx.test.blips;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.content.res.Resources;
 //import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -14,8 +16,29 @@ import android.os.Handler;
 public class BlipGenerator {   
 	// Static variables
    // Note name array
-   // TODO: Why is this here?
-   static final String[] notes = {"A5", "Bb5", "B5", "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab6", "A6"};
+   // TODO: Why is this here?BlipsMain
+   static String[] noteNames = {"C", 
+	   							"D\u266D", "D", 
+	   							"E\u266D", "E", 
+	   							"F", 
+	   							"G\u266D", "G", 
+	   							"A\u266D", "A",
+	   							"B\u266D", "B"};
+   
+   //TODO: Hashmap scale names to their scale arrays to decrease save and load time/logic
+   /*
+   private static final HashMap<String, int[]> scales = 
+		    new HashMap<String, int[]>() {{
+		        put("Major",      new int[] {2, 2, 1, 2, 2, 2, 1});
+		        put("Minor",      new int[] {2, 1, 2, 2, 1, 2, 2});
+		        put("Dorian",     new int[] {2, 1, 2, 2, 2, 1, 2});
+		        put("Lydian",     new int[] {2, 2, 2, 1, 2, 2, 1});
+		        put("Locrian",    new int[] {1, 2, 2, 1, 2, 2, 2});
+		        put("Phrygian",   new int[] {1, 2, 2, 2, 1, 2, 2});
+		        put("Mixolydian", new int[] {2, 2, 1, 2, 2, 1, 2});
+		        put("Harmonic Minor",   new int[] {2, 1, 2, 2, 1, 3, 1});
+		    }};
+   */
    
    // Scale interval arrays
    static final int[] major      = {2, 2, 1, 2, 2, 2, 1};
@@ -27,12 +50,7 @@ public class BlipGenerator {
    static final int[] harmonic   = {2, 1, 2, 2, 1, 3, 1};
    static final int[] mixolydian = {2, 2, 1, 2, 2, 1, 2};
    
-   // TODO: Read below
-   // I parsed all the files from the site as they were,
-   // which was from C to C. While we don't need to change
-   // our default from being A, you should still take note
-   // that the lowest note we support is C5, and that the
-   // notes have now moved in terms of SX positioning.
+   // Piano C5 - B6 inclusive
    static final int S1 = R.raw.pianoc5;
    static final int S2 = R.raw.pianodb5;
    static final int S3 = R.raw.pianod5;
@@ -57,7 +75,12 @@ public class BlipGenerator {
    static final int S22 = R.raw.pianoa6;
    static final int S23 = R.raw.pianobb6;
    static final int S24 = R.raw.pianob6;
-   static final int S25 = R.raw.pianoc7;
+   
+   /*
+   // Guitar C5 - B6 inclusive
+   static final int S25 = R.raw.guitarc5;
+   static final int S26 = R.raw.guitardb5;
+   */
 	      
    private static SoundPool soundPool = null;
    
@@ -85,11 +108,11 @@ public class BlipGenerator {
 			scale[i] = mainContext.prefs.getInt("ScaleInterval" + i, BlipGenerator.minor[i]);
 	   }
 	   
-	   rootIndex = mainContext.prefs.getInt("ScaleRoot", 0);
+	   rootIndex = mainContext.prefs.getInt("ScaleRoot", 9);
 	   
 	   initSounds();
    }
-   
+ 
     /** Populate the SoundPool*/
    public void initSounds() {
 	   initSelections();
@@ -133,7 +156,6 @@ public class BlipGenerator {
 	      soundPool.load(mainContext, S22, 1);
 	      soundPool.load(mainContext, S23, 1);
 	      soundPool.load(mainContext, S24, 1);
-	      soundPool.load(mainContext, S25, 1);
 	   }
    }
    
@@ -174,15 +196,20 @@ public class BlipGenerator {
 	   startSequence();			
    }
    
-   
-   public void stop() {
-	   playing = false;	
-	   
+   // Don't release sounds when pausing, just stop timer
+   public void pause() {
 	   if (timer != null) {
 		   timer.cancel();
 		   timer = null;
 	   }
-	   
+   }
+   
+   public void stop() {
+	   pause();
+	   release();
+   }
+   
+   public void release() {
 	   if (soundPool != null) {
 		   soundPool.autoPause();
 		   soundPool.release();
@@ -190,6 +217,7 @@ public class BlipGenerator {
 	   }
    }
    
+   // Just restart timer
    public void startSequence (){
 	   final Handler handler = new Handler ();
 	   
@@ -247,7 +275,7 @@ public class BlipGenerator {
    
    public boolean changeScale(int[] newScale, int newRoot) {	   
 	   // Don't do anything if nothing changed
-	   if (newScale == scale && newRoot == rootIndex) {
+	   if ((newScale == scale && newRoot == rootIndex) || (newScale == null && newRoot < 0)) {
 		   return false;
 	   }
 	   

@@ -10,7 +10,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
+//import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -275,15 +275,15 @@ public class BlipsMain extends SherlockFragmentActivity {
 		 @Override
 		 public void onStartTrackingTouch(SeekBar seekBar) {
 			 // Stop the sequencer. This allows the Timer to update its delay
-			 if (!isStopped) {
-				 bg.stop();
+			 if (!isStopped && bg.playing) {
+				 bg.pause();
 			 }
 		 }
 
 		 @Override
 		 public void onStopTrackingTouch(SeekBar seekBar) {
-			 if (!isStopped) {
-				 bg.play();
+			 if (!isStopped && bg.playing) {
+				 bg.startSequence();
 			 }
 		 }
       });
@@ -308,13 +308,12 @@ public class BlipsMain extends SherlockFragmentActivity {
          playButton.setText("Pause");
          isStopped = false;
     	 bg.play();
-      }
-      else {
+      } else {
          isStopped = true;
          playButton.setText("Play");
          // Test change scale (it works)
          //bg.changeScale(bg.scale == BlipGenerator.major ? BlipGenerator.minor : BlipGenerator.major, 0);
-         bg.stop();
+         bg.pause();
       }
    }
    
@@ -394,75 +393,75 @@ public class BlipsMain extends SherlockFragmentActivity {
 			   
 			   ret = true;
 		   		break;
-		   case R.id.subroot_a:
-	   		    root = 0;
-		   		rootMenu.setTitle(R.string.root_a);
-
-				ret = true;
-		   		break;
-		   case R.id.subroot_bb:
-				root = 1;
-				rootMenu.setTitle(R.string.root_bb);
-
-				ret = true;
-		   		break;
-		   case R.id.subroot_b:
-				root = 2;
-				rootMenu.setTitle(R.string.root_b);
-
-				ret = true;
-		   		break;
 		   case R.id.subroot_c:
-				root = 3;
-				rootMenu.setTitle(R.string.root_c);
+	   		    root = 0;
+		   		rootMenu.setTitle(R.string.root_c);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_db:
-				root = 4;
+				root = 1;
 				rootMenu.setTitle(R.string.root_db);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_d:
-				root = 5;
+				root = 2;
 				rootMenu.setTitle(R.string.root_d);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_eb:
-				root = 6;
+				root = 3;
 				rootMenu.setTitle(R.string.root_eb);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_e:
-				root = 7;
+				root = 4;
 				rootMenu.setTitle(R.string.root_e);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_f:
-				root = 8;
+				root = 5;
 				rootMenu.setTitle(R.string.root_f);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_gb:
-				root = 9;
+				root = 6;
 				rootMenu.setTitle(R.string.root_gb);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_g:
-				root = 10;
+				root = 7;
 				rootMenu.setTitle(R.string.root_g);
 
 				ret = true;
 		   		break;
 		   case R.id.subroot_ab:
-				root = 11;
+				root = 8;
 				rootMenu.setTitle(R.string.root_ab);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_a:
+				root = 9;
+				rootMenu.setTitle(R.string.root_a);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_bb:
+				root = 10;
+				rootMenu.setTitle(R.string.root_bb);
+
+				ret = true;
+		   		break;
+		   case R.id.subroot_b:
+				root = 11;
+				rootMenu.setTitle(R.string.root_b);
 
 				ret = true;
 		   		break;
@@ -509,7 +508,7 @@ public class BlipsMain extends SherlockFragmentActivity {
       super.onActivityResult(requestCode, resultCode, data);
       switch(requestCode) {
 	      case (LOAD_SAVE_REQ_CODE):
-	         if(resultCode == Activity.RESULT_OK) {
+	         if(resultCode == SherlockFragmentActivity.RESULT_OK) {
 	        	Editor edit = prefs.edit();
 	         	DATA_LOADED = true;
 	         	int[] scale = new int[BlipGenerator.minor.length];
