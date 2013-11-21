@@ -263,18 +263,20 @@ public class BlipGenerator {
 	            			}
 	            	   }
 	            	   
-	            	   /** This is pretty broken... Not sure how to fix it */
-//	            	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
-//
-//	            	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-//	            		   if (mainContext.cells[playingIndex][r].isOn()) {
-//	            			   mainContext.cells[playingIndex][r].setBackgroundResource(R.drawable.ic_matrix_play);
-//	            		   }
-//	            		   
-//	            		   if (mainContext.cells[lastIndex][r].isOn()) {
-//	            			   mainContext.cells[lastIndex][r].setBackgroundColor(R.drawable.cell);
-//	            		   }
-//	            	   }
+	            	   // Update playing index in UI (Scroll column highlighting with playing index)
+	            	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
+
+	            	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+	            		   // Set all current index cell images to "play"
+	            		   if (mainContext.cells[playingIndex][r].isOn()) {
+	            			   mainContext.cells[playingIndex][r].setBackgroundResource(R.drawable.ic_cell_play);
+	            		   }
+	            		   
+	            		   // Set all previous index cell images to "selected"
+	            		   if (mainContext.cells[lastIndex][r].isOn()) {
+        			   		   mainContext.cells[lastIndex][r].setBackgroundResource(R.drawable.ic_cell_on);
+	            		   }
+	            	   }
 	            		
 	            		
 	 	               // Increment index for next loop
