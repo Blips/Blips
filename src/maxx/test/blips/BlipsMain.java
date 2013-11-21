@@ -535,6 +535,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	    		rootMenu.setTitle(BlipGenerator.noteNames[bg.rootIndex]);
 
 	    		edit.commit();
+	    		
 	    		bg.play();    
 	         }
 	      

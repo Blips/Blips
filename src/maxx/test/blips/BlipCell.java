@@ -104,6 +104,8 @@ public class BlipCell extends ToggleButton {
 		} else {
 			ArrayList<Integer> col = generator.selections.get(column);
 			
+	   		setBackgroundResource(R.drawable.ic_cell_off);
+
 			if (col.contains(soundIndex)) {
 				System.out.println("Remove row " + row + " from col " + column);
 		   		setBackgroundResource(R.drawable.ic_cell_off);
