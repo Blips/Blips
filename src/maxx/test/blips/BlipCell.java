@@ -93,8 +93,9 @@ public class BlipCell extends ToggleButton {
 		if (isActive) {		
 			System.out.println("Setting button name: " + name);
 			setText(name);
-			this.
-		 	generator.selections.get(column).add(soundIndex);
+			generator.selections.get(column).add(soundIndex);
+	   		setBackgroundResource(R.drawable.ic_cell_on);
+
 		
 		 	if (!(generator.playing || ((BlipsMain)getContext()).resetting)) {
 				// Play demo sound if not sequencing already
@@ -105,6 +106,7 @@ public class BlipCell extends ToggleButton {
 			
 			if (col.contains(soundIndex)) {
 				System.out.println("Remove row " + row + " from col " + column);
+		   		setBackgroundResource(R.drawable.ic_cell_off);
 
 				for (int i = 0; i < col.size(); i++) {
 					if (col.get(i) == soundIndex) {

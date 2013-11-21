@@ -215,6 +215,15 @@ public class BlipGenerator {
    public void pause() {
 	   playing = false;
 	   
+	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
+
+	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+		   // Set all previous index cell images to "selected"
+		   if (mainContext.cells[lastIndex][r].isOn()) {
+	   		   mainContext.cells[lastIndex][r].setBackgroundResource(R.drawable.ic_cell_on);
+		   }
+	   }
+	   
 	   if (timer != null) {
 		   timer.cancel();
 		   timer = null;

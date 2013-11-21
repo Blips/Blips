@@ -243,6 +243,9 @@ public class BlipsMain extends SherlockFragmentActivity {
       }
       else {
     	  //playButton.setBackgroundResource(R.drawable.ic_pause);
+    	  // Temporarily remove pause button
+    	  playButton.setBackgroundResource(R.drawable.ic_play);
+
       }
       isStopped = !prefs.getBoolean("isStopped", true);
       togglePlay();
