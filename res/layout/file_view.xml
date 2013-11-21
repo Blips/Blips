@@ -7,10 +7,9 @@
     android:background="@color/background" >
     <TextView
         android:id="@+id/fileTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:layout_weight="0.85"
         android:focusable="false"
         android:textSize="20sp"
         android:hint="@string/filename_placeholder"
@@ -19,9 +18,9 @@
         android:id="@+id/loadFileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".1"
-        android:layout_marginLeft="2dip"
-        android:text="@string/button_load"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/ic_load"
         android:focusable="false"
         android:focusableInTouchMode="false" 
          />
@@ -29,9 +28,9 @@
         android:id="@+id/deleteFileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".1"
-        android:layout_marginRight="2dip"
-        android:text="@string/button_delete"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="2dp"
+        android:background="@drawable/ic_clear_all"
         android:focusable="false"
         android:focusableInTouchMode="false" 
         />

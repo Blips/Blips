@@ -218,7 +218,7 @@ public class BlipsMain extends SherlockFragmentActivity {
         	 BlipCell btn = new BlipCell(this, bg, c, r);
         	 btn.setCol(c);
         	 btn.setRow(r);
-        	 
+        	 btn.setBackgroundResource(R.drawable.cell);
         	 btn.setTextOff("");
         	 btn.setTextOn("");
         	 btn.setText("");
@@ -238,7 +238,12 @@ public class BlipsMain extends SherlockFragmentActivity {
       tempoSlider.setProgress(sliderValue);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
-      
+      if(isStopped) {
+    	  playButton.setBackgroundResource(R.drawable.ic_play);
+      }
+      else {
+    	  playButton.setBackgroundResource(R.drawable.ic_pause);
+      }
       isStopped = !prefs.getBoolean("isStopped", true);
       togglePlay();
    }
@@ -302,14 +307,12 @@ public class BlipsMain extends SherlockFragmentActivity {
    
    public void togglePlay() {      
 	  if (isStopped) {
-         playButton.setText("Pause");
+         playButton.setBackgroundResource(R.drawable.ic_pause);
          isStopped = false;
     	 bg.play();
       } else {
          isStopped = true;
-         playButton.setText("Play");
-         // Test change scale (it works)
-         //bg.changeScale(bg.scale == BlipGenerator.major ? BlipGenerator.minor : BlipGenerator.major, 0);
+         playButton.setBackgroundResource(R.drawable.ic_play);
          bg.pause();
       }
    }
@@ -462,6 +465,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 
 				ret = true;
 		   		break;
+		   case R.id.menu_instrument:
+			   //TODO: Add instrument changing here
 			
 		   default:
 				ret = super.onOptionsItemSelected(item);
@@ -480,8 +485,6 @@ public class BlipsMain extends SherlockFragmentActivity {
    }
    
    public void handleSaveLoad() {
-	   	Toast t = Toast.makeText(this, "Load/Save", Toast.LENGTH_SHORT);
-		   t.show();
         Intent i = new Intent(BlipsMain.this, LoadSavePage.class);
         for(int c = 0; c < GRID_COLS; c++) {
            for (int r = 0; r < GRID_ROWS; r++) {

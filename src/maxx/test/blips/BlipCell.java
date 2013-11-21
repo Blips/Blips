@@ -48,7 +48,8 @@ public class BlipCell extends ToggleButton {
 	 	setLayoutParams(btn_params);
 	 	setIncludeFontPadding(false);
 	 	
-	 	setTextSize(8.0f);
+	 	setTextSize(12.0f);
+	 	
 	 	
 		System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
@@ -91,6 +92,7 @@ public class BlipCell extends ToggleButton {
 		if (isActive) {		
 			System.out.println("Setting button name: " + name);
 			setText(name);
+			this.
 		 	generator.selections.get(column).add(soundIndex);
 		
 		 	if (!(generator.playing || ((BlipsMain)getContext()).resetting)) {

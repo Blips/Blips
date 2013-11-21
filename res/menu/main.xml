@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
     android:id="@+id/menu_main">
     
+    <item android:id="@+id/menu_instrument"
+        android:title="@string/instrument_menu_text"
+        android:icon="@drawable/ic_instrument"
+        android:showAsAction="always"/>
+    
     <item android:id="@+id/menu_rootnote"
-        android:title="@string/root_a"
+        android:title="@string/root_c"
         android:showAsAction="always">
     	
     	<menu>
@@ -78,5 +83,6 @@
     </item>
     <item android:id="@+id/menu_saveload"
         android:title="@string/saveload_menu"
+        android:icon="@drawable/ic_load"
         android:showAsAction="always" />
 </menu>

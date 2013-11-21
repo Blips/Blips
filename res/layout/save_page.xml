@@ -14,14 +14,14 @@
         	android:hint="@string/save_edittext" 
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:layout_weight="4"/>
+        	android:layout_weight="7"/>
 
     	<Button
         	android:id="@+id/savePageButton"
+        	android:background="@drawable/ic_save"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:layout_weight="1"
-        	android:text="@string/button_save" />
+        	android:layout_weight="1" />
     </LinearLayout>
     <ListView
         android:id="@+id/savedFilesList"

@@ -1,14 +1,11 @@
 package maxx.test.blips;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
-import android.content.res.Resources;
-//import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
@@ -16,8 +13,7 @@ import android.os.Handler;
 
 public class BlipGenerator {   
 	// Static variables
-   // Note name array
-   // TODO: Why is this here?BlipsMain
+    // Note name array
    static String[] noteNames = {"C", 
 	   							"D\u266D", "D", 
 	   							"E\u266D", "E", 
@@ -27,7 +23,12 @@ public class BlipGenerator {
 	   							"B\u266D", "B"};
    
    static final LinkedHashMap<String, int[]> scales = 
-		    new LinkedHashMap<String, int[]>() {{
+		    new LinkedHashMap<String, int[]>() {/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			{
 		        put("Major",          new int[] {2, 2, 1, 2, 2, 2, 1});
 		        put("Minor",      	  new int[] {2, 1, 2, 2, 1, 2, 2});
 		        put("Dorian",     	  new int[] {2, 1, 2, 2, 2, 1, 2});
@@ -38,38 +39,60 @@ public class BlipGenerator {
 		        put("Harmonic Minor", new int[] {2, 1, 2, 2, 1, 3, 1});
 		    }};
    
-   // Piano C5 - B6 inclusive
-   static final int S1 = R.raw.pianoc5;
-   static final int S2 = R.raw.pianodb5;
-   static final int S3 = R.raw.pianod5;
-   static final int S4 = R.raw.pianoeb5;
-   static final int S5 = R.raw.pianoe5;
-   static final int S6 = R.raw.pianof5;
-   static final int S7 = R.raw.pianogb5;
-   static final int S8 = R.raw.pianog5;
-   static final int S9 = R.raw.pianoab5;
-   static final int S10 = R.raw.pianoa5; // here's A!
-   static final int S11 = R.raw.pianobb5;
-   static final int S12 = R.raw.pianob5;
-   static final int S13 = R.raw.pianoc6;
-   static final int S14 = R.raw.pianodb6;
-   static final int S15 = R.raw.pianod6;
-   static final int S16 = R.raw.pianoeb6;
-   static final int S17 = R.raw.pianoe6;
-   static final int S18 = R.raw.pianof6;
-   static final int S19 = R.raw.pianogb6;
-   static final int S20 = R.raw.pianog6;
-   static final int S21 = R.raw.pianoab6;
-   static final int S22 = R.raw.pianoa6;
-   static final int S23 = R.raw.pianobb6;
-   static final int S24 = R.raw.pianob6;
+   // Piano C4 - B5 inclusive
+   static final int S1 = R.raw.pianoc4;
+   static final int S2 = R.raw.pianodb4;
+   static final int S3 = R.raw.pianod4;
+   static final int S4 = R.raw.pianoeb4;
+   static final int S5 = R.raw.pianoe4;
+   static final int S6 = R.raw.pianof4;
+   static final int S7 = R.raw.pianogb4;
+   static final int S8 = R.raw.pianog4;
+   static final int S9 = R.raw.pianoab4;
+   static final int S10 = R.raw.pianoa4;
+   static final int S11 = R.raw.pianobb4;
+   static final int S12 = R.raw.pianob4;
+   static final int S13 = R.raw.pianoc5;
+   static final int S14 = R.raw.pianodb5;
+   static final int S15 = R.raw.pianod5;
+   static final int S16 = R.raw.pianoeb5;
+   static final int S17 = R.raw.pianoe5;
+   static final int S18 = R.raw.pianof5;
+   static final int S19 = R.raw.pianogb5;
+   static final int S20 = R.raw.pianog5;
+   static final int S21 = R.raw.pianoab5;
+   static final int S22 = R.raw.pianoa5;
+   static final int S23 = R.raw.pianobb5;
+   static final int S24 = R.raw.pianob5;
    
-   /*
-   // Guitar C5 - B6 inclusive
-   static final int S25 = R.raw.guitarc5;
-   static final int S26 = R.raw.guitardb5;
-   */
-	      
+   
+   // Guitar C3 - B4 inclusive
+   static final int S25 = R.raw.guitarc3;
+   static final int S26 = R.raw.guitardb3;
+   static final int S27 = R.raw.guitard3;
+   static final int S28 = R.raw.guitareb3;
+   static final int S29 = R.raw.guitare3;
+   static final int S30 = R.raw.guitarf3;
+   static final int S31 = R.raw.guitargb3;
+   static final int S32 = R.raw.guitarg3;
+   static final int S33 = R.raw.guitarab3;
+   static final int S34 = R.raw.guitara3;
+   static final int S35 = R.raw.guitarbb3;
+   static final int S36 = R.raw.guitarb3;
+   static final int S37 = R.raw.guitarc4;
+   static final int S38 = R.raw.guitardb4;
+   static final int S39 = R.raw.guitard4;
+   static final int S40 = R.raw.guitareb4;
+   static final int S41 = R.raw.guitare4;
+   static final int S42 = R.raw.guitarf4;
+   static final int S43 = R.raw.guitargb4;
+   static final int S44 = R.raw.guitarg4;
+   static final int S45 = R.raw.guitarab4;
+   static final int S46 = R.raw.guitara4;
+   static final int S47 = R.raw.guitarbb4;
+   static final int S48 = R.raw.guitarb4;
+   
+   
    private static SoundPool soundPool = null;
    
     // Member variables
@@ -237,21 +260,18 @@ public class BlipGenerator {
 	            			}
 	            	   }
 	            	   
-	            	   //TODO: Implement playing/selected/off graphics
-	            	   /*
-	            	   
-	            	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
-
-	            	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-	            		   if (mainContext.cells[playingIndex][r].isOn()) {
-	            			   mainContext.cells[playingIndex][r].setBackgroundColor(Color.GREEN);
-	            		   }
-	            		   
-	            		   if (mainContext.cells[lastIndex][r].isOn()) {
-	            			   mainContext.cells[lastIndex][r].setBackgroundColor(Color.GRAY);
-	            		   }
-	            	   }
-	            	   */
+	            	   /** This is pretty broken... Not sure how to fix it */
+//	            	   int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
+//
+//	            	   for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+//	            		   if (mainContext.cells[playingIndex][r].isOn()) {
+//	            			   mainContext.cells[playingIndex][r].setBackgroundResource(R.drawable.ic_matrix_play);
+//	            		   }
+//	            		   
+//	            		   if (mainContext.cells[lastIndex][r].isOn()) {
+//	            			   mainContext.cells[lastIndex][r].setBackgroundColor(R.drawable.cell);
+//	            		   }
+//	            	   }
 	            		
 	            		
 	 	               // Increment index for next loop

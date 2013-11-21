@@ -20,8 +20,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llContainer"
-        android:text="@string/button_clear"
-        android:textSize="18sp" />
+        android:background="@drawable/ic_clear_all" />
+    
+    <SeekBar
+        android:id="@+id/tempobar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llContainer"
+        android:layout_toLeftOf="@+id/play_button"
+        android:layout_toRightOf="@+id/clear_button"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="3dp" 
+        android:layout_marginRight="3dp"  />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tempobar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/tempotext" 
+        android:textColor="@color/accent"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/play_button"
@@ -30,25 +50,6 @@
         android:layout_alignBaseline="@+id/clear_button"
         android:layout_alignBottom="@+id/clear_button"
         android:layout_alignRight="@+id/llContainer"
-        android:textSize="18sp" />
-
-    <SeekBar
-        android:id="@+id/tempobar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llContainer"
-        android:layout_toLeftOf="@+id/play_button"
-        android:layout_toRightOf="@+id/clear_button"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tempobar"
-        android:layout_below="@+id/play_button"
-        android:layout_marginRight="43dp"
-        android:text="@string/tempotext"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:background="@drawable/ic_pause" />
 
 </RelativeLayout>
