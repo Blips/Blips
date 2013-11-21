@@ -213,6 +213,8 @@ public class BlipGenerator {
    
    // Don't release sounds when pausing, just stop timer
    public void pause() {
+	   playing = false;
+	   
 	   if (timer != null) {
 		   timer.cancel();
 		   timer = null;

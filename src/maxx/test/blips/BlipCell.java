@@ -47,6 +47,7 @@ public class BlipCell extends ToggleButton {
 													BlipsMain.heightPixels / (BlipsMain.GRID_ROWS + heightOffset));
 	 	setLayoutParams(btn_params);
 	 	setIncludeFontPadding(false);
+	 	setPadding(2, 2, 2, 2);
 	 	
 	 	setTextSize(12.0f);
 	 	
