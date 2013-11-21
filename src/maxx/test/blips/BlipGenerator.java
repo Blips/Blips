@@ -243,6 +243,7 @@ public class BlipGenerator {
 		   timer.cancel();
 	   }
 	   
+	   playing = true;
 	   timer = new Timer();
 	   timer.scheduleAtFixedRate (new TimerTask (){
 	      public void run () {

@@ -242,7 +242,7 @@ public class BlipsMain extends SherlockFragmentActivity {
     	  playButton.setBackgroundResource(R.drawable.ic_play);
       }
       else {
-    	  playButton.setBackgroundResource(R.drawable.ic_pause);
+    	  //playButton.setBackgroundResource(R.drawable.ic_pause);
       }
       isStopped = !prefs.getBoolean("isStopped", true);
       togglePlay();
@@ -284,7 +284,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 
 		 @Override
 		 public void onStopTrackingTouch(SeekBar seekBar) {
-			 if (!isStopped && bg.playing) {
+			 if (!isStopped) {
 				 bg.startSequence();
 			 }
 		 }
@@ -307,7 +307,7 @@ public class BlipsMain extends SherlockFragmentActivity {
    
    public void togglePlay() {      
 	  if (isStopped) {
-         playButton.setBackgroundResource(R.drawable.ic_pause);
+     //    playButton.setBackgroundResource(R.drawable.ic_pause);
          isStopped = false;
     	 bg.play();
       } else {
