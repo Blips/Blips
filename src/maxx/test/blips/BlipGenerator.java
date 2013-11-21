@@ -341,6 +341,7 @@ public class BlipGenerator {
 	        	
 				if (btn.isOn()) {
 	        		selections.get(c).add(btn.getIndex());
+	    	   		btn.setBackgroundResource(R.drawable.ic_cell_on);
 	        	}
 			}
 		}
