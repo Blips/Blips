@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@color/background" >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/save_area"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-    	<EditText android:id="@+id/savedBlipName"
-        	android:hint="@string/save_edittext" 
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_weight="7"/>
-
     	<Button
-        	android:id="@+id/savePageButton"
-        	android:background="@drawable/ic_save"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_weight="1" />
-    </LinearLayout>
+    	    android:id="@+id/savePageButton"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_alignParentTop="true"
+    	    android:background="@drawable/ic_save" />
+
+    	<EditText
+    	    android:id="@+id/savedBlipName"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentLeft="true"
+    	    android:layout_alignParentTop="true"
+    	    android:layout_toLeftOf="@+id/savePageButton"
+    	    android:hint="@string/save_edittext" />
+
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/savedFilesList"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/save_area"
+        android:orientation="vertical" >
     </ListView>
-</LinearLayout>
+
+</RelativeLayout>

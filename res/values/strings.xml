@@ -11,7 +11,7 @@
     <string name="save_edittext">Enter filename to save       </string>
     <string name="button_load">Load</string>
     <string name="button_delete">Del</string>
-    <string name="filename_placeholder">Filename Will go Here</string>
+    <string name="filename_placeholder">filename</string>
     <string name="scale_mixolydian">Mixolydian</string>
     <string name="scale_major">Major</string>
     <string name="scale_minor">Minor</string>
@@ -35,5 +35,13 @@
     <string name="saveload_menu">Load/Save</string>
     <string name="tempotext">Tempo</string>
     <string name="instrument_menu_text">Inst</string>
-
+    <string name="trumpet">Trumpet</string>
+    <string name="cello">Cello</string>
+    <string name="guitar">Guitar</string>
+    <string name="piano">Piano</string>
+    <string name="clarinet">Clarinet</string>
+    <string name="trombone">Trombone</string>
+    <string name="tuba">Tuba</string>
+    <string name="flute">Flute</string>
+    
 </resources>

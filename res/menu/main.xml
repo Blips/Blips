@@ -4,8 +4,24 @@
     
     <item android:id="@+id/menu_instrument"
         android:title="@string/instrument_menu_text"
-        android:icon="@drawable/ic_instrument"
-        android:showAsAction="always"/>
+        android:icon="@drawable/ic_trumpet"
+        android:showAsAction="always">
+        
+        <menu>
+            <item android:id="@+id/instrument_piano"
+                android:title="@string/piano" />
+            <item android:id="@+id/instrument_guitar"
+                android:title="@string/guitar" />
+            <item android:id="@+id/instrument_cello"
+                android:title="@string/cello" />
+            <item android:id="@+id/instrument_trumpet"
+                android:title="@string/trumpet" />
+            <item android:id="@+id/instrument_trombone"
+                android:title="@string/trombone" />
+            <item android:id="@+id/instrument_clarinet"
+                android:title="@string/clarinet" />
+        </menu>
+    </item>
     
     <item android:id="@+id/menu_rootnote"
         android:title="@string/root_c"
@@ -83,6 +99,6 @@
     </item>
     <item android:id="@+id/menu_saveload"
         android:title="@string/saveload_menu"
-        android:icon="@drawable/ic_load"
+        android:icon="@drawable/ic_action_load"
         android:showAsAction="always" />
 </menu>

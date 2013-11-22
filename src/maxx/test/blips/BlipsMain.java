@@ -10,7 +10,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.os.Build;
 import android.os.Bundle;
-//import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -31,7 +30,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	// Grid and timer constants
 	static final int GRID_ROWS = 8;
 	static final int GRID_COLS = 8;
-	static final int MILLI_DELAY = 750; // changed since slider starts at 250
+	static final int MILLI_DELAY = 650;
 	static int widthPixels = 0;
 	static int heightPixels = 0;
 	static int rotation = 0;
@@ -90,6 +89,7 @@ public class BlipsMain extends SherlockFragmentActivity {
       // Remove the App title from Action bar
       ActionBar ab = getSupportActionBar();
       ab.setDisplayShowTitleEnabled(false);
+      ab.setDisplayShowHomeEnabled(false);
 
       // create the layout 
       initializeLayout();
@@ -218,7 +218,7 @@ public class BlipsMain extends SherlockFragmentActivity {
         	 BlipCell btn = new BlipCell(this, bg, c, r);
         	 btn.setCol(c);
         	 btn.setRow(r);
-        	 btn.setBackgroundResource(R.drawable.cell);
+        	 btn.setBackgroundResource(R.drawable.ic_cell_off);
         	 btn.setTextOff("");
         	 btn.setTextOn("");
         	 btn.setText("");
@@ -234,7 +234,7 @@ public class BlipsMain extends SherlockFragmentActivity {
       
       // Initialize tempo slider and buttons
       tempoSlider = (SeekBar)this.findViewById(R.id.tempobar);
-      tempoSlider.setMax(500); // Delay can go from 250 to 750
+      tempoSlider.setMax(500);
       tempoSlider.setProgress(sliderValue);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
@@ -242,9 +242,7 @@ public class BlipsMain extends SherlockFragmentActivity {
     	  playButton.setBackgroundResource(R.drawable.ic_play);
       }
       else {
-    	  //playButton.setBackgroundResource(R.drawable.ic_pause);
-    	  // Temporarily remove pause button
-    	  playButton.setBackgroundResource(R.drawable.ic_play);
+    	  playButton.setBackgroundResource(R.drawable.ic_pause);
 
       }
       isStopped = !prefs.getBoolean("isStopped", true);
@@ -310,7 +308,7 @@ public class BlipsMain extends SherlockFragmentActivity {
    
    public void togglePlay() {      
 	  if (isStopped) {
-     //    playButton.setBackgroundResource(R.drawable.ic_pause);
+         playButton.setBackgroundResource(R.drawable.ic_pause);
          isStopped = false;
     	 bg.play();
       } else {
@@ -468,8 +466,29 @@ public class BlipsMain extends SherlockFragmentActivity {
 
 				ret = true;
 		   		break;
-		   case R.id.menu_instrument:
-			   //TODO: Add instrument changing here
+		   case R.id.instrument_piano:
+			   //TODO: Add swap to piano here
+			    ret = true;
+			   	break;
+		   case R.id.instrument_guitar:
+			   //TODO: Add swap to guitar here
+			   ret = true;
+			   break;
+		   case R.id.instrument_cello:
+			   //TODO: Add swap to cello here
+			   ret = true;
+			   break;
+		   case R.id.instrument_trumpet:
+			   //TODO Add swap to trumpet here
+			   ret = true;
+			   break;
+			   
+		   case R.id.instrument_trombone:
+			   //TODO Add swap to trombone
+			   break;
+		   case R.id.instrument_clarinet:
+			   //TODO add swap to trumpet here
+			   break;
 			
 		   default:
 				ret = super.onOptionsItemSelected(item);

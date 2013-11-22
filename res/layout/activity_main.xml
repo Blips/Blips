@@ -41,7 +41,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/tempotext" 
         android:textColor="@color/accent"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/play_button"
