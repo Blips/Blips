@@ -2,7 +2,9 @@ package maxx.test.blips;
 
 import java.io.File;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +65,20 @@ public class FileListAdapter extends BaseAdapter{
       delete.setOnClickListener(new OnClickListener() {
          public void onClick(View v){
             Log.d("DELETEBUTTON", "delete clicked");
-            ((LoadSavePage)con).delete(((File)getItem(position)).getName());
+            AlertDialog.Builder	builder = new AlertDialog.Builder(((LoadSavePage)con));
+            builder.setTitle("Delete Warning");
+            builder.setMessage("Are you sure you want to delete this file?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                	((LoadSavePage)con).delete(((File)getItem(position)).getName());
+               }
+           });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+               }
+           });
+           builder.show();
          }
       });
       

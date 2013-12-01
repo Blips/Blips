@@ -36,6 +36,13 @@ public class BlipsMain extends SherlockFragmentActivity {
 	static int rotation = 0;
 	static Display display;
 	
+	// Constants for instrument offsets
+	static final int PIANO = 0;
+	static final int GUITAR = 1;
+	static final int CLARINET = 2;
+	static final int TRUMPET = 3;
+	static final int TROMBONE = 4;
+	
 	// Reference to every button in grid
 	BlipCell[][] cells;
 	// Boolean to tell whether we're paused or not
@@ -63,6 +70,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	protected static Menu mainMenu;
 	protected static MenuItem scaleMenu;
 	protected static MenuItem rootMenu;
+	protected static MenuItem instMenu;
 	
 	SharedPreferences prefs = null;
 
@@ -326,9 +334,12 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   mainMenu = menu;
 	   rootMenu = menu.findItem(R.id.menu_rootnote);
 	   scaleMenu = menu.findItem(R.id.menu_scale);
+	   instMenu = menu.findItem(R.id.menu_instrument);
 	   
 	   scaleMenu.setTitle(prefs.getString("savedScale", getString(R.string.scale_minor)));
 	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_a)));
+	   //TODO Add and retrieve shared preferences for Instrument menu, unless we just want to default to piano
+	   instMenu.setIcon(R.drawable.ic_trumpet); // Will change to piano when graphic received
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
 	   return true;
@@ -467,27 +478,24 @@ public class BlipsMain extends SherlockFragmentActivity {
 				ret = true;
 		   		break;
 		   case R.id.instrument_piano:
-			   //TODO: Add swap to piano here
-			    ret = true;
-			   	break;
-		   case R.id.instrument_guitar:
-			   //TODO: Add swap to guitar here
-			   ret = true;
+			   Toast.makeText(this, "Loading Piano", Toast.LENGTH_SHORT).show();
+			   //instMenu.setIcon(R.drawable.ic_piano);
 			   break;
-		   case R.id.instrument_cello:
-			   //TODO: Add swap to cello here
-			   ret = true;
+		   case R.id.instrument_guitar:
+			   Toast.makeText(this, "Loading Guitar", Toast.LENGTH_SHORT).show();
+			   //instMenu.setIcon(R.drawable.ic_guitar);
 			   break;
 		   case R.id.instrument_trumpet:
-			   //TODO Add swap to trumpet here
-			   ret = true;
+			   Toast.makeText(this, "Loading Trumpet", Toast.LENGTH_SHORT).show();
+			   //instMenu.setIcon(R.drawable.ic_trumpet);
 			   break;
-			   
 		   case R.id.instrument_trombone:
-			   //TODO Add swap to trombone
+			   Toast.makeText(this, "Loading Trombone", Toast.LENGTH_SHORT).show();
+			   //instMenu.setIcon(R.drawable.ic_trombone);
 			   break;
 		   case R.id.instrument_clarinet:
-			   //TODO add swap to trumpet here
+			   Toast.makeText(this, "Loading Clarinet", Toast.LENGTH_SHORT).show();
+			   //instMenu.setIcon(R.drawable.ic_clarinet);
 			   break;
 			
 		   default:

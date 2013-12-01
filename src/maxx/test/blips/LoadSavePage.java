@@ -9,16 +9,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 //import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 //import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -38,6 +36,9 @@ public class LoadSavePage extends Activity {
    
    // Array of files
    File[] saveFiles;
+   
+   // Boolean to tell if we've saved a file already
+   static boolean savedAlready = false;
    
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -61,31 +62,38 @@ public class LoadSavePage extends Activity {
          public void onClick(View view)
          {
             saveName = saveEditText.getText().toString();
-            if (!saveName.isEmpty()) {
+            
+            // See if filename already exists and create pop-up if so
+            for (File f : saveFiles) {
+            	if (f.getName().equals(saveName)) {
+            		AlertDialog.Builder	builder = new AlertDialog.Builder(LoadSavePage.this);
+                    builder.setTitle("Overwrite Warning");
+                    builder.setMessage("The filename entered already exists. Would you like to overwrite?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        	save(saveName);
+                        	savedAlready = true;
+                       }
+                   });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            savedAlready = true;
+                       }
+                   });
+                   builder.show(); 
+                   break;
+            	}
+            }
+            if (!saveName.isEmpty() && !savedAlready) {
                saveEditText.setText("");
                save(saveName);
+               savedAlready = false;
             }
-         }
-      });
-      
-      this.saveEditText.setOnKeyListener(new OnKeyListener()
-      {
-         public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if(event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER))
-            {
-               saveName = saveEditText.getText().toString();
-               if (!saveName.isEmpty()) {
-                  saveEditText.setText("");
-                  save(saveName);
-               }
+            else {
+            	saveEditText.setText("");
+            	savedAlready = false;
             }
-            if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
-            {
-               InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-               imm.hideSoftInputFromWindow(saveEditText.getWindowToken(), 0);
-               return true;
-            }
-            return false;
          }
       });
    }

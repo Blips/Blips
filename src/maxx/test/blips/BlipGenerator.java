@@ -39,59 +39,46 @@ public class BlipGenerator {
 		        put("Harmonic Minor", new int[] {2, 1, 2, 2, 1, 3, 1});
 		    }};
    
-   // Piano C4 - B5 inclusive
-   static final int S1 = R.raw.pianoc4;
-   static final int S2 = R.raw.pianodb4;
-   static final int S3 = R.raw.pianod4;
-   static final int S4 = R.raw.pianoeb4;
-   static final int S5 = R.raw.pianoe4;
-   static final int S6 = R.raw.pianof4;
-   static final int S7 = R.raw.pianogb4;
-   static final int S8 = R.raw.pianog4;
-   static final int S9 = R.raw.pianoab4;
-   static final int S10 = R.raw.pianoa4;
-   static final int S11 = R.raw.pianobb4;
-   static final int S12 = R.raw.pianob4;
-   static final int S13 = R.raw.pianoc5;
-   static final int S14 = R.raw.pianodb5;
-   static final int S15 = R.raw.pianod5;
-   static final int S16 = R.raw.pianoeb5;
-   static final int S17 = R.raw.pianoe5;
-   static final int S18 = R.raw.pianof5;
-   static final int S19 = R.raw.pianogb5;
-   static final int S20 = R.raw.pianog5;
-   static final int S21 = R.raw.pianoab5;
-   static final int S22 = R.raw.pianoa5;
-   static final int S23 = R.raw.pianobb5;
-   static final int S24 = R.raw.pianob5;
-   
-   
-   // Guitar C3 - B4 inclusive
-   static final int S25 = R.raw.guitarc3;
-   static final int S26 = R.raw.guitardb3;
-   static final int S27 = R.raw.guitard3;
-   static final int S28 = R.raw.guitareb3;
-   static final int S29 = R.raw.guitare3;
-   static final int S30 = R.raw.guitarf3;
-   static final int S31 = R.raw.guitargb3;
-   static final int S32 = R.raw.guitarg3;
-   static final int S33 = R.raw.guitarab3;
-   static final int S34 = R.raw.guitara3;
-   static final int S35 = R.raw.guitarbb3;
-   static final int S36 = R.raw.guitarb3;
-   static final int S37 = R.raw.guitarc4;
-   static final int S38 = R.raw.guitardb4;
-   static final int S39 = R.raw.guitard4;
-   static final int S40 = R.raw.guitareb4;
-   static final int S41 = R.raw.guitare4;
-   static final int S42 = R.raw.guitarf4;
-   static final int S43 = R.raw.guitargb4;
-   static final int S44 = R.raw.guitarg4;
-   static final int S45 = R.raw.guitarab4;
-   static final int S46 = R.raw.guitara4;
-   static final int S47 = R.raw.guitarbb4;
-   static final int S48 = R.raw.guitarb4;
-   
+   static final int[] RAW_SOUNDS = {R.raw.pianoc4, R.raw.pianodb4, R.raw.pianod4, 
+	   								R.raw.pianoeb4, R.raw.pianoe4, R.raw.pianof4,
+	   								R.raw.pianogb4, R.raw.pianog4, R.raw.pianoab4,
+	   								R.raw.pianoa4, R.raw.pianobb4, R.raw.pianob4,
+	   								R.raw.pianoc5, R.raw.pianodb5, R.raw.pianod5,
+	   								R.raw.pianoeb5, R.raw.pianoe5, R.raw.pianof5,
+	   								R.raw.pianogb5, R.raw.pianog5, R.raw.pianoab5,
+	   								R.raw.pianoa5, R.raw.pianobb5, R.raw.pianob5,
+	   								R.raw.guitarc3, R.raw.guitardb3, R.raw.guitard3,
+	   								R.raw.guitareb3, R.raw.guitare3, R.raw.guitarf3,
+	   								R.raw.guitargb3, R.raw.guitarg3, R.raw.guitarab3,
+	   								R.raw.guitara3, R.raw.guitarbb3, R.raw.guitarb3,
+	   								R.raw.guitarc4, R.raw.guitardb4, R.raw.guitard4,
+	   								R.raw.guitareb4, R.raw.guitare4, R.raw.guitarf4,
+	   								R.raw.guitargb4, R.raw.guitarg4, R.raw.guitarab4,
+	   								R.raw.guitara4, R.raw.guitarbb4, R.raw.guitarb4,
+	   								R.raw.clarinetc4, R.raw.clarinetdb4,R.raw.clarinetd4,
+	   								R.raw.clarineteb4, R.raw.clarinete4,R.raw.clarinetf4, 
+	   								R.raw.clarinetgb4, R.raw.clarinetg4,R.raw.clarinetab4,
+	   								R.raw.clarineta4, R.raw.clarinetbb4,R.raw.clarinetb4, 
+	   								R.raw.clarinetc5, R.raw.clarinetdb5,R.raw.clarinetd5, 
+	   								R.raw.clarineteb5, R.raw.clarinete5,R.raw.clarinetf5,
+	   								R.raw.clarinetgb5, R.raw.clarinetg5,R.raw.clarinetab5, 
+	   								R.raw.clarineta5, R.raw.clarinetbb5,R.raw.clarinetb5, 
+	   								R.raw.trumpetc4, R.raw.trumpetdb4,R.raw.trumpetd4, 
+	   								R.raw.trumpeteb4,R.raw.trumpete4, R.raw.trumpetf4, 
+	   								R.raw.trumpetgb4, R.raw.trumpetg4, R.raw.trumpetab4,
+	   								R.raw.trumpeta4, R.raw.trumpetbb4, R.raw.trumpetb4, 
+	   								R.raw.trumpetc5, R.raw.trumpetdb5, R.raw.trumpetd5,
+	   								R.raw.trumpeteb5,R.raw.trumpete5,R.raw.trumpetf5,
+	   								R.raw.trumpetgb5,R.raw.trumpetg5, R.raw.trumpetab5, 
+	   								R.raw.trumpeta5, R.raw.trumpetbb5, R.raw.trumpetb5, 
+	   								R.raw.trombonec3,R.raw.trombonedb3, R.raw.tromboned3, 
+	   								R.raw.tromboneeb3,R.raw.trombonee3, R.raw.trombonef3,
+	   								R.raw.trombonegb3,R.raw.tromboneg3, R.raw.tromboneab3, 
+	   								R.raw.trombonea3,R.raw.trombonebb3,R.raw.tromboneb3, 
+	   								R.raw.trombonec4, R.raw.trombonedb4, R.raw.tromboned4, 
+	   								R.raw.tromboneeb4, R.raw.trombonee4, R.raw.trombonef4, 
+	   								R.raw.trombonegb4, R.raw.tromboneg4,R.raw.tromboneab4, 
+	   								R.raw.trombonea4, R.raw.trombonebb4, R.raw.tromboneb4};
    
    private static SoundPool soundPool = null;
    
@@ -125,11 +112,11 @@ public class BlipGenerator {
 	   scale = (int[])scales.values().toArray()[scaleIndex];
 	   
 	   // Load sounds
-	   initSounds();
+	   initSounds(BlipsMain.PIANO);
    }
  
     /** Populate the SoundPool*/
-   public void initSounds() {
+   public void initSounds(int instOffset) {
 	   initSelections();
 
 	   if (soundPool == null) {
@@ -147,30 +134,30 @@ public class BlipGenerator {
 	         }
 	      });
 	      
-	      soundPool.load(mainContext, S1, 1);
-	      soundPool.load(mainContext, S2, 1);
-	      soundPool.load(mainContext, S3, 1);
-	      soundPool.load(mainContext, S4, 1);
-	      soundPool.load(mainContext, S5, 1);
-	      soundPool.load(mainContext, S6, 1);
-	      soundPool.load(mainContext, S7, 1);
-	      soundPool.load(mainContext, S8, 1);
-	      soundPool.load(mainContext, S9, 1);
-	      soundPool.load(mainContext, S10, 1);
-	      soundPool.load(mainContext, S11, 1);
-	      soundPool.load(mainContext, S12, 1);
-	      soundPool.load(mainContext, S13, 1);
-	      soundPool.load(mainContext, S14, 1);
-	      soundPool.load(mainContext, S15, 1);
-	      soundPool.load(mainContext, S16, 1);
-	      soundPool.load(mainContext, S17, 1);
-	      soundPool.load(mainContext, S18, 1);
-	      soundPool.load(mainContext, S19, 1);
-	      soundPool.load(mainContext, S20, 1);
-	      soundPool.load(mainContext, S21, 1);
-	      soundPool.load(mainContext, S22, 1);
-	      soundPool.load(mainContext, S23, 1);
-	      soundPool.load(mainContext, S24, 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[0+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[1+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[2+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[3+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[4+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[5+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[6+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[7+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[8+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[9+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[10+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[11+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[12+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[13+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[14+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[15+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[16+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[17+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[18+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[19+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[20+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[21+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[22+instOffset], 1);
+	      soundPool.load(mainContext, RAW_SOUNDS[23+instOffset], 1);
 	   }
    }
    
@@ -192,7 +179,7 @@ public class BlipGenerator {
     public void playSound(int soundID) {
 	   if(soundPool == null) {
 		   System.out.println("Something is null");
-	      initSounds();
+	      initSounds(BlipsMain.PIANO);
 	   }
 
        // play sound with same right and left volume, with a priority of 1, 
@@ -202,7 +189,7 @@ public class BlipGenerator {
    
    public void play() {
 	   if (soundPool == null) {
-		   initSounds();
+		   initSounds(BlipsMain.PIANO);
 	   }
 	   
 	   playing = true;
@@ -268,7 +255,7 @@ public class BlipGenerator {
 	            				// Error recovery
 	            				soundPool.release();
 	            				soundPool = null;
-	            				initSounds();
+	            				initSounds(BlipsMain.PIANO);
 	            			}
 	            	   }
 	            	   
@@ -350,5 +337,10 @@ public class BlipGenerator {
 		playingIndex = 0;
 		
 		return true;
+   }
+   
+   public void changeInstrument(int instOffset) {
+	   //TODO Not sure if instrument change requires a separate method
+	   // but I was unable to figure out how to do it.
    }
 }

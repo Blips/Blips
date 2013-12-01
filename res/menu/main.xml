@@ -12,8 +12,6 @@
                 android:title="@string/piano" />
             <item android:id="@+id/instrument_guitar"
                 android:title="@string/guitar" />
-            <item android:id="@+id/instrument_cello"
-                android:title="@string/cello" />
             <item android:id="@+id/instrument_trumpet"
                 android:title="@string/trumpet" />
             <item android:id="@+id/instrument_trombone"
