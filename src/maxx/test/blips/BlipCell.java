@@ -53,7 +53,7 @@ public class BlipCell extends ToggleButton {
 	 	setTextSize(12.0f);
 	 	
 	 	
-		System.out.println("Cell in column:" + c + " row:" + r + " created.");
+		//System.out.println("Cell in column:" + c + " row:" + r + " created.");
 	}
 	
 	public int getCol() {
@@ -133,7 +133,7 @@ public class BlipCell extends ToggleButton {
 		// Name is root note + sound index (modulo for wrap around) -1 for zero index
 		name = BlipGenerator.noteNames[(soundIndex - 1) % 12];
 		
-		System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
+		//System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
 		
 		if (active) {
 			setText(name);

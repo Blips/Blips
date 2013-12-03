@@ -294,7 +294,7 @@ public class BlipGenerator {
 		   rootIndex = newRoot;
 	   }
 	   
-	   // Pass null scale to maintain current value
+	   // Pass negative scale to maintain current value
 	   if (newScale >= 0) {
 		   System.out.println("Changing scale from " + scale + " to " + newScale);
 
@@ -302,23 +302,37 @@ public class BlipGenerator {
 		   scaleName = (String)scales.keySet().toArray()[scaleIndex];
 		   scale = (int[])scales.values().toArray()[scaleIndex];
 	   }
-	  
-	   // Drop old selected notes
-	   selections = null;
-	   initSelections();
-	   
-	   // Set each button's new label and sound index
-		for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
-			for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-				BlipCell btn = mainContext.cells[c][r];
-				btn.resetIndex(); 
-	        	
-				if (btn.isOn()) {
-	        		selections.get(c).add(btn.getIndex());
-	    	   		btn.setBackgroundResource(R.drawable.ic_cell_on);
-	        	}
+
+	   BlipCell btn;
+
+	   if (newScale >= 0 || newRoot >= 0) {
+		   // Drop old selected notes
+		   selections = null;
+		   initSelections();
+		   
+		   // Set each button's new label and sound index
+			for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
+				for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
+					btn = mainContext.cells[c][r];
+					btn.resetIndex(); 
+		        	
+					if (btn.isOn()) {
+		        		selections.get(c).add(btn.getIndex());
+		    	   		btn.setBackgroundResource(R.drawable.ic_cell_on);
+		        	}
+				}
 			}
-		}
+	    } else {
+	    	int lastIndex = (playingIndex == 0 ? BlipsMain.GRID_COLS : playingIndex) - 1;
+	    	
+	    	for (int i = 0; i < BlipsMain.GRID_ROWS; i++) {
+	    		btn = mainContext.cells[lastIndex][i];
+	    		
+	    		if (btn.isOn()) {
+	    			btn.setBackgroundResource(R.drawable.ic_cell_on);
+	    		}
+	    	}
+	    }
 
 		playingIndex = 0;
 

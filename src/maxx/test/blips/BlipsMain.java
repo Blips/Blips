@@ -85,8 +85,6 @@ public class BlipsMain extends SherlockFragmentActivity {
       }
       
       resetting = true;
-	  bg = new BlipGenerator(this);
-	  resetting = true;
       isStopped = false;
       
       // Reset dimensions if unset or screen rotated
