@@ -148,6 +148,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 		
 		editor.putInt("ScaleRoot", bg.rootIndex);
 		editor.putInt("ScaleIndex", bg.scaleIndex);
+		editor.putInt("Instrument", bg.instrumentOffset);
 		editor.putBoolean("isStopped", isStopped);
 		
 		editor.commit();
@@ -524,6 +525,7 @@ public class BlipsMain extends SherlockFragmentActivity {
         
 		i.putExtra("ScaleIndex", bg.scaleIndex);
 		i.putExtra("ScaleRoot", bg.rootIndex);
+		i.putExtra("Instrument", bg.instrumentOffset);
 		
         startActivityForResult(i, LOAD_SAVE_REQ_CODE);
    }
@@ -553,7 +555,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 	                }
 	            }	  
 	    		    		
-	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), data.getIntExtra("LoadRoot", 9), 0);
+	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), 
+	    				       data.getIntExtra("LoadRoot", 9), 
+	    				       data.getIntExtra("LoadInstrument", 0));
 
 	    		edit.putString("savedScale", bg.scaleName);
 	    		scaleMenu.setTitle(bg.scaleName);

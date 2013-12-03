@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Handler;
+import android.widget.Toast;
 
 public class BlipGenerator {   
 	// Static variables
@@ -113,6 +114,7 @@ public class BlipGenerator {
 	   scaleIndex = mainContext.prefs.getInt("ScaleIndex", 1);
 	   scaleName = (String)scales.keySet().toArray()[scaleIndex];
 	   scale = (int[])scales.values().toArray()[scaleIndex];
+	   instrumentOffset = mainContext.prefs.getInt("Instrument", 0);
 	   
 	   // Load sounds
 	   initSounds();
@@ -134,6 +136,7 @@ public class BlipGenerator {
 	            // Turn off loading flag when last sample is loaded
 	            if (sampleId == 24) {
 	            	loading = false;
+	 			    Toast.makeText(mainContext, "Sound Library Ready", Toast.LENGTH_SHORT).show();
 	            }
 	         }
 	      });
@@ -316,9 +319,9 @@ public class BlipGenerator {
 	        	}
 			}
 		}
-		
+
 		playingIndex = 0;
-		
+
 	    if (newInst >= 0) {
 		   System.out.println("Changing instrument from offset " + instrumentOffset + " to " + newInst);
 		   instrumentOffset = newInst;
@@ -327,10 +330,9 @@ public class BlipGenerator {
 		   release();
 		   initSounds();
 	    } else {
-	    	// Only set loading false if we're not reloading the sound library
-			loading = false;
+	    	loading = false;
 	    }
-	   		
+			   		
 		return true;
    }
 }

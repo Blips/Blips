@@ -104,6 +104,7 @@ public class LoadSavePage extends Activity {
       
       encodedSave += i.getIntExtra("ScaleRoot", 9);
       encodedSave += i.getIntExtra("ScaleIndex", 1);
+      encodedSave += i.getIntExtra("Instrument", 0);
       
       for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
          for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
@@ -175,6 +176,7 @@ public class LoadSavePage extends Activity {
           
            resI.putExtra("LoadRoot", Character.getNumericValue(inputBuffer[i++]));
            resI.putExtra("LoadScaleIndex", Character.getNumericValue(inputBuffer[i++]));
+           resI.putExtra("LoadInstrument", Character.getNumericValue(inputBuffer[i++]));
 
            for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
               for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
