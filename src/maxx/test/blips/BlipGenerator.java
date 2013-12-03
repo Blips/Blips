@@ -115,11 +115,11 @@ public class BlipGenerator {
 	   scale = (int[])scales.values().toArray()[scaleIndex];
 	   
 	   // Load sounds
-	   initSounds(BlipsMain.PIANO);
+	   initSounds();
    }
  
     /** Populate the SoundPool*/
-   public void initSounds(int instOffset) {
+   public void initSounds() {
 	   initSelections();
 
 	   if (soundPool == null) {
@@ -131,36 +131,16 @@ public class BlipGenerator {
 	          int status) {
 	            System.out.println("Load completed for " + sampleId + " Status: " + status);
 	            
+	            // Turn off loading flag when last sample is loaded
 	            if (sampleId == 24) {
 	            	loading = false;
 	            }
 	         }
 	      });
 	      
-	      soundPool.load(mainContext, RAW_SOUNDS[0+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[1+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[2+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[3+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[4+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[5+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[6+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[7+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[8+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[9+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[10+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[11+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[12+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[13+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[14+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[15+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[16+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[17+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[18+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[19+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[20+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[21+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[22+instOffset], 1);
-	      soundPool.load(mainContext, RAW_SOUNDS[23+instOffset], 1);
+	      for (int i = 0; i < 24; i++) {
+	    	  soundPool.load(mainContext, RAW_SOUNDS[instrumentOffset * 24 + i], 1);
+	      }
 	   }
    }
    
@@ -182,7 +162,7 @@ public class BlipGenerator {
     public void playSound(int soundID) {
 	   if(soundPool == null) {
 		   System.out.println("Something is null");
-	      initSounds(BlipsMain.PIANO);
+	      initSounds();
 	   }
 
        // play sound with same right and left volume, with a priority of 1, 
@@ -192,7 +172,7 @@ public class BlipGenerator {
    
    public void play() {
 	   if (soundPool == null) {
-		   initSounds(BlipsMain.PIANO);
+		   initSounds();
 	   }
 	   
 	   playing = true;
@@ -258,7 +238,7 @@ public class BlipGenerator {
 	            				// Error recovery
 	            				soundPool.release();
 	            				soundPool = null;
-	            				initSounds(BlipsMain.PIANO);
+	            				initSounds();
 	            			}
 	            	   }
 	            	   
@@ -289,11 +269,11 @@ public class BlipGenerator {
 	   }, 0, BlipsMain.MILLI_DELAY-BlipsMain.sliderValue);
    }
    
-   public boolean changeScale(int newScale, int newRoot, int instOff) {	   
+   public boolean changeScale(int newScale, int newRoot, int newInst) {	   
 	   // Don't do anything if nothing changed
 	   if ((newScale == scaleIndex || newScale < 0) && 
 		   (newRoot == rootIndex || newRoot < 0) &&
-		   (instOff == instrumentOffset || instOff < 0)) {
+		   (newInst == instrumentOffset || newInst < 0)) {
 		   return false;
 	   }
 	   
@@ -338,12 +318,19 @@ public class BlipGenerator {
 		}
 		
 		playingIndex = 0;
-		loading = false;
 		
+	    if (newInst >= 0) {
+		   System.out.println("Changing instrument from offset " + instrumentOffset + " to " + newInst);
+		   instrumentOffset = newInst;
+		   // Set new instrument image here
+
+		   release();
+		   initSounds();
+	    } else {
+	    	// Only set loading false if we're not reloading the sound library
+			loading = false;
+	    }
+	   		
 		return true;
-   }
-   
-   public void changeInstrument(int instOffset) {
-	   instrumentOffset = instOffset;
    }
 }

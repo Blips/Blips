@@ -39,9 +39,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 	// Constants for instrument offsets
 	static final int PIANO = 0;
 	static final int GUITAR = 1;
-	static final int CLARINET = 2;
-	static final int TRUMPET = 3;
-	static final int TROMBONE = 4;
+	static final int TRUMPET = 2;
+	static final int TROMBONE = 3;
+	static final int CLARINET = 4;
 	
 	// Reference to every button in grid
 	BlipCell[][] cells;
@@ -474,27 +474,27 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   		break;
 		   case R.id.instrument_piano:
 			   Toast.makeText(this, "Loading Piano", Toast.LENGTH_SHORT).show();
-			   instrument = 0;
+			   instrument = PIANO;
 			   //instMenu.setIcon(R.drawable.ic_piano);
 			   break;
 		   case R.id.instrument_guitar:
 			   Toast.makeText(this, "Loading Guitar", Toast.LENGTH_SHORT).show();
-			   instrument = 1;
+			   instrument = GUITAR;
 			   //instMenu.setIcon(R.drawable.ic_guitar);
 			   break;
 		   case R.id.instrument_trumpet:
 			   Toast.makeText(this, "Loading Trumpet", Toast.LENGTH_SHORT).show();
-			   instrument = 2;
+			   instrument = TRUMPET;
 			   //instMenu.setIcon(R.drawable.ic_trumpet);
 			   break;
 		   case R.id.instrument_trombone:
 			   Toast.makeText(this, "Loading Trombone", Toast.LENGTH_SHORT).show();
-			   instrument = 3;
+			   instrument = TROMBONE;
 			   //instMenu.setIcon(R.drawable.ic_trombone);
 			   break;
 		   case R.id.instrument_clarinet:
 			   Toast.makeText(this, "Loading Clarinet", Toast.LENGTH_SHORT).show();
-			   instrument = 4;
+			   instrument = CLARINET;
 			   //instMenu.setIcon(R.drawable.ic_clarinet);
 			   break;
 			
