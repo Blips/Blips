@@ -13,7 +13,7 @@ public class BlipCell extends ToggleButton {
 	private int column;
 	private int row;
 	private boolean active;
-	private BlipGenerator generator = null;
+	private BlipsMain mainContext;
 	
 	// User feedback vars
 	private int soundIndex;
@@ -22,6 +22,7 @@ public class BlipCell extends ToggleButton {
 	public BlipCell(Context context) {
 		super(context);
 		
+		mainContext = (BlipsMain)context;
 		column = 0;
 		row = 0;
 		active = false;
@@ -29,12 +30,12 @@ public class BlipCell extends ToggleButton {
 		System.out.println("Cell created with default constructor");
 	}
 	
-	public BlipCell(Context context, BlipGenerator bg, int c, int r) {
+	public BlipCell(Context context, int c, int r) {
 		super(context);
-	
+		
+		mainContext = (BlipsMain)context;
 		column = c;
 		row = r;
-		generator = bg;
 		
 		resetIndex();
 
@@ -76,16 +77,14 @@ public class BlipCell extends ToggleButton {
 	}
 
 	public void setChecked(boolean isActive) {
-		if (generator == null) {
-			System.out.println("Getting new generator");
-			generator = ((BlipsMain)getContext()).bg;
-		}
-		
 		super.setChecked(isActive);
 
 		// Set the new button state
 		active = isActive;
-		if (generator == null) {
+		if (mainContext == null) {
+			mainContext = (BlipsMain)this.getContext();
+		}
+		if (mainContext.bg == null) {
 			System.out.println("Whoops! Generator is NULL!!!");
 			return;
 		}
@@ -93,16 +92,16 @@ public class BlipCell extends ToggleButton {
 		if (isActive) {		
 			System.out.println("Setting button name: " + name);
 			setText(name);
-			generator.selections.get(column).add(soundIndex);
+			mainContext.bg.selections.get(column).add(soundIndex);
 	   		setBackgroundResource(R.drawable.ic_cell_on);
 
 		
-		 	if (!(generator.playing || ((BlipsMain)getContext()).resetting)) {
+		 	if (!(mainContext.bg.playing || mainContext.resetting)) {
 				// Play demo sound if not sequencing already
-				generator.playSound(soundIndex);
+				mainContext.bg.playSound(soundIndex);
 			}
 		} else {
-			ArrayList<Integer> col = generator.selections.get(column);
+			ArrayList<Integer> col = mainContext.bg.selections.get(column);
 			
 	   		setBackgroundResource(R.drawable.ic_cell_off);
 
@@ -124,11 +123,11 @@ public class BlipCell extends ToggleButton {
 	
 	public void resetIndex() {
 		// SoundPool indexes at 1 (wtf???)
-		soundIndex = generator.rootIndex + 1;
+		soundIndex = mainContext.bg.rootIndex + 1;
 		
 		// Sound index (0-12) is the sum of all scale intervals preceding note
 		for (int i = 0; i < BlipsMain.GRID_ROWS - row - 1; i++) {
-			soundIndex += generator.scale[i];
+			soundIndex += mainContext.bg.scale[i];
 		}
 		
 		// Name is root note + sound index (modulo for wrap around) -1 for zero index
@@ -143,9 +142,5 @@ public class BlipCell extends ToggleButton {
 	
 	public int getIndex() {
 		return soundIndex;
-	}
-	
-	public void setGen(BlipGenerator bg) {
-		this.generator = bg;
 	}
 }

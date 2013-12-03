@@ -13,19 +13,21 @@ import android.os.Handler;
 
 public class BlipGenerator {   
 	// Static variables
-    // Note name array
+
+   // Unicode character for musical flat symbol
+   static final String FLAT = "\u266D";
+   
+   // Note name array
    static String[] noteNames = {"C", 
-	   							"D\u266D", "D", 
-	   							"E\u266D", "E", 
+	   							"D" + FLAT, "D", 
+	   							"E" + FLAT, "E", 
 	   							"F", 
-	   							"G\u266D", "G", 
-	   							"A\u266D", "A",
-	   							"B\u266D", "B"};
+	   							"G" + FLAT, "G", 
+	   							"A" + FLAT, "A",
+	   							"B" + FLAT, "B"};
    
    static final LinkedHashMap<String, int[]> scales = 
-		    new LinkedHashMap<String, int[]>() {/**
-				 * 
-				 */
+		    new LinkedHashMap<String, int[]>() {
 				private static final long serialVersionUID = 1L;
 
 			{
@@ -94,6 +96,7 @@ public class BlipGenerator {
    int[] scale = null;
    String scaleName = null;
    int scaleIndex;
+   int instrumentOffset = 0;
    
    // List of current selections for each column
    ArrayList<ArrayList<Integer>> selections = null;
@@ -286,9 +289,11 @@ public class BlipGenerator {
 	   }, 0, BlipsMain.MILLI_DELAY-BlipsMain.sliderValue);
    }
    
-   public boolean changeScale(int newScale, int newRoot) {	   
+   public boolean changeScale(int newScale, int newRoot, int instOff) {	   
 	   // Don't do anything if nothing changed
-	   if ((newScale == scaleIndex && newRoot == rootIndex) || (newScale < 0 && newRoot < 0)) {
+	   if ((newScale == scaleIndex || newScale < 0) && 
+		   (newRoot == rootIndex || newRoot < 0) &&
+		   (instOff == instrumentOffset || instOff < 0)) {
 		   return false;
 	   }
 	   
@@ -323,7 +328,6 @@ public class BlipGenerator {
 		for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
 			for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
 				BlipCell btn = mainContext.cells[c][r];
-				btn.setGen(this);
 				btn.resetIndex(); 
 	        	
 				if (btn.isOn()) {
@@ -333,14 +337,13 @@ public class BlipGenerator {
 			}
 		}
 		
-		loading = false;
 		playingIndex = 0;
+		loading = false;
 		
 		return true;
    }
    
    public void changeInstrument(int instOffset) {
-	   //TODO Not sure if instrument change requires a separate method
-	   // but I was unable to figure out how to do it.
+	   instrumentOffset = instOffset;
    }
 }

@@ -175,17 +175,11 @@ public class BlipsMain extends SherlockFragmentActivity {
 			if(!DATA_LOADED) {
 				for (int c = 0; c < GRID_COLS; c++) {
 					for (int r = 0; r < GRID_ROWS; r++) {
-						cells[c][r].setGen(bg); 
 						cells[c][r].setChecked(prefs.getBoolean("ButtonState" + c + r, false));
 					}
 				}
 			}
 			else {
-				for (int c = 0; c < GRID_COLS; c++) {
-					for (int r = 0; r < GRID_ROWS; r++) {
-						cells[c][r].setGen(bg); 
-					}
-				}
 				DATA_LOADED = false;
 			}
 			
@@ -223,7 +217,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 
          for (int c = 0; c < GRID_COLS; c++) {
         	 // Handle each column in row
-        	 BlipCell btn = new BlipCell(this, bg, c, r);
+        	 BlipCell btn = new BlipCell(this, c, r);
         	 btn.setCol(c);
         	 btn.setRow(r);
         	 btn.setBackgroundResource(R.drawable.ic_cell_off);
@@ -350,6 +344,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   boolean ret = false;
 	   int scaleIndex = -1;
 	   int root = -1;
+	   int instrument = -1;
 	   
 	   switch (item.getItemId()) {
 	   	   case R.id.menu_saveload:
@@ -479,22 +474,27 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   		break;
 		   case R.id.instrument_piano:
 			   Toast.makeText(this, "Loading Piano", Toast.LENGTH_SHORT).show();
+			   instrument = 0;
 			   //instMenu.setIcon(R.drawable.ic_piano);
 			   break;
 		   case R.id.instrument_guitar:
 			   Toast.makeText(this, "Loading Guitar", Toast.LENGTH_SHORT).show();
+			   instrument = 1;
 			   //instMenu.setIcon(R.drawable.ic_guitar);
 			   break;
 		   case R.id.instrument_trumpet:
 			   Toast.makeText(this, "Loading Trumpet", Toast.LENGTH_SHORT).show();
+			   instrument = 2;
 			   //instMenu.setIcon(R.drawable.ic_trumpet);
 			   break;
 		   case R.id.instrument_trombone:
 			   Toast.makeText(this, "Loading Trombone", Toast.LENGTH_SHORT).show();
+			   instrument = 3;
 			   //instMenu.setIcon(R.drawable.ic_trombone);
 			   break;
 		   case R.id.instrument_clarinet:
 			   Toast.makeText(this, "Loading Clarinet", Toast.LENGTH_SHORT).show();
+			   instrument = 4;
 			   //instMenu.setIcon(R.drawable.ic_clarinet);
 			   break;
 			
@@ -503,7 +503,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   		break;
 	   }
 	   
-	   if (bg.changeScale(scaleIndex, root)) {
+	   if (bg.changeScale(scaleIndex, root, instrument)) {
 		   // Only save preferences if something changed
 		   Editor edit = prefs.edit();
 		   edit.putString("savedScale", bg.scaleName);
@@ -553,7 +553,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	                }
 	            }	  
 	    		    		
-	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), data.getIntExtra("LoadRoot", 9));
+	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), data.getIntExtra("LoadRoot", 9), 0);
 
 	    		edit.putString("savedScale", bg.scaleName);
 	    		scaleMenu.setTitle(bg.scaleName);
