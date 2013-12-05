@@ -48,7 +48,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	static final int TROMBONE = 4;
 	
 	// Reference to every button in grid
-	BlipCell[][] cells = new BlipCell[GRID_COLS][GRID_ROWS];
+	BlipCell[][] cells = null;
 	// Boolean to tell whether we're paused or not
 	boolean isStopped = true;
 	boolean destroyed;
@@ -60,7 +60,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	// Tempo Slider and slider value
 	TextView tempoLabel;
 	SeekBar tempoSlider;
-	protected static int sliderValue = 250;
+	protected static int sliderValue;
 	
 	// Store generator and other state variables
 	BlipGenerator bg = null;
@@ -82,9 +82,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
-	   System.out.println("On Create called");
       super.onCreate(savedInstanceState);
-      System.out.println("Super on create called");
+
       setContentView(R.layout.activity_main);
       
       if (prefs == null) {
@@ -193,9 +192,12 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   System.out.println("Init layout called");
 	   // Grid container
       LinearLayout container = (LinearLayout) findViewById(R.id.llContainer);
+      
+      sliderValue = prefs.getInt("SliderValue", 250);
       tempoLabel = (TextView) findViewById(R.id.tempoLabel);
 	  tempoLabel.setText(formatter.format(60000.0 / (MILLI_DELAY - sliderValue)) + " BPM");
 
+	  cells = new BlipCell[GRID_COLS][GRID_ROWS];
           
       if (bg == null) {
     	  bg = new BlipGenerator(this);
@@ -223,15 +225,7 @@ public class BlipsMain extends SherlockFragmentActivity {
         	 btn.setText("");
         	 
         	 row.addView(btn);
-        	 
-        	 boolean state = prefs.getBoolean("ButtonState" + c + r, false);
-        	 System.out.println("Got button state for " + c + r + ": " + state);
-
-        	 btn.setChecked(state);
-        	 
-        	 if (cells == null) {
-        	    cells = new BlipCell[GRID_COLS][GRID_ROWS];
-        	 }
+        	 btn.setChecked(prefs.getBoolean("ButtonState" + c + r, false));
         	 
         	 cells[c][r] = btn;
          }
@@ -291,6 +285,10 @@ public class BlipsMain extends SherlockFragmentActivity {
 			 if (!isStopped) {
 				 bg.startSequence();
 			 }
+			 
+			   Editor edit = prefs.edit();
+			   edit.putInt("SliderValue", sliderValue);
+			   edit.commit();
 		 }
       });
    }
@@ -306,7 +304,10 @@ public class BlipsMain extends SherlockFragmentActivity {
          for(int r = 0; r < GRID_ROWS; r++) {
             cells[c][r].setChecked(false);
          }
-      }
+      } 
+      
+      bg.initSelections();
+      bg.loading = false;
    }
    
    public void togglePlay() {      
@@ -533,6 +534,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 		i.putExtra("ScaleIndex", bg.scaleIndex);
 		i.putExtra("ScaleRoot", bg.rootIndex);
 		i.putExtra("Instrument", bg.instrumentOffset);
+		i.putExtra("SliderValue", sliderValue);
 		
         startActivityForResult(i, LOAD_SAVE_REQ_CODE);
    }
@@ -562,13 +564,22 @@ public class BlipsMain extends SherlockFragmentActivity {
 	                }
 	            }	  
 	    		    		
-	    		// Grab second digit first
+	    		// Grab second digit of root first
 	    		int root = data.getIntExtra("LoadRoot1", 9);
 	    		
 	    		// If first digit is not 0, we need to handle the offset
 	    		if (data.getIntExtra("LoadRoot0", 0) == 1) {
 	    			root += 10;
 	    		}
+	    		
+	    		// Handle each digit of slider value individually
+	    		int slider0 = data.getIntExtra("LoadSlider0", 2);
+	    		int slider1 = data.getIntExtra("LoadSlider1", 5);
+	    		sliderValue = data.getIntExtra("LoadSlider2", 0);
+	    		
+	    		sliderValue += 100 * slider0 + 10 * slider1;
+	    		edit.putInt("SliderValue", sliderValue);
+	    		tempoSlider.setProgress(sliderValue);    		
 	    		
 	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), 
 	    				       root, 

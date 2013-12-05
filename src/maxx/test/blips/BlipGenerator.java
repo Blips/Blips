@@ -157,8 +157,6 @@ public class BlipGenerator {
       for (int i = 0; i < BlipsMain.GRID_COLS; i++) {
          selections.add(new ArrayList<Integer>(0));
       }
-
-      System.out.println("Selections initialized. Size: " + selections.size());
    }
     
     /** Play a given sound in the soundPool */

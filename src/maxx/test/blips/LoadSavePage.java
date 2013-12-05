@@ -110,8 +110,22 @@ public class LoadSavePage extends Activity {
     	  encodedSave += 0; 
       }
       
+      
       // Single digit root index stored with leading 0, double digits handled
       encodedSave += rootIndex;
+      
+      int sliderVal = i.getIntExtra("SliderValue", 250);
+      // Pad slider value
+      if (sliderVal < 100) {
+    	  encodedSave += 0;
+      }
+      
+      if (sliderVal < 10) {
+    	  encodedSave += 0;
+      }
+      
+      encodedSave += sliderVal;
+      
       encodedSave += i.getIntExtra("ScaleIndex", 1);
       encodedSave += i.getIntExtra("Instrument", 0);
       
@@ -168,7 +182,7 @@ public class LoadSavePage extends Activity {
 
           /* Prepare a char-Array that will
            * hold the chars we read back in. */
-           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 4];
+           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 7];
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
@@ -185,6 +199,10 @@ public class LoadSavePage extends Activity {
            // Root index stored as 2 digits, even if single digit number
            resI.putExtra("LoadRoot0", Character.getNumericValue(inputBuffer[i++]));
            resI.putExtra("LoadRoot1", Character.getNumericValue(inputBuffer[i++]));
+           
+           resI.putExtra("LoadSlider0", Character.getNumericValue(inputBuffer[i++]));
+           resI.putExtra("LoadSlider1", Character.getNumericValue(inputBuffer[i++]));          
+           resI.putExtra("LoadSlider2", Character.getNumericValue(inputBuffer[i++]));         
            
            resI.putExtra("LoadScaleIndex", Character.getNumericValue(inputBuffer[i++]));
            resI.putExtra("LoadInstrument", Character.getNumericValue(inputBuffer[i++]));
