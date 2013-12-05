@@ -99,7 +99,6 @@ public class BlipCell extends ToggleButton {
 				for (int i = 0; i < col.size(); i++) {
 					if (col.get(i) == soundIndex) {
 						col.remove(i);
-						break;
 					}
 				}
 			}

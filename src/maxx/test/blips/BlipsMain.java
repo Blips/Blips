@@ -306,6 +306,7 @@ public class BlipsMain extends SherlockFragmentActivity {
          }
       } 
       
+      bg.selections = null;
       bg.initSelections();
       bg.loading = false;
    }
