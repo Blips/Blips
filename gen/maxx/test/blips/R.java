@@ -1014,8 +1014,8 @@ containing a value of this type.
         public static final int subscale_mixolydian=0x7f05005a;
         public static final int subscale_phrygian=0x7f050059;
         public static final int tabMode=0x7f050003;
+        public static final int tempoLabel=0x7f050036;
         public static final int tempobar=0x7f050034;
-        public static final int textView1=0x7f050036;
         public static final int useLogo=0x7f050004;
         public static final int wrap_content=0x7f050000;
     }

@@ -99,25 +99,33 @@ public class LoadSavePage extends Activity {
    }
    
    public void save(String filename) {
+	   // Save Data state in an encoded string
       String encodedSave = "";
       Intent i = getIntent();
       
-      encodedSave += i.getIntExtra("ScaleRoot", 9);
+      int rootIndex = i.getIntExtra("ScaleRoot", 9);
+      
+      // Pad single digit rootIndex with leading 0 for uniform length
+      if (rootIndex < 10) {
+    	  encodedSave += 0; 
+      }
+      
+      // Single digit root index stored with leading 0, double digits handled
+      encodedSave += rootIndex;
       encodedSave += i.getIntExtra("ScaleIndex", 1);
       encodedSave += i.getIntExtra("Instrument", 0);
       
+      // Save each button's state according to row and column
       for (int c = 0; c < BlipsMain.GRID_COLS; c++) {
          for (int r = 0; r < BlipsMain.GRID_ROWS; r++) {
-            if (i.getBooleanExtra("ButtonState"+c+r, false)) {
+            if (i.getBooleanExtra("ButtonState" + c + r, false)) {
                encodedSave += 1;
             } else {
                encodedSave += 0;
             }
          }
       }
-      
-      System.out.println("Saving encoded string: " + encodedSave);
-      
+            
       try { 
              // catches IOException below
 
@@ -160,7 +168,7 @@ public class LoadSavePage extends Activity {
 
           /* Prepare a char-Array that will
            * hold the chars we read back in. */
-           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 3];
+           char[] inputBuffer = new char[BlipsMain.GRID_COLS * BlipsMain.GRID_ROWS + 4];
 
            // Fill the Buffer with data from the file
            isr.read(inputBuffer);
@@ -174,7 +182,10 @@ public class LoadSavePage extends Activity {
            
            int i = 0;
           
-           resI.putExtra("LoadRoot", Character.getNumericValue(inputBuffer[i++]));
+           // Root index stored as 2 digits, even if single digit number
+           resI.putExtra("LoadRoot0", Character.getNumericValue(inputBuffer[i++]));
+           resI.putExtra("LoadRoot1", Character.getNumericValue(inputBuffer[i++]));
+           
            resI.putExtra("LoadScaleIndex", Character.getNumericValue(inputBuffer[i++]));
            resI.putExtra("LoadInstrument", Character.getNumericValue(inputBuffer[i++]));
 

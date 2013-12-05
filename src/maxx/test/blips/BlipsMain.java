@@ -2,6 +2,8 @@ package maxx.test.blips;
 
 
 
+import java.text.DecimalFormat;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -31,6 +34,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	static final int GRID_ROWS = 8;
 	static final int GRID_COLS = 8;
 	static final int MILLI_DELAY = 650;
+	static final DecimalFormat formatter = new DecimalFormat("#.#");
 	static int widthPixels = 0;
 	static int heightPixels = 0;
 	static int rotation = 0;
@@ -54,6 +58,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	Button playButton;
 	
 	// Tempo Slider and slider value
+	TextView tempoLabel;
 	SeekBar tempoSlider;
 	protected static int sliderValue = 250;
 	
@@ -194,6 +199,9 @@ public class BlipsMain extends SherlockFragmentActivity {
    protected void initializeLayout() {
 	   // Grid container
       LinearLayout container = (LinearLayout) findViewById(R.id.llContainer);
+      tempoLabel = (TextView) findViewById(R.id.tempoLabel);
+	  tempoLabel.setText(formatter.format(60000.0 / (MILLI_DELAY - sliderValue)) + " BPM");
+
       // Grid cells
       cells = new BlipCell[GRID_COLS][GRID_ROWS];
     
@@ -274,6 +282,7 @@ public class BlipsMain extends SherlockFragmentActivity {
     	 @Override
     	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     	 	 sliderValue = progress;
+    	 	 tempoLabel.setText(formatter.format(60000.0 / (MILLI_DELAY - sliderValue)) + " BPM");
     	 }
 
 		 @Override
@@ -553,8 +562,16 @@ public class BlipsMain extends SherlockFragmentActivity {
 	                }
 	            }	  
 	    		    		
+	    		// Grab second digit first
+	    		int root = data.getIntExtra("LoadRoot1", 9);
+	    		
+	    		// If first digit is not 0, we need to handle the offset
+	    		if (data.getIntExtra("LoadRoot0", 0) == 1) {
+	    			root += 10;
+	    		}
+	    		
 	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), 
-	    				       data.getIntExtra("LoadRoot", 9), 
+	    				       root, 
 	    				       data.getIntExtra("LoadInstrument", 0));
 
 	    		edit.putString("savedScale", bg.scaleName);
