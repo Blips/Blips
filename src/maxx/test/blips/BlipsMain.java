@@ -43,12 +43,12 @@ public class BlipsMain extends SherlockFragmentActivity {
 	// Constants for instrument offsets
 	static final int PIANO = 0;
 	static final int GUITAR = 1;
-	static final int TRUMPET = 2;
-	static final int TROMBONE = 3;
-	static final int CLARINET = 4;
+	static final int CLARINET = 2;
+	static final int TRUMPET = 3;
+	static final int TROMBONE = 4;
 	
 	// Reference to every button in grid
-	BlipCell[][] cells;
+	BlipCell[][] cells = new BlipCell[GRID_COLS][GRID_ROWS];
 	// Boolean to tell whether we're paused or not
 	boolean isStopped = true;
 	boolean destroyed;
@@ -82,7 +82,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
+	   System.out.println("On Create called");
       super.onCreate(savedInstanceState);
+      System.out.println("Super on create called");
       setContentView(R.layout.activity_main);
       
       if (prefs == null) {
@@ -95,6 +97,10 @@ public class BlipsMain extends SherlockFragmentActivity {
       // Reset dimensions if unset or screen rotated
       if (heightPixels == 0 || widthPixels == 0 || rotation != display.getRotation()) {
     	  setScreenDimensions();
+      }
+      
+      if (bg == null) {
+    	  bg = new BlipGenerator(this);
       }
       
       // Remove the App title from Action bar
@@ -141,28 +147,13 @@ public class BlipsMain extends SherlockFragmentActivity {
    }
    
 	public void onPause() {
-		Editor editor = prefs.edit();
-		
-		for (int c = 0; c < GRID_COLS; c++) {
-			for (int r = 0; r < GRID_ROWS; r++) {
-				editor.putBoolean("ButtonState" + c + r, cells[c][r].isOn());
-			}
-		}
-		
-		editor.putInt("ScaleRoot", bg.rootIndex);
-		editor.putInt("ScaleIndex", bg.scaleIndex);
-		editor.putInt("Instrument", bg.instrumentOffset);
-		editor.putBoolean("isStopped", isStopped);
-		
-		editor.commit();
-	  
 		bg.stop();
-	    bg = null;
-
+		
 		super.onPause();
 	}
 	
 	public void onResume() {
+		System.out.println("On resume called");
 		if (prefs == null) {
 			prefs = getPreferences(MODE_PRIVATE);
 		}
@@ -173,9 +164,11 @@ public class BlipsMain extends SherlockFragmentActivity {
 	    }
     
 		super.onResume();
+		System.out.println("super on resume called");
 
 		if (!destroyed) {
 			isStopped = false;
+			
 			if(!DATA_LOADED) {
 				for (int c = 0; c < GRID_COLS; c++) {
 					for (int r = 0; r < GRID_ROWS; r++) {
@@ -197,14 +190,13 @@ public class BlipsMain extends SherlockFragmentActivity {
    }
    
    protected void initializeLayout() {
+	   System.out.println("Init layout called");
 	   // Grid container
       LinearLayout container = (LinearLayout) findViewById(R.id.llContainer);
       tempoLabel = (TextView) findViewById(R.id.tempoLabel);
 	  tempoLabel.setText(formatter.format(60000.0 / (MILLI_DELAY - sliderValue)) + " BPM");
 
-      // Grid cells
-      cells = new BlipCell[GRID_COLS][GRID_ROWS];
-    
+          
       if (bg == null) {
     	  bg = new BlipGenerator(this);
       }
@@ -213,8 +205,6 @@ public class BlipsMain extends SherlockFragmentActivity {
 	  LinearLayout.LayoutParams row_params = new LinearLayout.LayoutParams(
 				   LinearLayout.LayoutParams.MATCH_PARENT, 
 				   LinearLayout.LayoutParams.MATCH_PARENT);
-
-	  isStopped = false;
 
       for (int r = 0; r < GRID_ROWS; r++) {
     	 // Handle each row in grid
@@ -233,9 +223,17 @@ public class BlipsMain extends SherlockFragmentActivity {
         	 btn.setText("");
         	 
         	 row.addView(btn);
-        	 cells[c][r] = btn;
         	 
-        	 btn.setChecked(prefs.getBoolean("ButtonState" + c + r, false));
+        	 boolean state = prefs.getBoolean("ButtonState" + c + r, false);
+        	 System.out.println("Got button state for " + c + r + ": " + state);
+
+        	 btn.setChecked(state);
+        	 
+        	 if (cells == null) {
+        	    cells = new BlipCell[GRID_COLS][GRID_ROWS];
+        	 }
+        	 
+        	 cells[c][r] = btn;
          }
          
          container.addView(row);
@@ -247,13 +245,8 @@ public class BlipsMain extends SherlockFragmentActivity {
       tempoSlider.setProgress(sliderValue);
       clearButton = (Button)this.findViewById(R.id.clear_button);
       playButton = (Button)this.findViewById(R.id.play_button);
-      if(isStopped) {
-    	  playButton.setBackgroundResource(R.drawable.ic_play);
-      }
-      else {
-    	  playButton.setBackgroundResource(R.drawable.ic_pause);
+      
 
-      }
       isStopped = !prefs.getBoolean("isStopped", true);
       togglePlay();
    }
@@ -326,6 +319,10 @@ public class BlipsMain extends SherlockFragmentActivity {
          playButton.setBackgroundResource(R.drawable.ic_play);
          bg.pause();
       }
+	  
+		Editor editor = prefs.edit();
+		editor.putBoolean("isStopped", isStopped);
+		editor.commit();
    }
    
    @Override
@@ -514,6 +511,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   if (bg.changeScale(scaleIndex, root, instrument)) {
 		   // Only save preferences if something changed
 		   Editor edit = prefs.edit();
+		   edit.putInt("ScaleRoot", bg.rootIndex);
+		   edit.putInt("ScaleIndex", bg.scaleIndex);
+		   edit.putInt("Instrument", bg.instrumentOffset);
 		   edit.putString("savedScale", bg.scaleName);
 		   edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
 		   edit.commit();
@@ -579,6 +579,10 @@ public class BlipsMain extends SherlockFragmentActivity {
 	    		
 	    		edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
 	    		rootMenu.setTitle(BlipGenerator.noteNames[bg.rootIndex]);
+	    		
+				edit.putInt("ScaleRoot", bg.rootIndex);
+				edit.putInt("ScaleIndex", bg.scaleIndex);
+				edit.putInt("Instrument", bg.instrumentOffset);
 
 	    		edit.commit();
 	    		

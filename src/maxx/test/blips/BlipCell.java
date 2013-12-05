@@ -5,13 +5,14 @@ package maxx.test.blips;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 public class BlipCell extends ToggleButton {
 	// Layout and state vars
-	private int column;
-	private int row;
+	private int column = -1;
+	private int row = -1;
 	private boolean active;
 	private BlipsMain mainContext;
 	
@@ -21,13 +22,6 @@ public class BlipCell extends ToggleButton {
 
 	public BlipCell(Context context) {
 		super(context);
-		
-		mainContext = (BlipsMain)context;
-		column = 0;
-		row = 0;
-		active = false;
-		
-		System.out.println("Cell created with default constructor");
 	}
 	
 	public BlipCell(Context context, int c, int r) {
@@ -48,12 +42,10 @@ public class BlipCell extends ToggleButton {
 													BlipsMain.heightPixels / (BlipsMain.GRID_ROWS + heightOffset));
 	 	setLayoutParams(btn_params);
 	 	setIncludeFontPadding(false);
+	 	setMaxLines(1);
 	 	setPadding(2, 2, 2, 2);
 	 	
-	 	setTextSize(12.0f);
-	 	
-	 	
-		//System.out.println("Cell in column:" + c + " row:" + r + " created.");
+	 	setTextSize(16.0f);	 	
 	}
 	
 	public int getCol() {
@@ -90,25 +82,20 @@ public class BlipCell extends ToggleButton {
 		}
 		
 		if (isActive) {		
-			System.out.println("Setting button name: " + name);
-			setText(name);
-			mainContext.bg.selections.get(column).add(soundIndex);
-	   		setBackgroundResource(R.drawable.ic_cell_on);
-
-		
 		 	if (!(mainContext.bg.playing || mainContext.resetting)) {
 				// Play demo sound if not sequencing already
 				mainContext.bg.playSound(soundIndex);
 			}
+		 	
+			setText(name);
+			mainContext.bg.selections.get(column).add(soundIndex);
+	   		setBackgroundResource(R.drawable.ic_cell_on);
 		} else {
 			ArrayList<Integer> col = mainContext.bg.selections.get(column);
 			
 	   		setBackgroundResource(R.drawable.ic_cell_off);
 
 			if (col.contains(soundIndex)) {
-				System.out.println("Remove row " + row + " from col " + column);
-		   		setBackgroundResource(R.drawable.ic_cell_off);
-
 				for (int i = 0; i < col.size(); i++) {
 					if (col.get(i) == soundIndex) {
 						col.remove(i);
@@ -117,8 +104,13 @@ public class BlipCell extends ToggleButton {
 				}
 			}
 		}
-
-		System.out.println("Cell in column:" + column + " row:" + row + " set to " + isActive);		
+		
+		if (!mainContext.resetting) {
+			Editor edit = mainContext.prefs.edit();
+			edit.putBoolean("ButtonState" + column + row, active);
+			edit.commit();
+			System.out.println("Column " + column + " row " + row + " active " + active);		
+		}		
 	}
 	
 	public void resetIndex() {
