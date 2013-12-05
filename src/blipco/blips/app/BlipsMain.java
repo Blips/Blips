@@ -1,8 +1,8 @@
-package maxx.test.blips;
-
-
+package blipco.blips.app;
 
 import java.text.DecimalFormat;
+
+import maxx.test.blips.R;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -46,6 +46,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	static final int CLARINET = 2;
 	static final int TRUMPET = 3;
 	static final int TROMBONE = 4;
+	protected static int currentInstrument = PIANO;
 	
 	// Reference to every button in grid
 	BlipCell[][] cells = null;
@@ -339,8 +340,22 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   
 	   scaleMenu.setTitle(prefs.getString("savedScale", getString(R.string.scale_minor)));
 	   rootMenu.setTitle(prefs.getString("savedRootNote", getString(R.string.root_a)));
-	   //TODO Add and retrieve shared preferences for Instrument menu, unless we just want to default to piano
-	   instMenu.setIcon(R.drawable.ic_trumpet); // Will change to piano when graphic received
+	   currentInstrument = prefs.getInt("Instrument", PIANO);
+	   if(currentInstrument == PIANO) {
+		   instMenu.setIcon(R.drawable.ic_action_piano);
+	   }
+	   else if (currentInstrument == GUITAR) {
+		   instMenu.setIcon(R.drawable.ic_action_guitar);
+	   }
+	   else if (currentInstrument == CLARINET) {
+		   instMenu.setIcon(R.drawable.ic_action_clarinet);
+	   }
+	   else if (currentInstrument == TRUMPET) {
+		   instMenu.setIcon(R.drawable.ic_trumpet);
+	   }
+	   else if (currentInstrument == TROMBONE) {
+		   instMenu.setIcon(R.drawable.ic_action_trombone);
+	   }
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
 	   return true;
@@ -482,27 +497,27 @@ public class BlipsMain extends SherlockFragmentActivity {
 		   case R.id.instrument_piano:
 			   Toast.makeText(this, "Loading Piano", Toast.LENGTH_SHORT).show();
 			   instrument = PIANO;
-			   //instMenu.setIcon(R.drawable.ic_piano);
+			   instMenu.setIcon(R.drawable.ic_action_piano);
 			   break;
 		   case R.id.instrument_guitar:
 			   Toast.makeText(this, "Loading Guitar", Toast.LENGTH_SHORT).show();
 			   instrument = GUITAR;
-			   //instMenu.setIcon(R.drawable.ic_guitar);
+			   instMenu.setIcon(R.drawable.ic_action_guitar);
 			   break;
 		   case R.id.instrument_trumpet:
 			   Toast.makeText(this, "Loading Trumpet", Toast.LENGTH_SHORT).show();
 			   instrument = TRUMPET;
-			   //instMenu.setIcon(R.drawable.ic_trumpet);
+			   instMenu.setIcon(R.drawable.ic_trumpet);
 			   break;
 		   case R.id.instrument_trombone:
 			   Toast.makeText(this, "Loading Trombone", Toast.LENGTH_SHORT).show();
 			   instrument = TROMBONE;
-			   //instMenu.setIcon(R.drawable.ic_trombone);
+			   instMenu.setIcon(R.drawable.ic_action_trombone);
 			   break;
 		   case R.id.instrument_clarinet:
 			   Toast.makeText(this, "Loading Clarinet", Toast.LENGTH_SHORT).show();
 			   instrument = CLARINET;
-			   //instMenu.setIcon(R.drawable.ic_clarinet);
+			   instMenu.setIcon(R.drawable.ic_action_clarinet);
 			   break;
 			
 		   default:
@@ -572,16 +587,50 @@ public class BlipsMain extends SherlockFragmentActivity {
 	    		if (data.getIntExtra("LoadRoot0", 0) == 1) {
 	    			root += 10;
 	    		}
+	    		// Grab the instrument and set the Menu Icon to it
+	    		int instrument = data.getIntExtra("LoadInstrument", 0);
+	    		if(instrument == PIANO) {
+	    			instMenu.setIcon(R.drawable.ic_action_piano);
+	    		}
+	    		else if(instrument == GUITAR) {
+	    			instMenu.setIcon(R.drawable.ic_action_guitar);
+	    		}
+	    		else if(instrument == TRUMPET) {
+	    			instMenu.setIcon(R.drawable.ic_trumpet);
+	    		}
+	    		else if(instrument == CLARINET) {
+	    			instMenu.setIcon(R.drawable.ic_action_clarinet);
+	    		}
+	    		else if(instrument == TROMBONE) {
+	    			instMenu.setIcon(R.drawable.ic_action_piano);
+	    		}
+	    		
 	    		
 	    		// Handle each digit of slider value individually
 	    		int slider0 = data.getIntExtra("LoadSlider0", 2);
 	    		int slider1 = data.getIntExtra("LoadSlider1", 5);
 	    		sliderValue = data.getIntExtra("LoadSlider2", 0);
+	    		currentInstrument = data.getIntExtra("LoadInstrument", 0);
+	    		if(currentInstrument == PIANO) {
+	    			instMenu.setIcon(R.drawable.ic_action_piano);
+	    		}
+	    		else if (currentInstrument == GUITAR) {
+	    			instMenu.setIcon(R.drawable.ic_action_guitar);
+	    		}
+	    		else if (currentInstrument == CLARINET) {
+	    		   instMenu.setIcon(R.drawable.ic_action_clarinet);
+	    		}
+	    		else if (currentInstrument == TRUMPET) {
+	    		   instMenu.setIcon(R.drawable.ic_trumpet);
+	    		}
+	    		else if (currentInstrument == TROMBONE) {
+	    		   instMenu.setIcon(R.drawable.ic_action_trombone);
+	    		}
 	    		
 	    		sliderValue += 100 * slider0 + 10 * slider1;
 	    		edit.putInt("SliderValue", sliderValue);
 	    		tempoSlider.setProgress(sliderValue);    		
-	    		
+	    		//TODO
 	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), 
 	    				       root, 
 	    				       data.getIntExtra("LoadInstrument", 0));

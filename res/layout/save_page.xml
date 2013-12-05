@@ -21,6 +21,7 @@
 
     	<EditText
     	    android:id="@+id/savedBlipName"
+    	    android:textColor="@color/accent"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentLeft="true"
@@ -29,13 +30,25 @@
     	    android:hint="@string/save_edittext" />
 
     </RelativeLayout>
+    
+    <TextView 
+        android:id="@+id/fileHelpText"
+        android:textSize="18sp"
+    	android:textStyle="italic"
+        android:textColor="@color/accent"
+        android:text="@string/noFiles_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/save_area"
+        android:gravity="center_horizontal"/>
+    
 
     <ListView
         android:id="@+id/savedFilesList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/save_area"
+        android:layout_below="@+id/fileHelpText"
         android:orientation="vertical" >
     </ListView>
 

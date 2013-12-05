@@ -1,4 +1,4 @@
-package maxx.test.blips;
+package blipco.blips.app;
 
 
 import java.io.File;
@@ -8,18 +8,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import maxx.test.blips.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-//import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-//import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class LoadSavePage extends Activity {
    // File name variable
@@ -37,6 +38,9 @@ public class LoadSavePage extends Activity {
    // Array of files
    File[] saveFiles;
    
+   // Helper text
+   TextView saveHelperText;
+   
    // Boolean to tell if we've saved a file already
    static boolean savedAlready = false;
    
@@ -48,9 +52,14 @@ public class LoadSavePage extends Activity {
       saveEditText = (EditText)this.findViewById(R.id.savedBlipName);
       saveButton = (Button)this.findViewById(R.id.savePageButton);
       saveListview = (ListView)findViewById(R.id.savedFilesList);
+      saveHelperText = (TextView)findViewById(R.id.fileHelpText);
       
       File dir = getFilesDir();
       saveFiles = dir.listFiles();
+      
+      if (saveFiles.length > 0) {
+    	  saveHelperText.setText(R.string.howToLoad_text);
+      }
       
       saveListview.setAdapter(new FileListAdapter(this, saveFiles));
       //initialize listeners on Button and EditText
@@ -168,6 +177,9 @@ public class LoadSavePage extends Activity {
               * openFileInput(...) */
              File dir = getFilesDir();
              saveFiles = dir.listFiles();
+             if(saveFiles.length > 0) {
+            	 saveHelperText.setText(R.string.howToLoad_text);
+             }
              
              saveListview.setAdapter(new FileListAdapter(this, saveFiles));
 
@@ -225,6 +237,9 @@ public class LoadSavePage extends Activity {
       this.deleteFile(filename);
       File dir = getFilesDir();
       saveFiles = dir.listFiles();
+      if(saveFiles.length == 0) {
+     	 saveHelperText.setText(R.string.noFiles_text);
+      }
       
       saveListview.setAdapter(new FileListAdapter(this, saveFiles));
    }

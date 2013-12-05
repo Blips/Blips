@@ -1,6 +1,8 @@
-package maxx.test.blips;
+package blipco.blips.app;
 
 import java.io.File;
+
+import blipco.blips.app.LoadSavePage;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,7 +15,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import maxx.test.blips.LoadSavePage;
+import android.widget.Toast;
+import maxx.test.blips.R;
 
 public class FileListAdapter extends BaseAdapter{
    private File[] files;
@@ -52,13 +55,13 @@ public class FileListAdapter extends BaseAdapter{
       File f = files[position];
       filenameView.setText(f.getName());
       
-      Button load = (Button)v.findViewById(R.id.loadFileButton);
       Button delete = (Button)v.findViewById(R.id.deleteFileButton);
       
-      load.setOnClickListener(new OnClickListener() {
+      filenameView.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
-           Log.d("LOADBUTTON", "Load clicked");
-           ((LoadSavePage)con).load(((File)getItem(position)).getName());
+        	 Toast.makeText(con, "Loading File...", Toast.LENGTH_SHORT).show();
+        	 Log.d("LOADBUTTON", "Load clicked");
+        	 ((LoadSavePage)con).load(((File)getItem(position)).getName());
          }
       });
       

@@ -1,16 +1,18 @@
-package maxx.test.blips;
+package blipco.blips.app;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import maxx.test.blips.R;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Handler;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 public class BlipGenerator {   
 	// Static variables
@@ -136,7 +138,7 @@ public class BlipGenerator {
 	            // Turn off loading flag when last sample is loaded
 	            if (sampleId == 24) {
 	            	loading = false;
-	 			    Toast.makeText(mainContext, "Sound Library Ready", Toast.LENGTH_SHORT).show();
+	 			    //Toast.makeText(mainContext, "Sound Library Ready", Toast.LENGTH_SHORT).show();
 	            }
 	         }
 	      });

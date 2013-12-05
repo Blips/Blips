@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
     android:id="@+id/menu_main">
     
-    <item android:id="@+id/menu_instrument"
+        <item android:id="@+id/menu_instrument"
         android:title="@string/instrument_menu_text"
         android:icon="@drawable/ic_trumpet"
         android:showAsAction="always">
@@ -95,6 +95,7 @@
     	        android:title="@string/scale_harmonic" />
     	</menu>
     </item>
+    
     <item android:id="@+id/menu_saveload"
         android:title="@string/saveload_menu"
         android:icon="@drawable/ic_action_load"

@@ -1,5 +1,6 @@
-package maxx.test.blips;
+package blipco.blips.app;
 
+import maxx.test.blips.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

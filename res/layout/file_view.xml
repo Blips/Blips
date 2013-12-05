@@ -10,12 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:focusable="false"
         android:textSize="20sp"
+        android:clickable="true"
+        android:onClick="onClick"
         android:hint="@string/filename_placeholder"
         android:textColor="@color/accent"
         android:textStyle="bold"
-        android:layout_toLeftOf="@+id/loadFileButton"
+        android:layout_toLeftOf="@+id/deleteFileButton"
         android:layout_alignParentLeft="true" />
 
     <Button
@@ -24,11 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/ic_clear_all"
+        android:background="@drawable/ic_delete"
         android:focusable="false"
         android:focusableInTouchMode="false" />
 
-    <Button
+<!--<Button
         android:id="@+id/loadFileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,6 +37,6 @@
         android:layout_toLeftOf="@+id/deleteFileButton"
         android:background="@drawable/ic_load"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false" />-->
 
 </RelativeLayout>

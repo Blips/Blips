@@ -1,8 +1,10 @@
-package maxx.test.blips;
+package blipco.blips.app;
 
 
 
 import java.util.ArrayList;
+
+import maxx.test.blips.R;
 
 import android.content.Context;
 import android.content.SharedPreferences.Editor;

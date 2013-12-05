@@ -14,15 +14,16 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         <activity
-            android:name="maxx.test.blips.BlipsMain"
+            android:name="blipco.blips.app.BlipsMain"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="maxx.test.blips.LoadSavePage" >
+            android:name="blipco.blips.app.LoadSavePage" 
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name="maxx.test.blips.SplashScreen"
+            android:name="blipco.blips.app.SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
