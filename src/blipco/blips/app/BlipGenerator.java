@@ -21,7 +21,7 @@ public class BlipGenerator {
    static final String FLAT = "\u266D";
    
    // Note name array
-   static String[] noteNames = {"C", 
+   static String[] noteNamesFlat = {"C", 
 	   							"D" + FLAT, "D", 
 	   							"E" + FLAT, "E", 
 	   							"F", 
@@ -83,7 +83,15 @@ public class BlipGenerator {
 	   								R.raw.trombonec4, R.raw.trombonedb4, R.raw.tromboned4, 
 	   								R.raw.tromboneeb4, R.raw.trombonee4, R.raw.trombonef4, 
 	   								R.raw.trombonegb4, R.raw.tromboneg4,R.raw.tromboneab4, 
-	   								R.raw.trombonea4, R.raw.trombonebb4, R.raw.tromboneb4};
+	   								R.raw.trombonea4, R.raw.trombonebb4, R.raw.tromboneb4,
+	   								R.raw.saxa4,R.raw.saxbb4, R.raw.saxb4, 
+	   								R.raw.saxc4,R.raw.saxdb4, R.raw.saxd4,
+	   								R.raw.saxeb4,R.raw.saxe4, R.raw.saxf4,
+	   								R.raw.saxgb4,R.raw.saxg4, R.raw.saxab4,
+	   								R.raw.saxa5,R.raw.saxbb5, R.raw.saxb5, 
+	   								R.raw.saxc5,R.raw.saxdb5, R.raw.saxd5,
+	   								R.raw.saxeb5,R.raw.saxe5, R.raw.saxf5,
+	   								R.raw.saxgb5,R.raw.saxg5, R.raw.saxab5,};
    
    private static SoundPool soundPool = null;
    
@@ -289,7 +297,7 @@ public class BlipGenerator {
 	   
 	   // Pass negative root to maintain current value
 	   if (newRoot >= 0) {
-		   System.out.println("Changed root note from " + noteNames[rootIndex] + " to " + noteNames[newRoot]);
+		   System.out.println("Changed root note from " + noteNamesFlat[rootIndex] + " to " + noteNamesFlat[newRoot]);
 
 		   rootIndex = newRoot;
 	   }

@@ -43,6 +43,7 @@
     <string name="trombone">Trombone</string>
     <string name="tuba">Tuba</string>
     <string name="flute">Flute</string>
+    <string name="sax">Saxophone</string>
     <string name="noFiles_text">You have no saved Blips</string>
     <string name="howToLoad_text">Tap a Blip\'s name to load</string>
     

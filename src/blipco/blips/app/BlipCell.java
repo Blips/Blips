@@ -84,16 +84,16 @@ public class BlipCell extends ToggleButton {
 		}
 		
 		if (isActive) {		
-		 	if (!(mainContext.bg.playing || mainContext.resetting)) {
+		 	if (!(mainContext.bg.get(0).playing || mainContext.resetting)) {
 				// Play demo sound if not sequencing already
-				mainContext.bg.playSound(soundIndex);
+				mainContext.bg.get(0).playSound(soundIndex);
 			}
 		 	
 			setText(name);
-			mainContext.bg.selections.get(column).add(soundIndex);
+			mainContext.bg.get(0).selections.get(column).add(soundIndex);
 	   		setBackgroundResource(R.drawable.ic_cell_on);
 		} else {
-			ArrayList<Integer> col = mainContext.bg.selections.get(column);
+			ArrayList<Integer> col = mainContext.bg.get(0).selections.get(column);
 			
 	   		setBackgroundResource(R.drawable.ic_cell_off);
 
@@ -116,15 +116,15 @@ public class BlipCell extends ToggleButton {
 	
 	public void resetIndex() {
 		// SoundPool indexes at 1 (wtf???)
-		soundIndex = mainContext.bg.rootIndex + 1;
+		soundIndex = mainContext.bg.get(0).rootIndex + 1;
 		
 		// Sound index (0-12) is the sum of all scale intervals preceding note
 		for (int i = 0; i < BlipsMain.GRID_ROWS - row - 1; i++) {
-			soundIndex += mainContext.bg.scale[i];
+			soundIndex += mainContext.bg.get(0).scale[i];
 		}
 		
 		// Name is root note + sound index (modulo for wrap around) -1 for zero index
-		name = BlipGenerator.noteNames[(soundIndex - 1) % 12];
+		name = BlipGenerator.noteNamesFlat[(soundIndex - 1) % 12];
 		
 		//System.out.println("Reset: name: " + name + " soundIndex: " + soundIndex);
 		

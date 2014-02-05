@@ -1,6 +1,7 @@
 package blipco.blips.app;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import maxx.test.blips.R;
 
@@ -46,6 +47,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	static final int CLARINET = 2;
 	static final int TRUMPET = 3;
 	static final int TROMBONE = 4;
+	static final int SAXOPHONE = 5;
 	protected static int currentInstrument = PIANO;
 	
 	// Reference to every button in grid
@@ -64,7 +66,7 @@ public class BlipsMain extends SherlockFragmentActivity {
 	protected static int sliderValue;
 	
 	// Store generator and other state variables
-	BlipGenerator bg = null;
+	ArrayList<BlipGenerator> bg = new ArrayList<BlipGenerator>();
 	boolean resetting = true;
 
 	
@@ -99,8 +101,8 @@ public class BlipsMain extends SherlockFragmentActivity {
     	  setScreenDimensions();
       }
       
-      if (bg == null) {
-    	  bg = new BlipGenerator(this);
+      if (bg.isEmpty()) {
+    	  bg.add(new BlipGenerator(this));
       }
       
       // Remove the App title from Action bar
@@ -147,7 +149,7 @@ public class BlipsMain extends SherlockFragmentActivity {
    }
    
 	public void onPause() {
-		bg.stop();
+		bg.get(0).stop();
 		
 		super.onPause();
 	}
@@ -159,8 +161,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 		}
 		resetting = true;
 
-		if (bg == null) {
-	    	bg = new BlipGenerator(this);
+		if (bg.isEmpty()) {
+	    	bg.add(new BlipGenerator(this));
 	    }
     
 		super.onResume();
@@ -200,8 +202,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 
 	  cells = new BlipCell[GRID_COLS][GRID_ROWS];
           
-      if (bg == null) {
-    	  bg = new BlipGenerator(this);
+      if (bg.isEmpty()) {
+    	  bg.add(new BlipGenerator(this));
       }
 	 
       // Init row layout params
@@ -276,15 +278,15 @@ public class BlipsMain extends SherlockFragmentActivity {
 		 @Override
 		 public void onStartTrackingTouch(SeekBar seekBar) {
 			 // Stop the sequencer. This allows the Timer to update its delay
-			 if (!isStopped && bg.playing) {
-				 bg.pause();
+			 if (!isStopped && bg.get(0).playing) {
+				 bg.get(0).pause();
 			 }
 		 }
 
 		 @Override
 		 public void onStopTrackingTouch(SeekBar seekBar) {
 			 if (!isStopped) {
-				 bg.startSequence();
+				 bg.get(0).startSequence();
 			 }
 			 
 			   Editor edit = prefs.edit();
@@ -307,20 +309,20 @@ public class BlipsMain extends SherlockFragmentActivity {
          }
       } 
       
-      bg.selections = null;
-      bg.initSelections();
-      bg.loading = false;
+      bg.get(0).selections = null;
+      bg.get(0).initSelections();
+      bg.get(0).loading = false;
    }
    
    public void togglePlay() {      
 	  if (isStopped) {
          playButton.setBackgroundResource(R.drawable.ic_pause);
          isStopped = false;
-    	 bg.play();
+         bg.get(0).play();
       } else {
          isStopped = true;
          playButton.setBackgroundResource(R.drawable.ic_play);
-         bg.pause();
+         bg.get(0).pause();
       }
 	  
 		Editor editor = prefs.edit();
@@ -355,6 +357,9 @@ public class BlipsMain extends SherlockFragmentActivity {
 	   }
 	   else if (currentInstrument == TROMBONE) {
 		   instMenu.setIcon(R.drawable.ic_action_trombone);
+	   }
+	   else if (currentInstrument == SAXOPHONE) {
+		   instMenu.setIcon(R.drawable.ic_action_sax);
 	   }
 	   System.out.println("resumedScale: " + scaleMenu.getTitle().toString() + " resumedRootNote: " + rootMenu.getTitle().toString());
 	   
@@ -519,20 +524,25 @@ public class BlipsMain extends SherlockFragmentActivity {
 			   instrument = CLARINET;
 			   instMenu.setIcon(R.drawable.ic_action_clarinet);
 			   break;
+		   case R.id.instrument_sax:
+			   Toast.makeText(this,  "Loading Sax", Toast.LENGTH_SHORT).show();
+			   instrument = SAXOPHONE;
+			   instMenu.setIcon(R.drawable.ic_action_sax);
+			   break;
 			
 		   default:
 				ret = super.onOptionsItemSelected(item);
 		   		break;
 	   }
 	   
-	   if (bg.changeScale(scaleIndex, root, instrument)) {
+	   if (bg.get(0).changeScale(scaleIndex, root, instrument)) {
 		   // Only save preferences if something changed
 		   Editor edit = prefs.edit();
-		   edit.putInt("ScaleRoot", bg.rootIndex);
-		   edit.putInt("ScaleIndex", bg.scaleIndex);
-		   edit.putInt("Instrument", bg.instrumentOffset);
-		   edit.putString("savedScale", bg.scaleName);
-		   edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
+		   edit.putInt("ScaleRoot", bg.get(0).rootIndex);
+		   edit.putInt("ScaleIndex", bg.get(0).scaleIndex);
+		   edit.putInt("Instrument", bg.get(0).instrumentOffset);
+		   edit.putString("savedScale", bg.get(0).scaleName);
+		   edit.putString("savedRootNote", BlipGenerator.noteNamesFlat[bg.get(0).rootIndex]);
 		   edit.commit();
 	   }
 	   
@@ -547,9 +557,9 @@ public class BlipsMain extends SherlockFragmentActivity {
            }
         }
         
-		i.putExtra("ScaleIndex", bg.scaleIndex);
-		i.putExtra("ScaleRoot", bg.rootIndex);
-		i.putExtra("Instrument", bg.instrumentOffset);
+		i.putExtra("ScaleIndex", bg.get(0).scaleIndex);
+		i.putExtra("ScaleRoot", bg.get(0).rootIndex);
+		i.putExtra("Instrument", bg.get(0).instrumentOffset);
 		i.putExtra("SliderValue", sliderValue);
 		
         startActivityForResult(i, LOAD_SAVE_REQ_CODE);
@@ -566,8 +576,8 @@ public class BlipsMain extends SherlockFragmentActivity {
 	        	Editor edit = prefs.edit();
 	         	DATA_LOADED = true;
 		      	
-	         	if (bg == null) {
-			    	bg = new BlipGenerator(this);
+	         	if (bg.isEmpty()) {
+	         		bg.add(new BlipGenerator(this));
 	         	}
 	           
 	         	boolean active = false;
@@ -626,28 +636,30 @@ public class BlipsMain extends SherlockFragmentActivity {
 	    		else if (currentInstrument == TROMBONE) {
 	    		   instMenu.setIcon(R.drawable.ic_action_trombone);
 	    		}
+	    		else if (currentInstrument == SAXOPHONE) {
+	    			instMenu.setIcon(R.drawable.ic_action_sax);
+	    		}
 	    		
 	    		sliderValue += 100 * slider0 + 10 * slider1;
 	    		edit.putInt("SliderValue", sliderValue);
 	    		tempoSlider.setProgress(sliderValue);    		
-	    		//TODO
-	    		bg.changeScale(data.getIntExtra("LoadScaleIndex", 1), 
+	    		bg.get(0).changeScale(data.getIntExtra("LoadScaleIndex", 1), 
 	    				       root, 
 	    				       data.getIntExtra("LoadInstrument", 0));
 
-	    		edit.putString("savedScale", bg.scaleName);
-	    		scaleMenu.setTitle(bg.scaleName);
+	    		edit.putString("savedScale", bg.get(0).scaleName);
+	    		scaleMenu.setTitle(bg.get(0).scaleName);
 	    		
-	    		edit.putString("savedRootNote", BlipGenerator.noteNames[bg.rootIndex]);
-	    		rootMenu.setTitle(BlipGenerator.noteNames[bg.rootIndex]);
+	    		edit.putString("savedRootNote", BlipGenerator.noteNamesFlat[bg.get(0).rootIndex]);
+	    		rootMenu.setTitle(BlipGenerator.noteNamesFlat[bg.get(0).rootIndex]);
 	    		
-				edit.putInt("ScaleRoot", bg.rootIndex);
-				edit.putInt("ScaleIndex", bg.scaleIndex);
-				edit.putInt("Instrument", bg.instrumentOffset);
+				edit.putInt("ScaleRoot", bg.get(0).rootIndex);
+				edit.putInt("ScaleIndex", bg.get(0).scaleIndex);
+				edit.putInt("Instrument", bg.get(0).instrumentOffset);
 
 	    		edit.commit();
 	    		
-	    		bg.play();    
+	    		bg.get(0).play();    
 	         }
 	      
 	      	 break;

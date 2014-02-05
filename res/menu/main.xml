@@ -18,6 +18,8 @@
                 android:title="@string/trombone" />
             <item android:id="@+id/instrument_clarinet"
                 android:title="@string/clarinet" />
+            <item android:id="@+id/instrument_sax"
+                android:title="@string/sax" />
         </menu>
     </item>
     
