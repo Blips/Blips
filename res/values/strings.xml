@@ -13,12 +13,12 @@
     <string name="button_delete">Del</string>
     <string name="filename_placeholder">filename</string>
     <string name="scale_mixolydian">Mixolydian</string>
-    <string name="scale_major">Major</string>
-    <string name="scale_minor">Minor</string>
+    <string name="scale_ionian">Ionian (Major)</string>
     <string name="scale_dorian">Dorian</string>
     <string name="scale_phrygian">Phrygian</string>
     <string name="scale_lydian">Lydian</string>
     <string name="scale_locrian">Locrian</string>
+    <string name="scale_aeolian">Aeolian (Minor)</string>
     <string name="scale_harmonic">Harmonic Minor</string>
     <string name="root_c">C</string>
     <string name="root_db">D\u266D</string>
@@ -34,6 +34,7 @@
     <string name="root_b">B</string>
     <string name="saveload_menu">Load/Save</string>
     <string name="tempotext">Tempo</string>
+    <string name="swingtext">Swing Level</string>
     <string name="instrument_menu_text">Inst</string>
     <string name="trumpet">Trumpet</string>
     <string name="cello">Cello</string>

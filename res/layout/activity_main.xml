@@ -42,6 +42,27 @@
         android:text="@string/tempotext"
         android:textColor="@color/accent"
         android:textSize="18sp" />
+    
+    <SeekBar
+        android:id="@+id/swingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tempoLabel"
+        android:layout_toLeftOf="@+id/play_button"
+        android:layout_toRightOf="@+id/clear_button"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="3dp" 
+        android:layout_marginRight="3dp"  />
+
+    <TextView
+        android:id="@+id/swingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/swingbar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/swingtext"
+        android:textColor="@color/accent"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/play_button"

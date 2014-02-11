@@ -68,30 +68,30 @@
     </item>
    
     <item android:id="@+id/menu_scale"
-        android:title="@string/scale_minor"
+        android:title="@string/scale_ionian"
         android:showAsAction="always">
     
        	<menu>
-    	    <item android:id="@+id/subscale_major"
-    	        android:title="@string/scale_major" />
-    	    
-    	    <item android:id="@+id/subscale_minor"
-    	        android:title="@string/scale_minor" />
+    	    <item android:id="@+id/subscale_ionian"
+    	        android:title="@string/scale_ionian" />
     	    
     	    <item android:id="@+id/subscale_dorian"
     	        android:title="@string/scale_dorian" />
     	    
+    	    <item android:id="@+id/subscale_phrygian"
+    	        android:title="@string/scale_phrygian" />
+    	    
     	    <item android:id="@+id/subscale_lydian"
     	        android:title="@string/scale_lydian" />
     	    
-    	    <item android:id="@+id/subscale_locrian"
-    	        android:title="@string/scale_locrian" />
-    	    
-    	    <item android:id="@+id/subscale_phrygian"
-              android:title="@string/scale_phrygian" />
-    	              
     	    <item android:id="@+id/subscale_mixolydian"
-              android:title="@string/scale_mixolydian" />
+    	        android:title="@string/scale_mixolydian" />
+    	    
+    	    <item android:id="@+id/subscale_aeolian"
+              android:title="@string/scale_aeolian" />
+    	              
+    	    <item android:id="@+id/subscale_locrian"
+              android:title="@string/scale_locrian" />
     	    
     	    <item android:id="@+id/subscale_harmonic" 
     	        android:title="@string/scale_harmonic" />
